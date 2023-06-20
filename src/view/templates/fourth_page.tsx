@@ -13,6 +13,7 @@ import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import React from "react";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import CustomParticle from "../atoms/particle";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -104,6 +105,7 @@ export const FourthPage = () => {
   });
   return (
     <div className={classes.root}>
+      <CustomParticle />
       <CustomStepper arg1={3} />
       <div className={classes.fieldWrapper}>
         <p>学校名</p>
@@ -177,7 +179,7 @@ export const FourthPage = () => {
               <MenuItem value={120}>2012</MenuItem>
             </Select>
           </FormControl>
-          <p style={{paddingLeft: 10 , paddingRight: 10}}>年</p>
+          <p style={{ paddingLeft: 10, paddingRight: 10 }}>年</p>
           <FormControl>
             {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
             <Select
@@ -208,8 +210,8 @@ export const FourthPage = () => {
               <MenuItem value={120}>12</MenuItem>
             </Select>
           </FormControl>
-          <p style={{paddingLeft: 10}}>月</p>
-          <p style={{paddingLeft: 10 , paddingRight: 10}}>~</p>
+          <p style={{ paddingLeft: 10 }}>月</p>
+          <p style={{ paddingLeft: 10, paddingRight: 10 }}>~</p>
           <FormControl>
             {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
             <Select
@@ -240,7 +242,7 @@ export const FourthPage = () => {
               <MenuItem value={120}>2012</MenuItem>
             </Select>
           </FormControl>
-          <p style={{paddingLeft: 10 , paddingRight: 10}}>年</p>
+          <p style={{ paddingLeft: 10, paddingRight: 10 }}>年</p>
           <FormControl>
             {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
             <Select
@@ -271,7 +273,7 @@ export const FourthPage = () => {
               <MenuItem value={120}>12</MenuItem>
             </Select>
           </FormControl>
-          <p style={{paddingLeft: 10 , paddingRight: 10}}>月</p>
+          <p style={{ paddingLeft: 10, paddingRight: 10 }}>月</p>
         </div>
       </div>
       {errors.name && <span>エラーが発生しました</span>}

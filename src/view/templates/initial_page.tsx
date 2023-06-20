@@ -7,6 +7,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import { SecondPage } from "./second_page";
 import { Button, TextField } from "@material-ui/core";
 import { CustomStepper } from "../atoms/stepper";
+import CustomParticle from "../atoms/particle";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -40,22 +41,6 @@ function InitialPage() {
   } = useForm<User>();
 
   var currentCount = 0;
-
-  // const onSubmit: SubmitHandler<User> = (data: {
-  //   name: any;
-  //   email: any;
-  //   age: any;
-  // }) => {
-  //   console.log("onSubmit", data);
-  //   const usersCollectionRef = collection(db, "users");
-  //   const documentRef = addDoc(usersCollectionRef, {
-  //     name: data.name,
-  //     email: data.email,
-  //     age: data.age,
-  //     admin: false,
-  //   });
-  //   console.log(documentRef);
-  // };
 
   const onPressed = () => {
     const initialSubmitDoc = doc(
@@ -98,18 +83,12 @@ function InitialPage() {
 
   return (
     <div className={classes.root}>
-      <CustomStepper arg1={0}/>
+      <CustomParticle />
+      <CustomStepper arg1={0} />
       <div className={classes.fieldWrapper}>
         <p>メールアドレス</p>
         <TextField
           className={classes.field}
-          // style={{
-          //   maxWidth: "400px",
-          //   maxHeight: "45px",
-          //   minWidth: "400px",
-          //   minHeight: "45px",
-          //   marginTop: "2%",
-          // }}
           id="outlined-email"
           label="メールアドレス"
           variant="outlined"
@@ -119,13 +98,6 @@ function InitialPage() {
         <p>パスワード</p>
         <TextField
           className={classes.field}
-          // style={{
-          //   maxWidth: "400px",
-          //   maxHeight: "45px",
-          //   minWidth: "400px",
-          //   minHeight: "45px",
-          //   marginTop: "3%",
-          // }}
           id="outlined-password"
           label="パスワード"
           variant="outlined"
@@ -135,13 +107,6 @@ function InitialPage() {
         <p>パスワード（確認）</p>
         <TextField
           className={classes.field}
-          // style={{
-          //   maxWidth: "400px",
-          //   maxHeight: "45px",
-          //   minWidth: "400px",
-          //   minHeight: "45px",
-          //   marginTop: "3%",
-          // }}
           id="outlined-password-again"
           label="パスワード（確認）"
           variant="outlined"

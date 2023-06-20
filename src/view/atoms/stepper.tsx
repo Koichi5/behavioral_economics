@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 export const CustomStepper = (props: { arg1: number }) => {
   const classes = useStyles();
   function getSteps() {
-    return ["フォーム　1", "フォーム　2", "フォーム　3", "フォーム　4"];
+    return ["ステップ　1", "ステップ　2", "ステップ　3", "ステップ　4"];
   }
 
   const steps = getSteps();

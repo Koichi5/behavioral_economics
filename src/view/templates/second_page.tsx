@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
+import CustomParticle from "../atoms/particle";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -73,6 +74,7 @@ export const SecondPage = () => {
 
   return (
     <div className={classes.root}>
+      <CustomParticle />
       <CustomStepper arg1={1} />
       <div className={classes.fieldWrapper}>
         <p>ニックネーム</p>
