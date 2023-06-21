@@ -8,6 +8,7 @@ const useStyles = makeStyles(() => ({
   stepper: {
     marginLeft: "15%",
     marginRight: "15%",
+    backgroundColor: "transparent",
   },
 }));
 
