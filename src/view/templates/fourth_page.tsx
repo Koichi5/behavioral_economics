@@ -14,6 +14,7 @@ import { CustomStepper } from "../atoms/stepper";
 import React from "react";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import CustomParticle from "../atoms/particle";
+import { FifthPage } from "./fifth_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -277,7 +278,7 @@ export const FourthPage = () => {
         </div>
       </div>
       {errors.name && <span>エラーが発生しました</span>}
-      <Link to="/fourth_page">
+      <Link to="/fifth_page">
         <Button
           variant="contained"
           color="primary"
@@ -294,7 +295,7 @@ export const FourthPage = () => {
         </Button>
       </Link>
       <Routes>
-        <Route path="/fourth_page" element={<FourthPage />}></Route>
+        <Route path="/fifth_page" element={<FifthPage />}></Route>
       </Routes>
     </div>
   );

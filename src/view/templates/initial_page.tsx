@@ -5,7 +5,14 @@ import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { Link, Route, Routes } from "react-router-dom";
 import { SecondPage } from "./second_page";
-import { Button, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@material-ui/core";
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@material-ui/core";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
 import { VisibilityOff, Visibility } from "@material-ui/icons";
@@ -38,7 +45,7 @@ const useStyles = makeStyles(() => ({
     maxWidth: "400px",
     minWidth: "400px",
     marginTop: "2%",
-  }
+  },
 }));
 
 function InitialPage() {
@@ -47,11 +54,11 @@ function InitialPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   function handleClickShowPassword() {
-    setShowPassword(!(showPassword))
+    setShowPassword(!showPassword);
   }
 
   function handleClickConfirmShowPassword() {
-    setShowConfirmPassword(!(showConfirmPassword))
+    setShowConfirmPassword(!showConfirmPassword);
   }
 
   const {
@@ -114,53 +121,41 @@ function InitialPage() {
       </div>
       <div className={classes.fieldWrapper}>
         <p>パスワード</p>
-        {/* <TextField
-          className={classes.field}
-          id="outlined-password"
+        <OutlinedInput
+          className={classes.secretField}
+          id="outlined-adornment-password"
+          type={showPassword ? "text" : "password"}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
           label="パスワード"
-          variant="outlined"
-        /> */}
-                  <OutlinedInput
-                            className={classes.secretField}
-            id="outlined-adornment-password"
-            type={showPassword ? 'text' : 'password'}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="パスワード"
-          />
+        />
       </div>
       <div className={classes.fieldWrapper}>
         <p>パスワード（確認）</p>
-        {/* <TextField
-          className={classes.field}
-          id="outlined-password-again"
+        <OutlinedInput
+          className={classes.secretField}
+          id="outlined-adornment-password"
+          type={showConfirmPassword ? "text" : "password"}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickConfirmShowPassword}
+              >
+                {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
           label="パスワード（確認）"
-          variant="outlined"
-        /> */}
-                          <OutlinedInput
-                            className={classes.secretField}
-            id="outlined-adornment-password"
-            type={showConfirmPassword ? 'text' : 'password'}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickConfirmShowPassword}
-                >
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="パスワード（確認）"
-          />
+        />
       </div>
       {errors.name && <span>エラーが発生しました</span>}
       <Link to="/second_page">
@@ -173,6 +168,7 @@ function InitialPage() {
             maxHeight: "45px",
             minWidth: "300px",
             minHeight: "45px",
+            marginTop: "3%",
           }}
         >
           登　　録

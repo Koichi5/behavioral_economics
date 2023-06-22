@@ -1,4 +1,4 @@
-import { Button, TextField, makeStyles } from "@material-ui/core";
+import { Button, FormControl, MenuItem, TextField, makeStyles } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
 import { FourthPage } from "./fourth_page";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
@@ -7,6 +7,9 @@ import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import React from "react";
+import { FinalPage } from "./final_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -32,8 +35,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const ThirdPage = () => {
+export const FifthPage = () => {
   const classes = useStyles();
+  const [gender, setGender] = React.useState("");
+
+  const handleGenderChange = (event: SelectChangeEvent) => {
+    setGender(event.target.value);
+  }
+
   const {
     formState: { errors },
   } = useForm<User>();
@@ -41,68 +50,76 @@ export const ThirdPage = () => {
   var currentCount = 0;
 
   const onPressed = () => {
-    const thirdSubmitDoc = doc(db, "thirdSubmission", "5eWb85uV53vHB8wvA6AH");
-    const countUpdateDocumentRef = updateDoc(thirdSubmitDoc, {
+    const fifthSubmitDoc = doc(db, "fifthSubmission", "5xpPQVRCPGKm4SahUoqn");
+    const countUpdateDocumentRef = updateDoc(fifthSubmitDoc, {
       count: currentCount + 1,
     });
     console.log(countUpdateDocumentRef);
   };
 
-  const fetchThirdSubmissionCount = async () => {
-    var thirdSubmitCount = 0;
-    const thirdSubmitRef = doc(db, "thirdSubmission", "5eWb85uV53vHB8wvA6AH");
+  const fetchFifthSubmissionCount = async () => {
+    var fifthSubmitCount = 0;
+    const fifthSubmitRef = doc(db, "fifthSubmission", "5xpPQVRCPGKm4SahUoqn");
 
     try {
-      const snapshot = await getDoc(thirdSubmitRef);
+      const snapshot = await getDoc(fifthSubmitRef);
       const docData = snapshot.data();
       if (docData && docData.count) {
-        thirdSubmitCount = Number(docData.count);
+        fifthSubmitCount = Number(docData.count);
       }
-      console.log(thirdSubmitCount);
+      console.log(fifthSubmitCount);
     } catch (error) {
       console.error("Firestoreの更新処理に失敗しました", error);
     }
-    return thirdSubmitCount;
+    return fifthSubmitCount;
   };
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchThirdSubmissionCount();
+      currentCount = await fetchFifthSubmissionCount();
     })();
   });
   return (
     <div className={classes.root}>
       <CustomParticle />
-      <CustomStepper arg1={2} />
+      <CustomStepper arg1={4} />
       <div className={classes.fieldWrapper}>
-        <p>郵便番号</p>
+        <p>性別</p>
+        <FormControl className={classes.field}>
+        <Select
+            // labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={gender}
+            label="Degree"
+            onChange={handleGenderChange}
+          >
+            <MenuItem value={10}>男性</MenuItem>
+            <MenuItem value={20}>女性</MenuItem>
+            <MenuItem value={30}>その他</MenuItem>
+            <MenuItem value={40}>選択しない</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
+      <div className={classes.fieldWrapper}>
+        <p>職業</p>
         <TextField
           className={classes.field}
           id="outlined-name"
-          label="例）123-4567"
+          label="例）学生"
           variant="outlined"
         />
       </div>
       <div className={classes.fieldWrapper}>
-        <p>住所（都道府県、市町村、番地）</p>
+        <p>趣味</p>
         <TextField
           className={classes.field}
           id="outlined-name"
-          label="例）東京都渋谷区渋谷2-15-1"
-          variant="outlined"
-        />
-      </div>
-      <div className={classes.fieldWrapper}>
-        <p>住所（アパート名等）</p>
-        <TextField
-          className={classes.field}
-          id="outlined-name"
-          label="例）クロスタワー12F"
+          label="例）読書"
           variant="outlined"
         />
       </div>
       {errors.name && <span>エラーが発生しました</span>}
-      <Link to="/fourth_page">
+      <Link to="/final_page">
         <Button
           variant="contained"
           color="primary"
@@ -119,7 +136,7 @@ export const ThirdPage = () => {
         </Button>
       </Link>
       <Routes>
-        <Route path="/fourth_page" element={<FourthPage />}></Route>
+        <Route path="/final_page" element={<FinalPage />}></Route>
       </Routes>
     </div>
   );

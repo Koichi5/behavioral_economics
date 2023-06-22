@@ -11,7 +11,7 @@ import CustomParticle from "../atoms/particle";
 const useStyles = makeStyles(() => ({
   root: {
     position: "relative",
-    top: "25%",
+    top: "10%",
   },
 
   fieldWrapper: {
@@ -82,6 +82,15 @@ export const SecondPage = () => {
           className={classes.field}
           id="outlined-name"
           label="ニックネーム"
+          variant="outlined"
+        />
+      </div>
+      <div className={classes.fieldWrapper}>
+        <p>電話番号</p>
+        <TextField
+          className={classes.field}
+          id="outlined-name"
+          label="例）090-1234-5678"
           variant="outlined"
         />
       </div>

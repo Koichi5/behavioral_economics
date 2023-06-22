@@ -1,10 +1,12 @@
+import React from "react";
 import { ThemeProvider, createTheme, makeStyles, useMediaQuery } from "@material-ui/core";
 import InitialPage from "./view/templates/initial_page";
 import { Route, Routes } from "react-router-dom";
 import { ThirdPage } from "./view/templates/third_page";
 import { FourthPage } from "./view/templates/fourth_page";
 import { SecondPage } from "./view/templates/second_page";
-import React from "react";
+import { FifthPage } from "./view/templates/fifth_page";
+import { FinalPage } from "./view/templates/final_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -37,6 +39,8 @@ function App() {
         <Route path="/second_page" element={<SecondPage />} />
         <Route path="/third_page" element={<ThirdPage />} />
         <Route path="/fourth_page" element={<FourthPage />} />
+        <Route path="/fifth_page" element={<FifthPage />} />
+        <Route path="/final_page" element={<FinalPage />} />        
       </Routes>
     </div>
     </ThemeProvider>
