@@ -33,7 +33,6 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
     <div className={classes.root}>
-      {/* <InitialPage / */}
       <Routes>
         <Route path="/" element={<InitialPage />} />
         <Route path="/second_page" element={<SecondPage />} />

@@ -30,6 +30,10 @@ const useStyles = makeStyles(() => ({
     minHeight: "45px",
     marginTop: "2%",
   },
+
+  input: {
+    background: "gray",
+  },
 }));
 
 export const SecondPage = () => {
@@ -80,6 +84,7 @@ export const SecondPage = () => {
         <p>ニックネーム</p>
         <TextField
           className={classes.field}
+          InputProps={{ className: classes.input }}
           id="outlined-name"
           label="ニックネーム"
           variant="outlined"
@@ -89,6 +94,7 @@ export const SecondPage = () => {
         <p>電話番号</p>
         <TextField
           className={classes.field}
+          InputProps={{ className: classes.input }}
           id="outlined-name"
           label="例）090-1234-5678"
           variant="outlined"
@@ -98,6 +104,7 @@ export const SecondPage = () => {
         <p>誕生日</p>
         <TextField
           className={classes.field}
+          InputProps={{ className: classes.input }}
           id="outlined-name"
           label="例）2000-01-01"
           variant="outlined"

@@ -30,6 +30,10 @@ const useStyles = makeStyles(() => ({
     minHeight: "45px",
     marginTop: "2%",
   },
+
+  input: {
+    background: "gray",
+  },
 }));
 
 export const ThirdPage = () => {
@@ -78,6 +82,7 @@ export const ThirdPage = () => {
         <p>郵便番号</p>
         <TextField
           className={classes.field}
+          InputProps={{ className: classes.input }}
           id="outlined-name"
           label="例）123-4567"
           variant="outlined"
@@ -87,6 +92,7 @@ export const ThirdPage = () => {
         <p>住所（都道府県、市町村、番地）</p>
         <TextField
           className={classes.field}
+          InputProps={{ className: classes.input }}
           id="outlined-name"
           label="例）東京都渋谷区渋谷2-15-1"
           variant="outlined"
@@ -96,6 +102,7 @@ export const ThirdPage = () => {
         <p>住所（アパート名等）</p>
         <TextField
           className={classes.field}
+          InputProps={{ className: classes.input }}
           id="outlined-name"
           label="例）クロスタワー12F"
           variant="outlined"

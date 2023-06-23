@@ -9,7 +9,6 @@ import {
   Button,
   IconButton,
   InputAdornment,
-  InputLabel,
   OutlinedInput,
   TextField,
 } from "@material-ui/core";
@@ -40,11 +39,16 @@ const useStyles = makeStyles(() => ({
     marginTop: "2%",
   },
 
+  input: {
+    background: "gray"
+  },
+
   secretField: {
     marginBottom: "50px",
     maxWidth: "400px",
     minWidth: "400px",
     marginTop: "2%",
+    background: "gray"
   },
 }));
 
@@ -114,6 +118,7 @@ function InitialPage() {
         <p>メールアドレス</p>
         <TextField
           className={classes.field}
+          InputProps={{className: classes.input}}
           id="outlined-email"
           label="メールアドレス"
           variant="outlined"

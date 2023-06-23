@@ -1,6 +1,11 @@
-import { Button, FormControl, MenuItem, TextField, makeStyles } from "@material-ui/core";
+import {
+  Button,
+  FormControl,
+  MenuItem,
+  TextField,
+  makeStyles,
+} from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
-import { FourthPage } from "./fourth_page";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -33,6 +38,10 @@ const useStyles = makeStyles(() => ({
     minHeight: "45px",
     marginTop: "2%",
   },
+
+  input: {
+    background: "gray",
+  },
 }));
 
 export const FifthPage = () => {
@@ -41,7 +50,7 @@ export const FifthPage = () => {
 
   const handleGenderChange = (event: SelectChangeEvent) => {
     setGender(event.target.value);
-  }
+  };
 
   const {
     formState: { errors },
@@ -86,8 +95,9 @@ export const FifthPage = () => {
       <div className={classes.fieldWrapper}>
         <p>性別</p>
         <FormControl className={classes.field}>
-        <Select
+          <Select
             // labelId="demo-simple-select-label"
+            className={classes.input}
             id="demo-simple-select"
             value={gender}
             label="Degree"
@@ -104,6 +114,7 @@ export const FifthPage = () => {
         <p>職業</p>
         <TextField
           className={classes.field}
+          InputProps={{ className: classes.input }}
           id="outlined-name"
           label="例）学生"
           variant="outlined"
@@ -113,6 +124,7 @@ export const FifthPage = () => {
         <p>趣味</p>
         <TextField
           className={classes.field}
+          InputProps={{ className: classes.input }}
           id="outlined-name"
           label="例）読書"
           variant="outlined"

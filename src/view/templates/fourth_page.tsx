@@ -38,6 +38,10 @@ const useStyles = makeStyles(() => ({
     minHeight: "45px",
     marginTop: "2%",
   },
+
+  input: {
+    background: "gray",
+  },
 }));
 
 export const FourthPage = () => {
@@ -112,6 +116,7 @@ export const FourthPage = () => {
         <p>学校名</p>
         <TextField
           className={classes.field}
+          InputProps={{ className: classes.input }}
           id="outlined-name"
           label="例）太郎大学"
           variant="outlined"
@@ -121,6 +126,7 @@ export const FourthPage = () => {
         <p>学部・学科</p>
         <TextField
           className={classes.field}
+          InputProps={{ className: classes.input }}
           id="outlined-name"
           label="例）文学部文学科"
           variant="outlined"
@@ -132,6 +138,7 @@ export const FourthPage = () => {
           {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
           <Select
             // labelId="demo-simple-select-label"
+            className={classes.input}
             id="demo-simple-select"
             value={degree}
             label="Degree"
@@ -161,6 +168,7 @@ export const FourthPage = () => {
                 minHeight: "45px",
                 marginTop: "3%",
               }}
+              className={classes.input}
               id="demo-simple-select"
               value={degreeStartYear}
               label="Age"
@@ -192,6 +200,7 @@ export const FourthPage = () => {
                 minHeight: "45px",
                 marginTop: "3%",
               }}
+              className={classes.input}
               id="demo-simple-select"
               value={degreeStartMonth}
               label="Age"
@@ -224,6 +233,7 @@ export const FourthPage = () => {
                 minHeight: "45px",
                 marginTop: "3%",
               }}
+              className={classes.input}
               id="demo-simple-select"
               value={degreeEndYear}
               label="Age"
@@ -255,6 +265,7 @@ export const FourthPage = () => {
                 minHeight: "45px",
                 marginTop: "3%",
               }}
+              className={classes.input}
               id="demo-simple-select"
               value={degreeEndMonth}
               label="Age"
