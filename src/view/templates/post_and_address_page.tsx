@@ -1,6 +1,6 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
-import { FourthPage } from "./fourth_page";
+import { SchoolInfoPage } from "./school_info_page";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -32,11 +32,11 @@ const useStyles = makeStyles(() => ({
   },
 
   input: {
-    background: "gray",
+    background: "GhostWhite",
   },
 }));
 
-export const ThirdPage = () => {
+export const PostAndAddressPage = () => {
   const classes = useStyles();
   const {
     formState: { errors },
@@ -77,7 +77,7 @@ export const ThirdPage = () => {
   return (
     <div className={classes.root}>
       <CustomParticle />
-      <CustomStepper arg1={2} />
+      <CustomStepper arg1={3} />
       <div className={classes.fieldWrapper}>
         <p>郵便番号</p>
         <TextField
@@ -109,7 +109,7 @@ export const ThirdPage = () => {
         />
       </div>
       {errors.name && <span>エラーが発生しました</span>}
-      <Link to="/fourth_page">
+      <Link to="/fifth_page">
         <Button
           variant="contained"
           color="primary"
@@ -126,7 +126,7 @@ export const ThirdPage = () => {
         </Button>
       </Link>
       <Routes>
-        <Route path="/fourth_page" element={<FourthPage />}></Route>
+        <Route path="/fifth_page" element={<SchoolInfoPage />}></Route>
       </Routes>
     </div>
   );

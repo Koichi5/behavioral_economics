@@ -1,12 +1,12 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
-import { ThirdPage } from "./third_page";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
+import { GenderAndWorkAndHobbyPage } from "./gender_and_work_and_hobby_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -32,11 +32,11 @@ const useStyles = makeStyles(() => ({
   },
 
   input: {
-    background: "gray",
+    background: "GhostWhite",
   },
 }));
 
-export const SecondPage = () => {
+export const NicknameAndPhoneAndBirthPage = () => {
   const classes = useStyles();
 
   const {
@@ -128,7 +128,7 @@ export const SecondPage = () => {
         </Button>
       </Link>
       <Routes>
-        <Route path="/third_page" element={<ThirdPage />}></Route>
+        <Route path="/third_page" element={<GenderAndWorkAndHobbyPage />}></Route>
       </Routes>
     </div>
   );

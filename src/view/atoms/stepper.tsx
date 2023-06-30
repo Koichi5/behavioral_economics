@@ -1,5 +1,4 @@
 import { Stepper, Step, StepLabel, makeStyles } from "@material-ui/core";
-
 const useStyles = makeStyles(() => ({
   root: {
     marginBottom: "5%",
@@ -15,7 +14,13 @@ const useStyles = makeStyles(() => ({
 export const CustomStepper = (props: { arg1: number }) => {
   const classes = useStyles();
   function getSteps() {
-    return ["ステップ　1", "ステップ　2", "ステップ　3", "ステップ　4", "ステップ　5"];
+    return [
+      "ステップ　1",
+      "ステップ　2",
+      "ステップ　3",
+      "ステップ　4",
+      "ステップ　5",
+    ];
   }
 
   const steps = getSteps();

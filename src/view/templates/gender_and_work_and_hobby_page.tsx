@@ -14,7 +14,7 @@ import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import React from "react";
-import { FinalPage } from "./final_page";
+import { PostAndAddressPage } from "./post_and_address_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -40,11 +40,11 @@ const useStyles = makeStyles(() => ({
   },
 
   input: {
-    background: "gray",
+    background: "GhostWhite",
   },
 }));
 
-export const FifthPage = () => {
+export const GenderAndWorkAndHobbyPage = () => {
   const classes = useStyles();
   const [gender, setGender] = React.useState("");
 
@@ -91,7 +91,7 @@ export const FifthPage = () => {
   return (
     <div className={classes.root}>
       <CustomParticle />
-      <CustomStepper arg1={4} />
+      <CustomStepper arg1={2} />
       <div className={classes.fieldWrapper}>
         <p>性別</p>
         <FormControl className={classes.field}>
@@ -131,7 +131,7 @@ export const FifthPage = () => {
         />
       </div>
       {errors.name && <span>エラーが発生しました</span>}
-      <Link to="/final_page">
+      <Link to="/fourth_page">
         <Button
           variant="contained"
           color="primary"
@@ -148,7 +148,7 @@ export const FifthPage = () => {
         </Button>
       </Link>
       <Routes>
-        <Route path="/final_page" element={<FinalPage />}></Route>
+        <Route path="/fourth_page" element={<PostAndAddressPage />}></Route>
       </Routes>
     </div>
   );

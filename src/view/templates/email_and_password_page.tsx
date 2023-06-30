@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { Link, Route, Routes } from "react-router-dom";
-import { SecondPage } from "./second_page";
+import { NicknameAndPhoneAndBirthPage } from "./nickname_and_phone_and_birth_page";
 import {
   Button,
   IconButton,
@@ -40,7 +40,7 @@ const useStyles = makeStyles(() => ({
   },
 
   input: {
-    background: "gray"
+    background: "GhostWhite",
   },
 
   secretField: {
@@ -48,11 +48,11 @@ const useStyles = makeStyles(() => ({
     maxWidth: "400px",
     minWidth: "400px",
     marginTop: "2%",
-    background: "gray"
+    background: "GhostWhite",
   },
 }));
 
-function InitialPage() {
+function EmailAndPasswordPage() {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -118,7 +118,7 @@ function InitialPage() {
         <p>メールアドレス</p>
         <TextField
           className={classes.field}
-          InputProps={{className: classes.input}}
+          InputProps={{ className: classes.input }}
           id="outlined-email"
           label="メールアドレス"
           variant="outlined"
@@ -180,10 +180,13 @@ function InitialPage() {
         </Button>
       </Link>
       <Routes>
-        <Route path="/second_page" element={<SecondPage />}></Route>
+        <Route
+          path="/second_page"
+          element={<NicknameAndPhoneAndBirthPage />}
+        ></Route>
       </Routes>
     </div>
   );
 }
 
-export default InitialPage;
+export default EmailAndPasswordPage;

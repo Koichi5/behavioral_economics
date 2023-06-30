@@ -14,7 +14,7 @@ import { CustomStepper } from "../atoms/stepper";
 import React from "react";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import CustomParticle from "../atoms/particle";
-import { FifthPage } from "./fifth_page";
+import { FinalPage } from "./final_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -40,11 +40,11 @@ const useStyles = makeStyles(() => ({
   },
 
   input: {
-    background: "gray",
+    background: "GhostWhite",
   },
 }));
 
-export const FourthPage = () => {
+export const SchoolInfoPage = () => {
   const classes = useStyles();
   const [degree, setDegree] = React.useState("");
   const [degreeStartYear, setDegreeStartYear] = React.useState("");
@@ -111,7 +111,7 @@ export const FourthPage = () => {
   return (
     <div className={classes.root}>
       <CustomParticle />
-      <CustomStepper arg1={3} />
+      <CustomStepper arg1={4} />
       <div className={classes.fieldWrapper}>
         <p>学校名</p>
         <TextField
@@ -289,7 +289,7 @@ export const FourthPage = () => {
         </div>
       </div>
       {errors.name && <span>エラーが発生しました</span>}
-      <Link to="/fifth_page">
+      <Link to="/final_page">
         <Button
           variant="contained"
           color="primary"
@@ -306,7 +306,10 @@ export const FourthPage = () => {
         </Button>
       </Link>
       <Routes>
-        <Route path="/fifth_page" element={<FifthPage />}></Route>
+        <Route
+          path="/final_page"
+          element={<FinalPage />}
+        ></Route>
       </Routes>
     </div>
   );

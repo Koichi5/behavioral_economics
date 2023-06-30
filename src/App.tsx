@@ -1,11 +1,16 @@
 import React from "react";
-import { ThemeProvider, createTheme, makeStyles, useMediaQuery } from "@material-ui/core";
-import InitialPage from "./view/templates/initial_page";
+import {
+  ThemeProvider,
+  createTheme,
+  makeStyles,
+  useMediaQuery,
+} from "@material-ui/core";
+import EmailAndPasswordPage from "./view/templates/email_and_password_page";
 import { Route, Routes } from "react-router-dom";
-import { ThirdPage } from "./view/templates/third_page";
-import { FourthPage } from "./view/templates/fourth_page";
-import { SecondPage } from "./view/templates/second_page";
-import { FifthPage } from "./view/templates/fifth_page";
+import { PostAndAddressPage } from "./view/templates/post_and_address_page";
+import { SchoolInfoPage } from "./view/templates/school_info_page";
+import { NicknameAndPhoneAndBirthPage } from "./view/templates/nickname_and_phone_and_birth_page";
+import { GenderAndWorkAndHobbyPage } from "./view/templates/gender_and_work_and_hobby_page";
 import { FinalPage } from "./view/templates/final_page";
 
 const useStyles = makeStyles(() => ({
@@ -20,28 +25,31 @@ const useStyles = makeStyles(() => ({
 
 function App() {
   const classes = useStyles();
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const theme = React.useMemo(
     () =>
       createTheme({
         palette: {
-          type: prefersDarkMode ? 'dark' : 'light',
+          type: prefersDarkMode ? "dark" : "light",
         },
       }),
-    [prefersDarkMode],
+    [prefersDarkMode]
   );
   return (
     <ThemeProvider theme={theme}>
-    <div className={classes.root}>
-      <Routes>
-        <Route path="/" element={<InitialPage />} />
-        <Route path="/second_page" element={<SecondPage />} />
-        <Route path="/third_page" element={<ThirdPage />} />
-        <Route path="/fourth_page" element={<FourthPage />} />
-        <Route path="/fifth_page" element={<FifthPage />} />
-        <Route path="/final_page" element={<FinalPage />} />        
-      </Routes>
-    </div>
+      <div className={classes.root}>
+        <Routes>
+          <Route path="/" element={<EmailAndPasswordPage />} />
+          <Route
+            path="/second_page"
+            element={<NicknameAndPhoneAndBirthPage />}
+          />
+          <Route path="/third_page" element={<GenderAndWorkAndHobbyPage />} />
+          <Route path="/fourth_page" element={<PostAndAddressPage />} />
+          <Route path="/fifth_page" element={<SchoolInfoPage />} />
+          <Route path="/final_page" element={<FinalPage />} />
+        </Routes>
+      </div>
     </ThemeProvider>
   );
 }
