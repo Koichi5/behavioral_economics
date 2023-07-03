@@ -12,6 +12,8 @@ import { SchoolInfoPage } from "./view/templates/school_info_page";
 import { NicknameAndPhoneAndBirthPage } from "./view/templates/nickname_and_phone_and_birth_page";
 import { GenderAndWorkAndHobbyPage } from "./view/templates/gender_and_work_and_hobby_page";
 import { FinalPage } from "./view/templates/final_page";
+import { BloodTypeAndMotivationPage } from "./view/templates/blood_type_and_motivation_page";
+import { OtherPhoneAndNamePage } from "./view/templates/other_phone_and_name_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -46,7 +48,9 @@ function App() {
           />
           <Route path="/third_page" element={<GenderAndWorkAndHobbyPage />} />
           <Route path="/fourth_page" element={<PostAndAddressPage />} />
-          <Route path="/fifth_page" element={<SchoolInfoPage />} />
+          <Route path="/fifth_page" element={<OtherPhoneAndNamePage />} />
+          <Route path="/sixth_page" element={<BloodTypeAndMotivationPage />} />
+          <Route path="/seventh_page" element={<SchoolInfoPage />} />
           <Route path="/final_page" element={<FinalPage />} />
         </Routes>
       </div>

@@ -79,39 +79,39 @@ export const SchoolInfoPage = () => {
   var currentCount = 0;
 
   const onPressed = () => {
-    const thirdSubmitDoc = doc(db, "fourthSubmission", "XTtjNvymSrgYzOw9Og5c");
-    const countUpdateDocumentRef = updateDoc(thirdSubmitDoc, {
+    const schoolInfoSubmitDoc = doc(db, "schoolInfoSubmission", "P0GIu0A69M2u9dGD3oKX");
+    const countUpdateDocumentRef = updateDoc(schoolInfoSubmitDoc, {
       count: currentCount + 1,
     });
     console.log(countUpdateDocumentRef);
   };
 
-  const fetchThirdSubmissionCount = async () => {
-    var thirdSubmitCount = 0;
-    const thirdSubmitRef = doc(db, "fourthSubmission", "XTtjNvymSrgYzOw9Og5c");
+  const fetchSchoolInfoSubmissionCount = async () => {
+    var schoolInfoSubmissionSubmitCount = 0;
+    const schoolInfoSubmitRef = doc(db, "schoolInfoSubmission", "P0GIu0A69M2u9dGD3oKX");
 
     try {
-      const snapshot = await getDoc(thirdSubmitRef);
+      const snapshot = await getDoc(schoolInfoSubmitRef);
       const docData = snapshot.data();
       if (docData && docData.count) {
-        thirdSubmitCount = Number(docData.count);
+        schoolInfoSubmissionSubmitCount = Number(docData.count);
       }
-      console.log(thirdSubmitCount);
+      console.log(schoolInfoSubmissionSubmitCount);
     } catch (error) {
       console.error("Firestoreの更新処理に失敗しました", error);
     }
-    return thirdSubmitCount;
+    return schoolInfoSubmissionSubmitCount;
   };
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchThirdSubmissionCount();
+      currentCount = await fetchSchoolInfoSubmissionCount();
     })();
   });
   return (
     <div className={classes.root}>
       <CustomParticle />
-      <CustomStepper arg1={4} />
+      <CustomStepper arg1={6} />
       <div className={classes.fieldWrapper}>
         <p>学校名</p>
         <TextField

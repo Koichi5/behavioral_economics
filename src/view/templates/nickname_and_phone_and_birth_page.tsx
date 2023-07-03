@@ -46,33 +46,33 @@ export const NicknameAndPhoneAndBirthPage = () => {
   var currentCount = 0;
 
   const onPressed = () => {
-    const secondSubmitDoc = doc(db, "secondSubmission", "GIn1VvtwHBz2EGojpuVd");
-    const countUpdateDocumentRef = updateDoc(secondSubmitDoc, {
+    const nicknameAndPhoneAndBirthSubmitDoc = doc(db, "nicknameAndPhoneAndBirthSubmission", "VBWeQgZmJSEwJZ4STudk");
+    const countUpdateDocumentRef = updateDoc(nicknameAndPhoneAndBirthSubmitDoc, {
       count: currentCount + 1,
     });
     console.log(countUpdateDocumentRef);
   };
 
-  const fetchSecondSubmissionCount = async () => {
-    var secondSubmitCount = 0;
-    const secondSubmitRef = doc(db, "secondSubmission", "GIn1VvtwHBz2EGojpuVd");
+  const fetchNicknameAndPhoneAndBirthSubmissionCount = async () => {
+    var nicknameAndPhoneAndBirthSubmitCount = 0;
+    const nicknameAndPhoneAndBirthSubmitRef = doc(db, "nicknameAndPhoneAndBirthSubmission", "VBWeQgZmJSEwJZ4STudk");
 
     try {
-      const snapshot = await getDoc(secondSubmitRef);
+      const snapshot = await getDoc(nicknameAndPhoneAndBirthSubmitRef);
       const docData = snapshot.data();
       if (docData && docData.count) {
-        secondSubmitCount = Number(docData.count);
+        nicknameAndPhoneAndBirthSubmitCount = Number(docData.count);
       }
-      console.log(secondSubmitCount);
+      console.log(nicknameAndPhoneAndBirthSubmitCount);
     } catch (error) {
       console.error("Firestoreの更新処理に失敗しました", error);
     }
-    return secondSubmitCount;
+    return nicknameAndPhoneAndBirthSubmitCount;
   };
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchSecondSubmissionCount();
+      currentCount = await fetchNicknameAndPhoneAndBirthSubmissionCount();
     })();
   });
 
@@ -124,7 +124,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
             marginTop: "3%",
           }}
         >
-          登　　録
+          次　　へ
         </Button>
       </Link>
       <Routes>

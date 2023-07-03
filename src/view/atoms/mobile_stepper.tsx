@@ -7,7 +7,7 @@ const useStyles = makeStyles(() => ({
     alignContent: "center"
   },
 
-  stepper: {
+  mobileStepper: {
     marginLeft: "15%",
     marginRight: "15%",
     backgroundColor: "transparent",
@@ -20,11 +20,12 @@ export const CustomMobileStepper = (props: { arg1: number }) => {
   return (
     <div className={classes.root}>
       <MobileStepper
+        sx={{ bgcolor: 'transparent' }}
         variant="progress"
-        steps={6}
+        steps={7}
         position="static"
         activeStep={props.arg1}
-        className={classes.stepper} 
+        className={classes.mobileStepper} 
         backButton={undefined} 
         nextButton={undefined}        
       />

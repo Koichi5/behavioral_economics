@@ -19,7 +19,7 @@ import { VisibilityOff, Visibility } from "@material-ui/icons";
 const useStyles = makeStyles(() => ({
   root: {
     position: "relative",
-    top: "15%",
+    top: "10%",
   },
 
   fieldWrapper: {
@@ -72,41 +72,41 @@ function EmailAndPasswordPage() {
   var currentCount = 0;
 
   const onPressed = () => {
-    const initialSubmitDoc = doc(
+    const emailAndPasswordSubmissionDoc = doc(
       db,
-      "initialSubmission",
-      "BI7F9fAnwmGeHdku5EIq"
+      "emailAndPasswordSubmission",
+      "f1l7UtMKxLke8l40C3FZ"
     );
-    const countUpdateDocumentRef = updateDoc(initialSubmitDoc, {
+    const countUpdateDocumentRef = updateDoc(emailAndPasswordSubmissionDoc, {
       count: currentCount + 1,
     });
     console.log(countUpdateDocumentRef);
   };
 
-  const fetchInitialSubmissionCount = async () => {
-    var initialSubmitCount = 0;
-    const initialSubmitRef = doc(
+  const fetchEmailAndPasswordSubmissionCount = async () => {
+    var emailAndPasswordSubmitCount = 0;
+    const emailAndPasswordSubmissitRef = doc(
       db,
-      "initialSubmission",
-      "BI7F9fAnwmGeHdku5EIq"
+      "emailAndPasswordSubmission",
+      "f1l7UtMKxLke8l40C3FZ"
     );
 
     try {
-      const snapshot = await getDoc(initialSubmitRef);
+      const snapshot = await getDoc(emailAndPasswordSubmissitRef);
       const docData = snapshot.data();
       if (docData && docData.count) {
-        initialSubmitCount = Number(docData.count);
+        emailAndPasswordSubmitCount = Number(docData.count);
       }
-      console.log(initialSubmitCount);
+      console.log(emailAndPasswordSubmitCount);
     } catch (error) {
       console.error("Firestoreの更新処理に失敗しました", error);
     }
-    return initialSubmitCount;
+    return emailAndPasswordSubmitCount;
   };
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchInitialSubmissionCount();
+      currentCount = await fetchEmailAndPasswordSubmissionCount();
     })();
   });
 
@@ -176,7 +176,7 @@ function EmailAndPasswordPage() {
             marginTop: "3%",
           }}
         >
-          登　　録
+          次　　へ
         </Button>
       </Link>
       <Routes>

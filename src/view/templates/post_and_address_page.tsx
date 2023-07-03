@@ -1,12 +1,12 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
-import { SchoolInfoPage } from "./school_info_page";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
+import { OtherPhoneAndNamePage } from "./other_phone_and_name_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -45,33 +45,33 @@ export const PostAndAddressPage = () => {
   var currentCount = 0;
 
   const onPressed = () => {
-    const thirdSubmitDoc = doc(db, "thirdSubmission", "5eWb85uV53vHB8wvA6AH");
-    const countUpdateDocumentRef = updateDoc(thirdSubmitDoc, {
+    const postAndAddressSubmitDoc = doc(db, "postAndAddressSubmission", "inOV9RPe59p1ZG6TO831");
+    const countUpdateDocumentRef = updateDoc(postAndAddressSubmitDoc, {
       count: currentCount + 1,
     });
     console.log(countUpdateDocumentRef);
   };
 
-  const fetchThirdSubmissionCount = async () => {
-    var thirdSubmitCount = 0;
-    const thirdSubmitRef = doc(db, "thirdSubmission", "5eWb85uV53vHB8wvA6AH");
+  const fetchPostAndAddressSubmissionCount = async () => {
+    var postAndAddressSubmissionCount = 0;
+    const postAndAddressSubmitRef = doc(db, "postAndAddressSubmission", "inOV9RPe59p1ZG6TO831");
 
     try {
-      const snapshot = await getDoc(thirdSubmitRef);
+      const snapshot = await getDoc(postAndAddressSubmitRef);
       const docData = snapshot.data();
       if (docData && docData.count) {
-        thirdSubmitCount = Number(docData.count);
+        postAndAddressSubmissionCount = Number(docData.count);
       }
-      console.log(thirdSubmitCount);
+      console.log(postAndAddressSubmissionCount);
     } catch (error) {
       console.error("Firestoreの更新処理に失敗しました", error);
     }
-    return thirdSubmitCount;
+    return postAndAddressSubmissionCount;
   };
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchThirdSubmissionCount();
+      currentCount = await fetchPostAndAddressSubmissionCount();
     })();
   });
   return (
@@ -122,11 +122,11 @@ export const PostAndAddressPage = () => {
             marginTop: "3%",
           }}
         >
-          登　　録
+          次　　へ
         </Button>
       </Link>
       <Routes>
-        <Route path="/fifth_page" element={<SchoolInfoPage />}></Route>
+        <Route path="/fifth_page" element={<OtherPhoneAndNamePage />}></Route>
       </Routes>
     </div>
   );

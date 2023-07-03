@@ -59,33 +59,33 @@ export const GenderAndWorkAndHobbyPage = () => {
   var currentCount = 0;
 
   const onPressed = () => {
-    const fifthSubmitDoc = doc(db, "fifthSubmission", "5xpPQVRCPGKm4SahUoqn");
-    const countUpdateDocumentRef = updateDoc(fifthSubmitDoc, {
+    const genderAndWorkAndHobbySubmitDoc = doc(db, "genderAndWorkAndHobbySubmission", "ur6R8Avm4P55AUAtFTX2");
+    const countUpdateDocumentRef = updateDoc(genderAndWorkAndHobbySubmitDoc, {
       count: currentCount + 1,
     });
     console.log(countUpdateDocumentRef);
   };
 
-  const fetchFifthSubmissionCount = async () => {
-    var fifthSubmitCount = 0;
-    const fifthSubmitRef = doc(db, "fifthSubmission", "5xpPQVRCPGKm4SahUoqn");
+  const fetchgenderAndWorkAndHobbySubmissionCount = async () => {
+    var genderAndWorkAndHobbySubmissionCount = 0;
+    const genderAndWorkAndHobbySubmitRef = doc(db, "genderAndWorkAndHobbySubmission", "ur6R8Avm4P55AUAtFTX2");
 
     try {
-      const snapshot = await getDoc(fifthSubmitRef);
+      const snapshot = await getDoc(genderAndWorkAndHobbySubmitRef);
       const docData = snapshot.data();
       if (docData && docData.count) {
-        fifthSubmitCount = Number(docData.count);
+        genderAndWorkAndHobbySubmissionCount = Number(docData.count);
       }
-      console.log(fifthSubmitCount);
+      console.log(genderAndWorkAndHobbySubmissionCount);
     } catch (error) {
       console.error("Firestoreの更新処理に失敗しました", error);
     }
-    return fifthSubmitCount;
+    return genderAndWorkAndHobbySubmissionCount;
   };
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchFifthSubmissionCount();
+      currentCount = await fetchgenderAndWorkAndHobbySubmissionCount();
     })();
   });
   return (
@@ -144,7 +144,7 @@ export const GenderAndWorkAndHobbyPage = () => {
             marginTop: "3%",
           }}
         >
-          登　　録
+          次　　へ
         </Button>
       </Link>
       <Routes>

@@ -20,6 +20,8 @@ export const CustomStepper = (props: { arg1: number }) => {
       "ステップ　3",
       "ステップ　4",
       "ステップ　5",
+      "ステップ　6",
+      "ステップ　7",
     ];
   }
 
