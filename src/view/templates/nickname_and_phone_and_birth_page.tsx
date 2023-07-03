@@ -1,7 +1,7 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
@@ -38,6 +38,9 @@ const useStyles = makeStyles(() => ({
 
 export const NicknameAndPhoneAndBirthPage = () => {
   const classes = useStyles();
+  const [nickName, setNickName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [birthDay, setBirthDay] = useState("");
 
   const {
     formState: { errors },
@@ -46,16 +49,27 @@ export const NicknameAndPhoneAndBirthPage = () => {
   var currentCount = 0;
 
   const onPressed = () => {
-    const nicknameAndPhoneAndBirthSubmitDoc = doc(db, "nicknameAndPhoneAndBirthSubmission", "VBWeQgZmJSEwJZ4STudk");
-    const countUpdateDocumentRef = updateDoc(nicknameAndPhoneAndBirthSubmitDoc, {
-      count: currentCount + 1,
-    });
+    const nicknameAndPhoneAndBirthSubmitDoc = doc(
+      db,
+      "nicknameAndPhoneAndBirthSubmission",
+      "VBWeQgZmJSEwJZ4STudk"
+    );
+    const countUpdateDocumentRef = updateDoc(
+      nicknameAndPhoneAndBirthSubmitDoc,
+      {
+        count: currentCount + 1,
+      }
+    );
     console.log(countUpdateDocumentRef);
   };
 
   const fetchNicknameAndPhoneAndBirthSubmissionCount = async () => {
     var nicknameAndPhoneAndBirthSubmitCount = 0;
-    const nicknameAndPhoneAndBirthSubmitRef = doc(db, "nicknameAndPhoneAndBirthSubmission", "VBWeQgZmJSEwJZ4STudk");
+    const nicknameAndPhoneAndBirthSubmitRef = doc(
+      db,
+      "nicknameAndPhoneAndBirthSubmission",
+      "VBWeQgZmJSEwJZ4STudk"
+    );
 
     try {
       const snapshot = await getDoc(nicknameAndPhoneAndBirthSubmitRef);
@@ -83,6 +97,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
       <div className={classes.fieldWrapper}>
         <p>ニックネーム</p>
         <TextField
+          onChange={(event) => setNickName(event.target.value)}
           className={classes.field}
           InputProps={{ className: classes.input }}
           id="outlined-name"
@@ -93,6 +108,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
       <div className={classes.fieldWrapper}>
         <p>電話番号</p>
         <TextField
+          onChange={(event) => setPhoneNumber(event.target.value)}
           className={classes.field}
           InputProps={{ className: classes.input }}
           id="outlined-name"
@@ -103,6 +119,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
       <div className={classes.fieldWrapper}>
         <p>誕生日</p>
         <TextField
+          onChange={(event) => setBirthDay(event.target.value)}
           className={classes.field}
           InputProps={{ className: classes.input }}
           id="outlined-name"
@@ -113,6 +130,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
       </div>
       <Link to="/third_page">
         <Button
+          disabled={nickName == "" || phoneNumber == "" || birthDay == ""}
           variant="contained"
           color="primary"
           onClick={onPressed}
@@ -128,7 +146,10 @@ export const NicknameAndPhoneAndBirthPage = () => {
         </Button>
       </Link>
       <Routes>
-        <Route path="/third_page" element={<GenderAndWorkAndHobbyPage />}></Route>
+        <Route
+          path="/third_page"
+          element={<GenderAndWorkAndHobbyPage />}
+        ></Route>
       </Routes>
     </div>
   );

@@ -7,14 +7,13 @@ import {
 } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
-import React from "react";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import CustomParticle from "../atoms/particle";
-import { FinalPage } from "./final_page";
+import { ExplanationPage } from "./explanation_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -46,11 +45,13 @@ const useStyles = makeStyles(() => ({
 
 export const SchoolInfoPage = () => {
   const classes = useStyles();
-  const [degree, setDegree] = React.useState("");
-  const [degreeStartYear, setDegreeStartYear] = React.useState("");
-  const [degreeStartMonth, setDegreeStartMonth] = React.useState("");
-  const [degreeEndYear, setDegreeEndYear] = React.useState("");
-  const [degreeEndMonth, setDegreeEndMonth] = React.useState("");
+  const [schoolName, setSchoolName] = useState("");
+  const [departmentName, setDepartmentName] = useState("");
+  const [degree, setDegree] = useState("");
+  const [degreeStartYear, setDegreeStartYear] = useState("");
+  const [degreeStartMonth, setDegreeStartMonth] = useState("");
+  const [degreeEndYear, setDegreeEndYear] = useState("");
+  const [degreeEndMonth, setDegreeEndMonth] = useState("");
 
   const handleDegreeChange = (event: SelectChangeEvent) => {
     setDegree(event.target.value);
@@ -79,7 +80,11 @@ export const SchoolInfoPage = () => {
   var currentCount = 0;
 
   const onPressed = () => {
-    const schoolInfoSubmitDoc = doc(db, "schoolInfoSubmission", "P0GIu0A69M2u9dGD3oKX");
+    const schoolInfoSubmitDoc = doc(
+      db,
+      "schoolInfoSubmission",
+      "P0GIu0A69M2u9dGD3oKX"
+    );
     const countUpdateDocumentRef = updateDoc(schoolInfoSubmitDoc, {
       count: currentCount + 1,
     });
@@ -88,7 +93,11 @@ export const SchoolInfoPage = () => {
 
   const fetchSchoolInfoSubmissionCount = async () => {
     var schoolInfoSubmissionSubmitCount = 0;
-    const schoolInfoSubmitRef = doc(db, "schoolInfoSubmission", "P0GIu0A69M2u9dGD3oKX");
+    const schoolInfoSubmitRef = doc(
+      db,
+      "schoolInfoSubmission",
+      "P0GIu0A69M2u9dGD3oKX"
+    );
 
     try {
       const snapshot = await getDoc(schoolInfoSubmitRef);
@@ -115,6 +124,7 @@ export const SchoolInfoPage = () => {
       <div className={classes.fieldWrapper}>
         <p>学校名</p>
         <TextField
+          onChange={(event) => setSchoolName(event.target.value)}
           className={classes.field}
           InputProps={{ className: classes.input }}
           id="outlined-name"
@@ -125,6 +135,7 @@ export const SchoolInfoPage = () => {
       <div className={classes.fieldWrapper}>
         <p>学部・学科</p>
         <TextField
+          onChange={(event) => setDepartmentName(event.target.value)}
           className={classes.field}
           InputProps={{ className: classes.input }}
           id="outlined-name"
@@ -289,8 +300,17 @@ export const SchoolInfoPage = () => {
         </div>
       </div>
       {errors.name && <span>エラーが発生しました</span>}
-      <Link to="/final_page">
+      <Link to="/explanation_page">
         <Button
+          disabled={
+            schoolName == "" ||
+            departmentName == "" ||
+            degree == "" ||
+            degreeStartYear == "" ||
+            degreeStartMonth == "" ||
+            degreeEndYear == "" ||
+            degreeEndMonth == ""
+          }
           variant="contained"
           color="primary"
           onClick={onPressed}
@@ -306,10 +326,7 @@ export const SchoolInfoPage = () => {
         </Button>
       </Link>
       <Routes>
-        <Route
-          path="/final_page"
-          element={<FinalPage />}
-        ></Route>
+        <Route path="/explanation_page" element={<ExplanationPage />}></Route>
       </Routes>
     </div>
   );

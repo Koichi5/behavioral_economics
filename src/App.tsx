@@ -14,6 +14,7 @@ import { GenderAndWorkAndHobbyPage } from "./view/templates/gender_and_work_and_
 import { FinalPage } from "./view/templates/final_page";
 import { BloodTypeAndMotivationPage } from "./view/templates/blood_type_and_motivation_page";
 import { OtherPhoneAndNamePage } from "./view/templates/other_phone_and_name_page";
+import { ExplanationPage } from "./view/templates/explanation_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -51,6 +52,7 @@ function App() {
           <Route path="/fifth_page" element={<OtherPhoneAndNamePage />} />
           <Route path="/sixth_page" element={<BloodTypeAndMotivationPage />} />
           <Route path="/seventh_page" element={<SchoolInfoPage />} />
+          <Route path="/explanation_page" element={<ExplanationPage />} />
           <Route path="/final_page" element={<FinalPage />} />
         </Routes>
       </div>

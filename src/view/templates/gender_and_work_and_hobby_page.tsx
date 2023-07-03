@@ -7,13 +7,12 @@ import {
 } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import React from "react";
 import { PostAndAddressPage } from "./post_and_address_page";
 
 const useStyles = makeStyles(() => ({
@@ -46,7 +45,9 @@ const useStyles = makeStyles(() => ({
 
 export const GenderAndWorkAndHobbyPage = () => {
   const classes = useStyles();
-  const [gender, setGender] = React.useState("");
+  const [gender, setGender] = useState("");
+  const [work, setWork] = useState("");
+  const [hobby, setHobby] = useState("");
 
   const handleGenderChange = (event: SelectChangeEvent) => {
     setGender(event.target.value);
@@ -59,7 +60,11 @@ export const GenderAndWorkAndHobbyPage = () => {
   var currentCount = 0;
 
   const onPressed = () => {
-    const genderAndWorkAndHobbySubmitDoc = doc(db, "genderAndWorkAndHobbySubmission", "ur6R8Avm4P55AUAtFTX2");
+    const genderAndWorkAndHobbySubmitDoc = doc(
+      db,
+      "genderAndWorkAndHobbySubmission",
+      "ur6R8Avm4P55AUAtFTX2"
+    );
     const countUpdateDocumentRef = updateDoc(genderAndWorkAndHobbySubmitDoc, {
       count: currentCount + 1,
     });
@@ -68,7 +73,11 @@ export const GenderAndWorkAndHobbyPage = () => {
 
   const fetchgenderAndWorkAndHobbySubmissionCount = async () => {
     var genderAndWorkAndHobbySubmissionCount = 0;
-    const genderAndWorkAndHobbySubmitRef = doc(db, "genderAndWorkAndHobbySubmission", "ur6R8Avm4P55AUAtFTX2");
+    const genderAndWorkAndHobbySubmitRef = doc(
+      db,
+      "genderAndWorkAndHobbySubmission",
+      "ur6R8Avm4P55AUAtFTX2"
+    );
 
     try {
       const snapshot = await getDoc(genderAndWorkAndHobbySubmitRef);
@@ -113,6 +122,7 @@ export const GenderAndWorkAndHobbyPage = () => {
       <div className={classes.fieldWrapper}>
         <p>職業</p>
         <TextField
+          onChange={(event) => setWork(event.target.value)}
           className={classes.field}
           InputProps={{ className: classes.input }}
           id="outlined-name"
@@ -123,6 +133,7 @@ export const GenderAndWorkAndHobbyPage = () => {
       <div className={classes.fieldWrapper}>
         <p>趣味</p>
         <TextField
+          onChange={(event) => setHobby(event.target.value)}
           className={classes.field}
           InputProps={{ className: classes.input }}
           id="outlined-name"
@@ -133,6 +144,7 @@ export const GenderAndWorkAndHobbyPage = () => {
       {errors.name && <span>エラーが発生しました</span>}
       <Link to="/fourth_page">
         <Button
+          disabled={gender == "" || work == "" || hobby == ""}
           variant="contained"
           color="primary"
           onClick={onPressed}

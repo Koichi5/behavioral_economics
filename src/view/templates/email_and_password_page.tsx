@@ -56,6 +56,9 @@ function EmailAndPasswordPage() {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [retypePassword, setRetypePassword] = useState("");
 
   function handleClickShowPassword() {
     setShowPassword(!showPassword);
@@ -117,6 +120,7 @@ function EmailAndPasswordPage() {
       <div className={classes.fieldWrapper}>
         <p>メールアドレス</p>
         <TextField
+          onChange={(event) => setEmail(event.target.value)}
           className={classes.field}
           InputProps={{ className: classes.input }}
           id="outlined-email"
@@ -127,6 +131,7 @@ function EmailAndPasswordPage() {
       <div className={classes.fieldWrapper}>
         <p>パスワード</p>
         <OutlinedInput
+          onChange={(event) => setPassword(event.target.value)}
           className={classes.secretField}
           id="outlined-adornment-password"
           type={showPassword ? "text" : "password"}
@@ -146,6 +151,7 @@ function EmailAndPasswordPage() {
       <div className={classes.fieldWrapper}>
         <p>パスワード（確認）</p>
         <OutlinedInput
+          onChange={(event) => setRetypePassword(event.target.value)}
           className={classes.secretField}
           id="outlined-adornment-password"
           type={showConfirmPassword ? "text" : "password"}
@@ -165,6 +171,7 @@ function EmailAndPasswordPage() {
       {errors.name && <span>エラーが発生しました</span>}
       <Link to="/second_page">
         <Button
+          disabled={email == "" || password == "" || retypePassword == ""}
           variant="contained"
           color="primary"
           onClick={onPressed}

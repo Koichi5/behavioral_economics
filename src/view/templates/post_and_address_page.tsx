@@ -1,7 +1,7 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
@@ -38,6 +38,10 @@ const useStyles = makeStyles(() => ({
 
 export const PostAndAddressPage = () => {
   const classes = useStyles();
+  const [postNumber, setPostNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [detailAddress, setDetailAddress] = useState("");
+
   const {
     formState: { errors },
   } = useForm<User>();
@@ -45,7 +49,11 @@ export const PostAndAddressPage = () => {
   var currentCount = 0;
 
   const onPressed = () => {
-    const postAndAddressSubmitDoc = doc(db, "postAndAddressSubmission", "inOV9RPe59p1ZG6TO831");
+    const postAndAddressSubmitDoc = doc(
+      db,
+      "postAndAddressSubmission",
+      "inOV9RPe59p1ZG6TO831"
+    );
     const countUpdateDocumentRef = updateDoc(postAndAddressSubmitDoc, {
       count: currentCount + 1,
     });
@@ -54,7 +62,11 @@ export const PostAndAddressPage = () => {
 
   const fetchPostAndAddressSubmissionCount = async () => {
     var postAndAddressSubmissionCount = 0;
-    const postAndAddressSubmitRef = doc(db, "postAndAddressSubmission", "inOV9RPe59p1ZG6TO831");
+    const postAndAddressSubmitRef = doc(
+      db,
+      "postAndAddressSubmission",
+      "inOV9RPe59p1ZG6TO831"
+    );
 
     try {
       const snapshot = await getDoc(postAndAddressSubmitRef);
@@ -81,6 +93,7 @@ export const PostAndAddressPage = () => {
       <div className={classes.fieldWrapper}>
         <p>郵便番号</p>
         <TextField
+          onChange={(event) => setPostNumber(event.target.value)}
           className={classes.field}
           InputProps={{ className: classes.input }}
           id="outlined-name"
@@ -91,6 +104,7 @@ export const PostAndAddressPage = () => {
       <div className={classes.fieldWrapper}>
         <p>住所（都道府県、市町村、番地）</p>
         <TextField
+          onChange={(event) => setAddress(event.target.value)}
           className={classes.field}
           InputProps={{ className: classes.input }}
           id="outlined-name"
@@ -101,6 +115,7 @@ export const PostAndAddressPage = () => {
       <div className={classes.fieldWrapper}>
         <p>住所（アパート名等）</p>
         <TextField
+          onChange={(event) => setDetailAddress(event.target.value)}
           className={classes.field}
           InputProps={{ className: classes.input }}
           id="outlined-name"
@@ -111,6 +126,7 @@ export const PostAndAddressPage = () => {
       {errors.name && <span>エラーが発生しました</span>}
       <Link to="/fifth_page">
         <Button
+          disabled={postNumber == "" || address == "" || detailAddress == ""}
           variant="contained"
           color="primary"
           onClick={onPressed}
