@@ -47,17 +47,64 @@ export const OtherPhoneAndNamePage = () => {
   } = useForm<User>();
 
   var currentCount = 0;
+  var currentOtherPhoneCount = 0;
+  var currentOtherNameCount = 0;
+  var currentOtherRelationCount = 0;
 
-  const onPressed = () => {
+  const updateOtherPhoneAndNameAndRelation = () => {
     const otherPhoneAndNameSubmitDoc = doc(
       db,
       "otherPhoneAndNameSubmission",
       "wSTeNxF4tp4LK6QOnC7k"
     );
-    const countUpdateDocumentRef = updateDoc(otherPhoneAndNameSubmitDoc, {
+    updateDoc(otherPhoneAndNameSubmitDoc, {
       count: currentCount + 1,
     });
-    console.log(countUpdateDocumentRef);
+  };
+
+  const updateOtherPhoneCount = () => {
+    const otherPhoneCollectionPath = doc(
+      db,
+      "otherPhoneAndNameSubmission",
+      "wSTeNxF4tp4LK6QOnC7k",
+      "otherPhoneRegister",
+      "pLxO66ORBxCNZSMUcGmc"
+    );
+    if (otherPhone != "") {
+      updateDoc(otherPhoneCollectionPath, {
+        count: currentOtherPhoneCount + 1,
+      });
+    }
+  };
+
+  const updateOtherNameCount = () => {
+    const otherNameCollectionPath = doc(
+      db,
+      "otherPhoneAndNameSubmission",
+      "wSTeNxF4tp4LK6QOnC7k",
+      "otherNameRegister",
+      "VjS0kT9lHBcibqvxdCch"
+    );
+    if (otherName != "") {
+      updateDoc(otherNameCollectionPath, {
+        count: currentOtherNameCount + 1,
+      });
+    }
+  };
+
+  const updateOtherRelationCount = () => {
+    const otherRelationCollectionPath = doc(
+      db,
+      "otherPhoneAndNameSubmission",
+      "wSTeNxF4tp4LK6QOnC7k",
+      "otherRelationRegister",
+      "BMJmc7A6sA9ch0cJiM9L"
+    );
+    if (otherRelation != "") {
+      updateDoc(otherRelationCollectionPath, {
+        count: currentOtherRelationCount + 1,
+      });
+    }
   };
 
   const fetchotherPhoneAndNameSubmissionCount = async () => {
@@ -81,10 +128,99 @@ export const OtherPhoneAndNamePage = () => {
     return phoneAndNameSubmissionCount;
   };
 
+  const fetchOtherPhoneCount = async () => {
+    var otherPhoneCount = 0;
+    const otherPhoneCountRef = doc(
+      db,
+      "otherPhoneAndNameSubmission",
+      "wSTeNxF4tp4LK6QOnC7k",
+      "otherPhoneRegister",
+      "pLxO66ORBxCNZSMUcGmc"
+    );
+
+    try {
+      const snapshot = await getDoc(otherPhoneCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        otherPhoneCount = Number(docData.count);
+      }
+      console.log(otherPhoneCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherPhoneCount;
+  };
+
+  const fetchOtherNameCount = async () => {
+    var otherNameCount = 0;
+    const otherNameCountRef = doc(
+      db,
+      "otherPhoneAndNameSubmission",
+      "wSTeNxF4tp4LK6QOnC7k",
+      "otherNameRegister",
+      "VjS0kT9lHBcibqvxdCch"
+    );
+
+    try {
+      const snapshot = await getDoc(otherNameCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        otherNameCount = Number(docData.count);
+      }
+      console.log(otherNameCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherNameCount;
+  };
+
+  const fetchOtherRelationCount = async () => {
+    var otherRelationCount = 0;
+    const otherRelationCountRef = doc(
+      db,
+      "otherPhoneAndNameSubmission",
+      "wSTeNxF4tp4LK6QOnC7k",
+      "otherRelationRegister",
+      "BMJmc7A6sA9ch0cJiM9L"
+    );
+
+    try {
+      const snapshot = await getDoc(otherRelationCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        otherRelationCount = Number(docData.count);
+      }
+      console.log(otherRelationCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherRelationCount;
+  };
+
+  const _onBrowserBack = () => {
+    console.log("browser back fired !");
+    updateOtherPhoneCount();
+    updateOtherNameCount();
+    updateOtherRelationCount();
+  };
+
+  const _onPressed = () => {
+    updateOtherPhoneAndNameAndRelation();
+    updateOtherPhoneCount();
+    updateOtherNameCount();
+    updateOtherRelationCount();
+  };
+
   useEffect(() => {
     (async () => {
       currentCount = await fetchotherPhoneAndNameSubmissionCount();
+      currentOtherPhoneCount = await fetchOtherPhoneCount();
+      currentOtherNameCount = await fetchOtherNameCount();
+      currentOtherRelationCount = await fetchOtherRelationCount();
     })();
+    window.onpopstate = () => {
+      _onBrowserBack();
+    }
   });
   return (
     <div className={classes.root}>
@@ -129,7 +265,7 @@ export const OtherPhoneAndNamePage = () => {
           disabled={otherPhone == "" || otherName == "" || otherRelation == ""}
           variant="contained"
           color="primary"
-          onClick={onPressed}
+          onClick={_onPressed}
           style={{
             maxWidth: "400px",
             maxHeight: "45px",

@@ -49,27 +49,74 @@ export const GenderAndWorkAndHobbyPage = () => {
   const [work, setWork] = useState("");
   const [hobby, setHobby] = useState("");
 
-  const handleGenderChange = (event: SelectChangeEvent) => {
-    setGender(event.target.value);
-  };
-
   const {
     formState: { errors },
   } = useForm<User>();
 
   var currentCount = 0;
+  var currentGenderCount = 0;
+  var currentWorkCount = 0;
+  var currentHobbyCount = 0;
 
-  const onPressed = () => {
+  const handleGenderChange = (event: SelectChangeEvent) => {
+    setGender(event.target.value);
+  };
+
+  const updateGenderAndWorkAndHobbyCount = () => {
     const genderAndWorkAndHobbySubmitDoc = doc(
       db,
       "genderAndWorkAndHobbySubmission",
       "ur6R8Avm4P55AUAtFTX2"
     );
-    const countUpdateDocumentRef = updateDoc(genderAndWorkAndHobbySubmitDoc, {
+    updateDoc(genderAndWorkAndHobbySubmitDoc, {
       count: currentCount + 1,
     });
-    console.log(countUpdateDocumentRef);
-  };
+  }
+
+  const updateGenderCount = () => {
+    const genderCollectionPath = doc(
+      db,
+      "genderAndWorkAndHobbySubmission",
+      "ur6R8Avm4P55AUAtFTX2",
+      "genderRegister",
+      "GkekzDOTmJP1FGHvdgj0"
+    );
+    if (gender != "") {
+      updateDoc(genderCollectionPath, {
+        count: currentGenderCount + 1,
+      });
+    }
+  }
+
+  const updateWorkCount = () => {
+    const workCollectionPath = doc(
+      db,
+      "genderAndWorkAndHobbySubmission",
+      "ur6R8Avm4P55AUAtFTX2",
+      "workRegister",
+      "r0LK8sEDjAxYMCfjY8Mv"
+    );
+    if (work != "") {
+      updateDoc(workCollectionPath, {
+        count: currentWorkCount + 1,
+      });
+    }
+  }
+
+  const updateHobbyCount = () => {
+    const hobbyCollectionPath = doc(
+      db,
+      "genderAndWorkAndHobbySubmission",
+      "ur6R8Avm4P55AUAtFTX2",
+      "hobbyRegister",
+      "ChTom4Cvys1I6eKTN786"
+    );
+    if (hobby != "") {
+      updateDoc(hobbyCollectionPath, {
+        count: currentHobbyCount + 1,
+      });
+    }
+  }
 
   const fetchgenderAndWorkAndHobbySubmissionCount = async () => {
     var genderAndWorkAndHobbySubmissionCount = 0;
@@ -92,10 +139,99 @@ export const GenderAndWorkAndHobbyPage = () => {
     return genderAndWorkAndHobbySubmissionCount;
   };
 
+  const fetchGenderCount = async () => {
+    var genderCount = 0;
+    const genderCountRef = doc(
+      db,
+      "genderAndWorkAndHobbySubmission",
+      "ur6R8Avm4P55AUAtFTX2",
+      "genderRegister",
+      "GkekzDOTmJP1FGHvdgj0"
+    );
+
+    try {
+      const snapshot = await getDoc(genderCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        genderCount = Number(docData.count);
+      }
+      console.log(genderCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return genderCount;
+  };
+
+  const fetchWorkCount = async () => {
+    var workCount = 0;
+    const workCountRef = doc(
+      db,
+      "genderAndWorkAndHobbySubmission",
+      "ur6R8Avm4P55AUAtFTX2",
+      "workRegister",
+      "r0LK8sEDjAxYMCfjY8Mv"
+    );
+
+    try {
+      const snapshot = await getDoc(workCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        workCount = Number(docData.count);
+      }
+      console.log(workCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return workCount;
+  };
+
+  const fetchHobbyCount = async () => {
+    var hobbyCount = 0;
+    const hobbyCountRef = doc(
+      db,
+      "genderAndWorkAndHobbySubmission",
+      "ur6R8Avm4P55AUAtFTX2",
+      "hobbyRegister",
+      "ChTom4Cvys1I6eKTN786"
+    );
+
+    try {
+      const snapshot = await getDoc(hobbyCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        hobbyCount = Number(docData.count);
+      }
+      console.log(hobbyCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return hobbyCount;
+  };
+
+  const _onBrowserBack = () => {
+    console.log("browser back fired !");
+    updateGenderCount();
+    updateWorkCount();
+    updateHobbyCount();
+  };
+
+  const _onPressed = () => {
+    updateGenderAndWorkAndHobbyCount();
+    updateGenderCount();
+    updateWorkCount();
+    updateHobbyCount();
+  };
+
   useEffect(() => {
     (async () => {
       currentCount = await fetchgenderAndWorkAndHobbySubmissionCount();
+      currentGenderCount = await fetchGenderCount();
+      currentWorkCount = await fetchWorkCount();
+      currentHobbyCount = await fetchHobbyCount();
     })();
+    window.onpopstate = () => {
+      _onBrowserBack()
+    }
   });
   return (
     <div className={classes.root}>
@@ -147,7 +283,7 @@ export const GenderAndWorkAndHobbyPage = () => {
           disabled={gender == "" || work == "" || hobby == ""}
           variant="contained"
           color="primary"
-          onClick={onPressed}
+          onClick={_onPressed}
           style={{
             maxWidth: "400px",
             maxHeight: "45px",

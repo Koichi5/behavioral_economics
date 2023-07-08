@@ -41,6 +41,7 @@ const useStyles = makeStyles(() => ({
 
 export const FourthIntroductionPage = () => {
   const classes = useStyles();
+  
   return (
     <div className={classes.root}>
       <CustomParticle />

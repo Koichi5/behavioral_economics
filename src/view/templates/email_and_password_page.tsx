@@ -15,6 +15,7 @@ import {
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
 import { VisibilityOff, Visibility } from "@material-ui/icons";
+import "firebase/firestore";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -68,11 +69,20 @@ function EmailAndPasswordPage() {
     setShowConfirmPassword(!showConfirmPassword);
   }
 
+  const backButtonListener = () => {
+    useEffect(() => {
+      window.onpopstate = () => {
+        onBrowserBack();
+      };
+    });
+  };
+
   const {
     formState: { errors },
   } = useForm<User>();
 
   var currentCount = 0;
+  var currentEmailCount = 0;
 
   const onPressed = () => {
     const emailAndPasswordSubmissionDoc = doc(
@@ -84,6 +94,21 @@ function EmailAndPasswordPage() {
       count: currentCount + 1,
     });
     console.log(countUpdateDocumentRef);
+  };
+
+  const onBrowserBack = () => {
+    const emailCollectionPath = doc(
+      db,
+      "emailAndPasswordSubmission",
+      "f1l7UtMKxLke8l40C3FZ",
+      "emailRegister",
+      "GmE3vIiVFF3agndDBXsh",
+    );
+    if (email != "") {
+      updateDoc(emailCollectionPath, {
+        count: currentEmailCount + 1,
+      });
+    }
   };
 
   const fetchEmailAndPasswordSubmissionCount = async () => {
@@ -104,14 +129,41 @@ function EmailAndPasswordPage() {
     } catch (error) {
       console.error("Firestoreの更新処理に失敗しました", error);
     }
+    console.log("current email and password submission count:", currentCount);
     return emailAndPasswordSubmitCount;
+  };
+
+  const fetchEmailRegisterCount = async () => {
+    var emailRegisterCount = 0;
+    const emailRegisterCountRef = doc(
+      db,
+      "emailAndPasswordSubmission",
+      "f1l7UtMKxLke8l40C3FZ",
+      "emailRegister",
+      "GmE3vIiVFF3agndDBXsh"
+    );
+
+    try {
+      const snapshot = await getDoc(emailRegisterCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        emailRegisterCount = Number(docData.count);
+      }
+      console.log(emailRegisterCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    console.log("current email count:", emailRegisterCount);
+    return emailRegisterCount;
   };
 
   useEffect(() => {
     (async () => {
       currentCount = await fetchEmailAndPasswordSubmissionCount();
-    })();
-  });
+      currentEmailCount = await fetchEmailRegisterCount();
+      backButtonListener();
+    });
+  }, []);
 
   return (
     <div className={classes.root}>

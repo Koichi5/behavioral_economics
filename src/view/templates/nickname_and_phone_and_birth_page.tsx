@@ -47,21 +47,68 @@ export const NicknameAndPhoneAndBirthPage = () => {
   } = useForm<User>();
 
   var currentCount = 0;
+  var currentNickNameCount = 0;
+  var currentPhoneCount = 0;
+  var currentBirthCount = 0;
 
-  const onPressed = () => {
+  const updateNickNameAndPhoneAndBirthCount = () => {
     const nicknameAndPhoneAndBirthSubmitDoc = doc(
       db,
       "nicknameAndPhoneAndBirthSubmission",
       "VBWeQgZmJSEwJZ4STudk"
     );
-    const countUpdateDocumentRef = updateDoc(
+    updateDoc(
       nicknameAndPhoneAndBirthSubmitDoc,
       {
         count: currentCount + 1,
       }
     );
-    console.log(countUpdateDocumentRef);
-  };
+  }
+
+  const updateNickNameCount = () => {
+    const nickNameCollectionPath = doc(
+      db,
+      "nicknameAndPhoneAndBirthSubmission",
+      "VBWeQgZmJSEwJZ4STudk",
+      "nickNameRegister",
+      "Ao7DYTETqqe6tUQYNSHV"
+    );
+    if (nickName != "") {
+      updateDoc(nickNameCollectionPath, {
+        count: currentNickNameCount + 1,
+      });
+    }
+  }
+
+  const updatePhoneCount = () => {
+    const phoneCollectionPath = doc(
+      db,
+      "nicknameAndPhoneAndBirthSubmission",
+      "VBWeQgZmJSEwJZ4STudk",
+      "phoneRegister",
+      "hG6rf4GftXlDxu9qsI13"
+    );
+    if (phoneNumber != "") {
+      updateDoc(phoneCollectionPath, {
+        count: currentPhoneCount + 1,
+      });
+    }
+  }
+
+  const updateBirthCount = () => {
+    const birthCollectionPath = doc(
+      db,
+      "nicknameAndPhoneAndBirthSubmission",
+      "VBWeQgZmJSEwJZ4STudk",
+      "birthRegister",
+      "gv9RkSKdABBnbSnSD5Ms"
+    );
+    if (birthDay != "") {
+      updateDoc(birthCollectionPath, {
+        count: currentBirthCount + 1,
+      });
+    }
+  }
 
   const fetchNicknameAndPhoneAndBirthSubmissionCount = async () => {
     var nicknameAndPhoneAndBirthSubmitCount = 0;
@@ -70,7 +117,6 @@ export const NicknameAndPhoneAndBirthPage = () => {
       "nicknameAndPhoneAndBirthSubmission",
       "VBWeQgZmJSEwJZ4STudk"
     );
-
     try {
       const snapshot = await getDoc(nicknameAndPhoneAndBirthSubmitRef);
       const docData = snapshot.data();
@@ -84,10 +130,97 @@ export const NicknameAndPhoneAndBirthPage = () => {
     return nicknameAndPhoneAndBirthSubmitCount;
   };
 
+  const fetchNicknameCount = async () => {
+    var nicknameCount = 0;
+    const nickNameCountRef = doc(
+      db,
+      "nicknameAndPhoneAndBirthSubmission",
+      "VBWeQgZmJSEwJZ4STudk",
+      "nickNameRegister",
+      "Ao7DYTETqqe6tUQYNSHV"
+    );
+
+    try {
+      const snapshot = await getDoc(nickNameCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        nicknameCount = Number(docData.count);
+      }
+      console.log(nicknameCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return nicknameCount;
+  };
+
+  const fetchPhoneCount = async () => {
+    var phoneCount = 0;
+    const phoneCountRef = doc(
+      db,
+      "nicknameAndPhoneAndBirthSubmission",
+      "VBWeQgZmJSEwJZ4STudk",
+      "phoneRegister",
+      "hG6rf4GftXlDxu9qsI13"
+    );
+    try {
+      const snapshot = await getDoc(phoneCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        phoneCount = Number(docData.count);
+      }
+      console.log(phoneCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return phoneCount;
+  };
+
+  const fetchBirthCount = async () => {
+    var birthCount = 0;
+    const birthCountRef = doc(
+      db,
+      "nicknameAndPhoneAndBirthSubmission",
+      "VBWeQgZmJSEwJZ4STudk",
+      "birthRegister",
+      "gv9RkSKdABBnbSnSD5Ms"
+    );
+    try {
+      const snapshot = await getDoc(birthCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        birthCount = Number(docData.count);
+      }
+      console.log(birthCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return birthCount;
+  };
+
+  const _onBrowserBack = () => {
+    console.log("browser back fired !");
+    updateNickNameCount();
+    updatePhoneCount();
+    updateBirthCount();
+  };
+
+  const _onPressed = () => {
+    updateNickNameAndPhoneAndBirthCount();
+    updateNickNameCount();
+    updatePhoneCount();
+    updateBirthCount();
+  };
+
   useEffect(() => {
     (async () => {
       currentCount = await fetchNicknameAndPhoneAndBirthSubmissionCount();
+      currentNickNameCount = await fetchNicknameCount();
+      currentPhoneCount = await fetchPhoneCount();
+      currentBirthCount = await fetchBirthCount();
     })();
+    window.onpopstate = () => {
+      _onBrowserBack();
+    };
   });
 
   return (
@@ -133,7 +266,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
           disabled={nickName == "" || phoneNumber == "" || birthDay == ""}
           variant="contained"
           color="primary"
-          onClick={onPressed}
+          onClick={_onPressed}
           style={{
             maxWidth: "400px",
             maxHeight: "45px",

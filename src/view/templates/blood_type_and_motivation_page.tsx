@@ -42,6 +42,10 @@ export const BloodTypeAndMotivationPage = () => {
   const [bloodType, setBloodType] = useState("");
   const [motivation, setMotivation] = useState("");
 
+  var currentCount = 0;
+  var currentBloodCount = 0;
+  var currentMotivationCount = 0;
+
   const handleBloodTypeChange = (event: SelectChangeEvent) => {
     setBloodType(event.target.value);
   };
@@ -54,18 +58,45 @@ export const BloodTypeAndMotivationPage = () => {
     formState: { errors },
   } = useForm<User>();
 
-  var currentCount = 0;
-
-  const onPressed = () => {
+  const updateBloodTypeAndMotivationCount = () => {
     const bloodTypeAndMotivationSubmitDoc = doc(
       db,
       "bloodTypeAndMotivationSubmission",
       "YkUZ38YRtTgjXKbPshm6"
     );
-    const countUpdateDocumentRef = updateDoc(bloodTypeAndMotivationSubmitDoc, {
+    updateDoc(bloodTypeAndMotivationSubmitDoc, {
       count: currentCount + 1,
     });
-    console.log(countUpdateDocumentRef);
+  };
+
+  const updateBloodCount = () => {
+    const bloodCollectionPath = doc(
+      db,
+      "bloodTypeAndMotivationSubmission",
+      "YkUZ38YRtTgjXKbPshm6",
+      "bloodRegister",
+      "9nvY1Fx8O4tR5ZXM7H40"
+    );
+    if (bloodType != "") {
+      updateDoc(bloodCollectionPath, {
+        count: currentBloodCount + 1,
+      });
+    }
+  };
+
+  const updateMotivationCount = () => {
+    const motivationCollectionPath = doc(
+      db,
+      "bloodTypeAndMotivationSubmission",
+      "YkUZ38YRtTgjXKbPshm6",
+      "motivationRegister",
+      "V7XfOwzoIs4Oxm00PygN"
+    );
+    if (motivation != "") {
+      updateDoc(motivationCollectionPath, {
+        count: currentMotivationCount + 1,
+      });
+    }
   };
 
   const fetchBloodTypeAndMotivationSubmissionCount = async () => {
@@ -75,7 +106,6 @@ export const BloodTypeAndMotivationPage = () => {
       "bloodTypeAndMotivationSubmission",
       "YkUZ38YRtTgjXKbPshm6"
     );
-
     try {
       const snapshot = await getDoc(bloodTypeAndMotivationSubmitRef);
       const docData = snapshot.data();
@@ -89,10 +119,73 @@ export const BloodTypeAndMotivationPage = () => {
     return bloodTypeAndMotivationSubmissionCount;
   };
 
+  const fetchBloodCount = async () => {
+    var bloodCount = 0;
+    const bloodCountRef = doc(
+      db,
+      "bloodTypeAndMotivationSubmission",
+      "YkUZ38YRtTgjXKbPshm6",
+      "bloodRegister",
+      "9nvY1Fx8O4tR5ZXM7H40"
+    );
+
+    try {
+      const snapshot = await getDoc(bloodCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        bloodCount = Number(docData.count);
+      }
+      console.log(bloodCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return bloodCount;
+  };
+
+  const fetchmotivationCount = async () => {
+    var motivationCount = 0;
+    const motivationCountRef = doc(
+      db,
+      "bloodTypeAndMotivationSubmission",
+      "YkUZ38YRtTgjXKbPshm6",
+      "motivationRegister",
+      "V7XfOwzoIs4Oxm00PygN"
+    );
+
+    try {
+      const snapshot = await getDoc(motivationCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        motivationCount = Number(docData.count);
+      }
+      console.log(motivationCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return motivationCount;
+  };
+
+  const _onBrowserBack = () => {
+    console.log("browser back fired !");
+    updateBloodCount();
+    updateMotivationCount();
+  };
+
+  const _onPressed = () => {
+    updateBloodTypeAndMotivationCount();
+    updateBloodCount();
+    updateMotivationCount();
+  };
+
   useEffect(() => {
     (async () => {
       currentCount = await fetchBloodTypeAndMotivationSubmissionCount();
+      currentBloodCount = await fetchBloodCount();
+      currentMotivationCount = await fetchmotivationCount();
     })();
+    window.onpopstate = () => {
+      _onBrowserBack();
+    }
   });
   return (
     <div className={classes.root}>
@@ -143,7 +236,7 @@ export const BloodTypeAndMotivationPage = () => {
           disabled={bloodType == "" || motivation == ""}
           variant="contained"
           color="primary"
-          onClick={onPressed}
+          onClick={_onPressed}
           style={{
             maxWidth: "400px",
             maxHeight: "45px",

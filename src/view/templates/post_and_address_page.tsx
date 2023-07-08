@@ -47,17 +47,64 @@ export const PostAndAddressPage = () => {
   } = useForm<User>();
 
   var currentCount = 0;
+  var currentPostCount = 0;
+  var currentAddressCount = 0;
+  var currentDetailAddressCount = 0;
 
-  const onPressed = () => {
+  const updatePostAndAddressCount = () => {
     const postAndAddressSubmitDoc = doc(
       db,
       "postAndAddressSubmission",
       "inOV9RPe59p1ZG6TO831"
     );
-    const countUpdateDocumentRef = updateDoc(postAndAddressSubmitDoc, {
+    updateDoc(postAndAddressSubmitDoc, {
       count: currentCount + 1,
     });
-    console.log(countUpdateDocumentRef);
+  };
+
+  const updatePostCount = () => {
+    const postCollectionPath = doc(
+      db,
+      "postAndAddressSubmission",
+      "inOV9RPe59p1ZG6TO831",
+      "postRegister",
+      "7KoO3rPoHTWyrrey91k4"
+    );
+    if (postNumber != "") {
+      updateDoc(postCollectionPath, {
+        count: currentPostCount + 1,
+      });
+    }
+  };
+
+  const updateAddressCount = () => {
+    const addressCollectionPath = doc(
+      db,
+      "postAndAddressSubmission",
+      "inOV9RPe59p1ZG6TO831",
+      "addressRegister",
+      "d61Fl4OHDJS88Vlgqwdx"
+    );
+    if (address != "") {
+      updateDoc(addressCollectionPath, {
+        count: currentAddressCount + 1,
+      });
+    }
+  };
+
+  const updateDetailAddressCount = () => {
+    const detailAddressCollectionPath = doc(
+      db,
+      "postAndAddressSubmission",
+      "inOV9RPe59p1ZG6TO831",
+      "detailAddressRegister",
+      "p1vwGJTbvPi3zA0XRwPW"
+    );
+    if (detailAddress != "") {
+      updateDoc(detailAddressCollectionPath, {
+        count: currentDetailAddressCount + 1,
+      });
+    }
   };
 
   const fetchPostAndAddressSubmissionCount = async () => {
@@ -81,10 +128,99 @@ export const PostAndAddressPage = () => {
     return postAndAddressSubmissionCount;
   };
 
+  const fetchPostCount = async () => {
+    var postCount = 0;
+    const postCountRef = doc(
+      db,
+      "postAndAddressSubmission",
+      "inOV9RPe59p1ZG6TO831",
+      "postRegister",
+      "7KoO3rPoHTWyrrey91k4"
+    );
+
+    try {
+      const snapshot = await getDoc(postCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        postCount = Number(docData.count);
+      }
+      console.log(postCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return postCount;
+  };
+
+  const fetchAddressCount = async () => {
+    var addressCount = 0;
+    const addressCountRef = doc(
+      db,
+      "postAndAddressSubmission",
+      "inOV9RPe59p1ZG6TO831",
+      "addressRegister",
+      "d61Fl4OHDJS88Vlgqwdx"
+    );
+
+    try {
+      const snapshot = await getDoc(addressCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        addressCount = Number(docData.count);
+      }
+      console.log(addressCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return addressCount;
+  };
+
+  const fetchDetailAddressCount = async () => {
+    var detailAddressCount = 0;
+    const detailAddressCountRef = doc(
+      db,
+      "postAndAddressSubmission",
+      "inOV9RPe59p1ZG6TO831",
+      "detailAddressRegister",
+      "p1vwGJTbvPi3zA0XRwPW"
+    );
+
+    try {
+      const snapshot = await getDoc(detailAddressCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        detailAddressCount = Number(docData.count);
+      }
+      console.log(detailAddressCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return detailAddressCount;
+  };
+
+  const _onBrowserBack = () => {
+    console.log("browser back fired !");
+    updatePostCount();
+    updateAddressCount();
+    updateDetailAddressCount();
+  };
+
+  const _onPressed = () => {
+    updatePostAndAddressCount();
+    updatePostCount();
+    updateAddressCount();
+    updateDetailAddressCount();
+  };
+
   useEffect(() => {
     (async () => {
       currentCount = await fetchPostAndAddressSubmissionCount();
+      currentPostCount = await fetchPostCount();
+      currentAddressCount = await fetchAddressCount();
+      currentDetailAddressCount = await fetchDetailAddressCount();
     })();
+    window.onpopstate = () => {
+      _onBrowserBack();
+    }
   });
   return (
     <div className={classes.root}>
@@ -129,7 +265,7 @@ export const PostAndAddressPage = () => {
           disabled={postNumber == "" || address == "" || detailAddress == ""}
           variant="contained"
           color="primary"
-          onClick={onPressed}
+          onClick={_onPressed}
           style={{
             maxWidth: "400px",
             maxHeight: "45px",

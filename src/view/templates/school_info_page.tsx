@@ -78,17 +78,85 @@ export const SchoolInfoPage = () => {
   } = useForm<User>();
 
   var currentCount = 0;
+  var currentSchoolNameCount = 0;
+  var currentDepartmentNameCount = 0;
+  var currentDegreeCount = 0;
+  var currentDegreeYearsCount = 0;
 
-  const onPressed = () => {
+  const updateSchoolInfoCount = () => {
     const schoolInfoSubmitDoc = doc(
       db,
       "schoolInfoSubmission",
       "P0GIu0A69M2u9dGD3oKX"
     );
-    const countUpdateDocumentRef = updateDoc(schoolInfoSubmitDoc, {
+    updateDoc(schoolInfoSubmitDoc, {
       count: currentCount + 1,
     });
-    console.log(countUpdateDocumentRef);
+  };
+
+  const updateSchoolNameCount = () => {
+    const schoolNameCollectionPath = doc(
+      db,
+      "schoolInfoSubmission",
+      "P0GIu0A69M2u9dGD3oKX",
+      "schoolNameRegister",
+      "9hrSr3eAGujdTbXPBoz7"
+    );
+    if (schoolName != "") {
+      updateDoc(schoolNameCollectionPath, {
+        count: currentSchoolNameCount + 1,
+      });
+    }
+  };
+
+  const updateDepartmentNameCount = () => {
+    const departmentNameCollectionPath = doc(
+      db,
+      "schoolInfoSubmission",
+      "P0GIu0A69M2u9dGD3oKX",
+      "departmentNameRegister",
+      "xaZiKRD6NeJizO6lJmJ2"
+    );
+    if (departmentName != "") {
+      updateDoc(departmentNameCollectionPath, {
+        count: currentDepartmentNameCount + 1,
+      });
+    }
+  };
+
+  const updateDegreeCount = () => {
+    const degreeCollectionPath = doc(
+      db,
+      "schoolInfoSubmission",
+      "P0GIu0A69M2u9dGD3oKX",
+      "degreeRegister",
+      "le1MU9KzmFxjs5m67Pq1"
+    );
+    if (degree != "") {
+      updateDoc(degreeCollectionPath, {
+        count: currentDegreeCount + 1,
+      });
+    }
+  };
+
+  const updateDegreeYearsCount = () => {
+    const degreeYearsCollectionPath = doc(
+      db,
+      "schoolInfoSubmission",
+      "P0GIu0A69M2u9dGD3oKX",
+      "degreeYearsRegister",
+      "kllMW7XfFc29QguJHFFj"
+    );
+    if (
+      degreeStartYear != "" &&
+      degreeStartMonth != "" &&
+      degreeEndYear != "" &&
+      degreeEndMonth != ""
+    ) {
+      updateDoc(degreeYearsCollectionPath, {
+        count: currentDegreeYearsCount + 1,
+      });
+    }
   };
 
   const fetchSchoolInfoSubmissionCount = async () => {
@@ -112,10 +180,125 @@ export const SchoolInfoPage = () => {
     return schoolInfoSubmissionSubmitCount;
   };
 
+  const fetchSchoolNameCount = async () => {
+    var schoolNameCount = 0;
+    const schoolNameCountRef = doc(
+      db,
+      "schoolInfoSubmission",
+      "P0GIu0A69M2u9dGD3oKX",
+      "schoolNameRegister",
+      "9hrSr3eAGujdTbXPBoz7"
+    );
+
+    try {
+      const snapshot = await getDoc(schoolNameCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        schoolNameCount = Number(docData.count);
+      }
+      console.log(schoolNameCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return schoolNameCount;
+  };
+
+  const fetchDepartmentNameCount = async () => {
+    var departmentNameCount = 0;
+    const departmentNameCountRef = doc(
+      db,
+      "schoolInfoSubmission",
+      "P0GIu0A69M2u9dGD3oKX",
+      "departmentNameRegister",
+      "xaZiKRD6NeJizO6lJmJ2"
+    );
+
+    try {
+      const snapshot = await getDoc(departmentNameCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        departmentNameCount = Number(docData.count);
+      }
+      console.log(departmentNameCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return departmentNameCount;
+  };
+
+  const fetchDegreeCount = async () => {
+    var degreeCount = 0;
+    const degreeCountRef = doc(
+      db,
+      "schoolInfoSubmission",
+      "P0GIu0A69M2u9dGD3oKX",
+      "degreeRegister",
+      "le1MU9KzmFxjs5m67Pq1"
+    );
+
+    try {
+      const snapshot = await getDoc(degreeCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        degreeCount = Number(docData.count);
+      }
+      console.log(degreeCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return degreeCount;
+  };
+
+  const fetchDegreeYearsCount = async () => {
+    var degreeYearsCount = 0;
+    const degreeYearsCountRef = doc(
+      db,
+      "schoolInfoSubmission",
+      "P0GIu0A69M2u9dGD3oKX",
+      "degreeYearsRegister",
+      "kllMW7XfFc29QguJHFFj"
+    );
+
+    try {
+      const snapshot = await getDoc(degreeYearsCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.count) {
+        degreeYearsCount = Number(docData.count);
+      }
+      console.log(degreeYearsCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return degreeYearsCount;
+  };
+
+  const _onBrowserBack = () => {
+    console.log("browser back fired !");
+    updateSchoolNameCount();
+    updateDepartmentNameCount();
+    updateDegreeCount();
+    updateDegreeYearsCount();
+  };
+
+  const _onPressed = () => {
+    updateSchoolInfoCount();
+    updateSchoolNameCount();
+    updateDepartmentNameCount();
+    updateDegreeCount();
+    updateDegreeYearsCount();
+  };
+
   useEffect(() => {
     (async () => {
       currentCount = await fetchSchoolInfoSubmissionCount();
+      currentSchoolNameCount = await fetchSchoolNameCount();
+      currentDepartmentNameCount = await fetchDepartmentNameCount();
+      currentDegreeCount = await fetchDegreeCount();
+      currentDegreeYearsCount = await fetchDegreeYearsCount();
     })();
+    window.onpopstate = () => {
+      _onBrowserBack();
+    }
   });
   return (
     <div className={classes.root}>
@@ -313,7 +496,7 @@ export const SchoolInfoPage = () => {
           }
           variant="contained"
           color="primary"
-          onClick={onPressed}
+          onClick={_onPressed}
           style={{
             maxWidth: "400px",
             maxHeight: "45px",
