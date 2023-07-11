@@ -433,18 +433,22 @@ export const SchoolInfoPage = () => {
               label="Age"
               onChange={handleDegreeEndYearChange}
             >
-              <MenuItem value={10}>2023</MenuItem>
-              <MenuItem value={20}>2022</MenuItem>
-              <MenuItem value={30}>2021</MenuItem>
-              <MenuItem value={40}>2020</MenuItem>
-              <MenuItem value={50}>2019</MenuItem>
-              <MenuItem value={60}>2018</MenuItem>
-              <MenuItem value={70}>2017</MenuItem>
-              <MenuItem value={80}>2016</MenuItem>
-              <MenuItem value={90}>2015</MenuItem>
-              <MenuItem value={100}>2014</MenuItem>
-              <MenuItem value={110}>2013</MenuItem>
-              <MenuItem value={120}>2012</MenuItem>
+              <MenuItem value={10}>2030</MenuItem>
+              <MenuItem value={20}>2029</MenuItem>
+              <MenuItem value={30}>2028</MenuItem>
+              <MenuItem value={40}>2027</MenuItem>
+              <MenuItem value={50}>2026</MenuItem>
+              <MenuItem value={60}>2025</MenuItem>
+              <MenuItem value={70}>2024</MenuItem>
+              <MenuItem value={80}>2023</MenuItem>
+              <MenuItem value={90}>2022</MenuItem>
+              <MenuItem value={100}>2021</MenuItem>
+              <MenuItem value={110}>2020</MenuItem>
+              <MenuItem value={120}>2019</MenuItem>
+              <MenuItem value={110}>2018</MenuItem>
+              <MenuItem value={120}>2017</MenuItem>
+              <MenuItem value={110}>2016</MenuItem>
+              <MenuItem value={120}>2015</MenuItem>
             </Select>
           </FormControl>
           <p style={{ paddingLeft: 10, paddingRight: 10 }}>年</p>
