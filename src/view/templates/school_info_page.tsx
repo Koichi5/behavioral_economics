@@ -18,15 +18,24 @@ import { CustomMobileStepper } from "../atoms/mobile_stepper";
 import { useMedia } from "react-use";
 
 const useStyles = makeStyles(() => ({
+
   root: {
     position: "relative",
     top: "10%",
   },
 
+  formWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
   fieldWrapper: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "baseline",
+    textAlign: "start",
+    alignItems: "start",
     paddingLeft: "20%",
     paddingRight: "20%",
   },
@@ -301,223 +310,225 @@ export const SchoolInfoPage = () => {
     })();
     window.onpopstate = () => {
       _onBrowserBack();
-    }
+    };
   });
   return (
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={6} /> : <CustomMobileStepper arg1={7} />}
-      <div className={classes.fieldWrapper}>
-        <p>学校名</p>
-        <TextField
-          onChange={(event) => setSchoolName(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="例）太郎大学"
-          variant="outlined"
-        />
-      </div>
-      <div className={classes.fieldWrapper}>
-        <p>学部・学科</p>
-        <TextField
-          onChange={(event) => setDepartmentName(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="例）文学部文学科"
-          variant="outlined"
-        />
-      </div>
-      <div className={classes.fieldWrapper}>
-        <p>学位</p>
-        <FormControl className={classes.field}>
-          {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
-          <Select
-            // labelId="demo-simple-select-label"
-            className={classes.input}
-            id="demo-simple-select"
-            value={degree}
-            label="Degree"
-            onChange={handleDegreeChange}
-          >
-            <MenuItem value={10}>中卒</MenuItem>
-            <MenuItem value={20}>高卒</MenuItem>
-            <MenuItem value={30}>短期大学士</MenuItem>
-            <MenuItem value={40}>学士</MenuItem>
-            <MenuItem value={50}>修士</MenuItem>
-            <MenuItem value={60}>博士</MenuItem>
-            <MenuItem value={70}>その他</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
-      <div className={classes.fieldWrapper}>
-        <p>在学期間</p>
-        <div style={{ display: "flex" }}>
-          <FormControl>
-            {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
-            <Select
-              // labelId="demo-simple-select-label"
-              style={{
-                maxWidth: "100px",
-                maxHeight: "45px",
-                minWidth: "100px",
-                minHeight: "45px",
-                marginTop: "3%",
-              }}
-              className={classes.input}
-              id="demo-simple-select"
-              value={degreeStartYear}
-              label="Age"
-              onChange={handleDegreeStartYearChange}
-            >
-              <MenuItem value={10}>2023</MenuItem>
-              <MenuItem value={20}>2022</MenuItem>
-              <MenuItem value={30}>2021</MenuItem>
-              <MenuItem value={40}>2020</MenuItem>
-              <MenuItem value={50}>2019</MenuItem>
-              <MenuItem value={60}>2018</MenuItem>
-              <MenuItem value={70}>2017</MenuItem>
-              <MenuItem value={80}>2016</MenuItem>
-              <MenuItem value={90}>2015</MenuItem>
-              <MenuItem value={100}>2014</MenuItem>
-              <MenuItem value={110}>2013</MenuItem>
-              <MenuItem value={120}>2012</MenuItem>
-            </Select>
-          </FormControl>
-          <p style={{ paddingLeft: 10, paddingRight: 10 }}>年</p>
-          <FormControl>
-            {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
-            <Select
-              // labelId="demo-simple-select-label"
-              style={{
-                maxWidth: "100px",
-                maxHeight: "45px",
-                minWidth: "100px",
-                minHeight: "45px",
-                marginTop: "3%",
-              }}
-              className={classes.input}
-              id="demo-simple-select"
-              value={degreeStartMonth}
-              label="Age"
-              onChange={handleDegreeStartMonthChange}
-            >
-              <MenuItem value={10}>1</MenuItem>
-              <MenuItem value={20}>2</MenuItem>
-              <MenuItem value={30}>3</MenuItem>
-              <MenuItem value={40}>4</MenuItem>
-              <MenuItem value={50}>5</MenuItem>
-              <MenuItem value={60}>6</MenuItem>
-              <MenuItem value={70}>7</MenuItem>
-              <MenuItem value={80}>8</MenuItem>
-              <MenuItem value={90}>9</MenuItem>
-              <MenuItem value={100}>10</MenuItem>
-              <MenuItem value={110}>11</MenuItem>
-              <MenuItem value={120}>12</MenuItem>
-            </Select>
-          </FormControl>
-          <p style={{ paddingLeft: 10 }}>月</p>
-          <p style={{ paddingLeft: 10, paddingRight: 10 }}>~</p>
-          <FormControl>
-            {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
-            <Select
-              // labelId="demo-simple-select-label"
-              style={{
-                maxWidth: "100px",
-                maxHeight: "45px",
-                minWidth: "100px",
-                minHeight: "45px",
-                marginTop: "3%",
-              }}
-              className={classes.input}
-              id="demo-simple-select"
-              value={degreeEndYear}
-              label="Age"
-              onChange={handleDegreeEndYearChange}
-            >
-              <MenuItem value={10}>2030</MenuItem>
-              <MenuItem value={20}>2029</MenuItem>
-              <MenuItem value={30}>2028</MenuItem>
-              <MenuItem value={40}>2027</MenuItem>
-              <MenuItem value={50}>2026</MenuItem>
-              <MenuItem value={60}>2025</MenuItem>
-              <MenuItem value={70}>2024</MenuItem>
-              <MenuItem value={80}>2023</MenuItem>
-              <MenuItem value={90}>2022</MenuItem>
-              <MenuItem value={100}>2021</MenuItem>
-              <MenuItem value={110}>2020</MenuItem>
-              <MenuItem value={120}>2019</MenuItem>
-              <MenuItem value={110}>2018</MenuItem>
-              <MenuItem value={120}>2017</MenuItem>
-              <MenuItem value={110}>2016</MenuItem>
-              <MenuItem value={120}>2015</MenuItem>
-            </Select>
-          </FormControl>
-          <p style={{ paddingLeft: 10, paddingRight: 10 }}>年</p>
-          <FormControl>
-            {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
-            <Select
-              // labelId="demo-simple-select-label"
-              style={{
-                maxWidth: "100px",
-                maxHeight: "45px",
-                minWidth: "100px",
-                minHeight: "45px",
-                marginTop: "3%",
-              }}
-              className={classes.input}
-              id="demo-simple-select"
-              value={degreeEndMonth}
-              label="Age"
-              onChange={handleDegreeEndMonthChange}
-            >
-              <MenuItem value={10}>1</MenuItem>
-              <MenuItem value={20}>2</MenuItem>
-              <MenuItem value={30}>3</MenuItem>
-              <MenuItem value={40}>4</MenuItem>
-              <MenuItem value={50}>5</MenuItem>
-              <MenuItem value={60}>6</MenuItem>
-              <MenuItem value={70}>7</MenuItem>
-              <MenuItem value={80}>8</MenuItem>
-              <MenuItem value={90}>9</MenuItem>
-              <MenuItem value={100}>10</MenuItem>
-              <MenuItem value={110}>11</MenuItem>
-              <MenuItem value={120}>12</MenuItem>
-            </Select>
-          </FormControl>
-          <p style={{ paddingLeft: 10, paddingRight: 10 }}>月</p>
+      <div className={classes.formWrapper}>
+        <div className={classes.fieldWrapper}>
+          <p>学校名</p>
+          <TextField
+            onChange={(event) => setSchoolName(event.target.value)}
+            className={classes.field}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="例）太郎大学"
+            variant="outlined"
+          />
         </div>
+        <div className={classes.fieldWrapper}>
+          <p>学部・学科</p>
+          <TextField
+            onChange={(event) => setDepartmentName(event.target.value)}
+            className={classes.field}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="例）文学部文学科"
+            variant="outlined"
+          />
+        </div>
+        <div className={classes.fieldWrapper}>
+          <p>学位</p>
+          <FormControl className={classes.field}>
+            {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
+            <Select
+              // labelId="demo-simple-select-label"
+              className={classes.input}
+              id="demo-simple-select"
+              value={degree}
+              label="Degree"
+              onChange={handleDegreeChange}
+            >
+              <MenuItem value={10}>中卒</MenuItem>
+              <MenuItem value={20}>高卒</MenuItem>
+              <MenuItem value={30}>短期大学士</MenuItem>
+              <MenuItem value={40}>学士</MenuItem>
+              <MenuItem value={50}>修士</MenuItem>
+              <MenuItem value={60}>博士</MenuItem>
+              <MenuItem value={70}>その他</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+        <div className={classes.fieldWrapper}>
+          <p>在学期間</p>
+          <div style={{ display: "flex" }}>
+            <FormControl>
+              {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
+              <Select
+                // labelId="demo-simple-select-label"
+                style={{
+                  maxWidth: "100px",
+                  maxHeight: "45px",
+                  minWidth: "100px",
+                  minHeight: "45px",
+                  marginTop: "3%",
+                }}
+                className={classes.input}
+                id="demo-simple-select"
+                value={degreeStartYear}
+                label="Age"
+                onChange={handleDegreeStartYearChange}
+              >
+                <MenuItem value={10}>2023</MenuItem>
+                <MenuItem value={20}>2022</MenuItem>
+                <MenuItem value={30}>2021</MenuItem>
+                <MenuItem value={40}>2020</MenuItem>
+                <MenuItem value={50}>2019</MenuItem>
+                <MenuItem value={60}>2018</MenuItem>
+                <MenuItem value={70}>2017</MenuItem>
+                <MenuItem value={80}>2016</MenuItem>
+                <MenuItem value={90}>2015</MenuItem>
+                <MenuItem value={100}>2014</MenuItem>
+                <MenuItem value={110}>2013</MenuItem>
+                <MenuItem value={120}>2012</MenuItem>
+              </Select>
+            </FormControl>
+            <p style={{ paddingLeft: 10, paddingRight: 10 }}>年</p>
+            <FormControl>
+              {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
+              <Select
+                // labelId="demo-simple-select-label"
+                style={{
+                  maxWidth: "100px",
+                  maxHeight: "45px",
+                  minWidth: "100px",
+                  minHeight: "45px",
+                  marginTop: "3%",
+                }}
+                className={classes.input}
+                id="demo-simple-select"
+                value={degreeStartMonth}
+                label="Age"
+                onChange={handleDegreeStartMonthChange}
+              >
+                <MenuItem value={10}>1</MenuItem>
+                <MenuItem value={20}>2</MenuItem>
+                <MenuItem value={30}>3</MenuItem>
+                <MenuItem value={40}>4</MenuItem>
+                <MenuItem value={50}>5</MenuItem>
+                <MenuItem value={60}>6</MenuItem>
+                <MenuItem value={70}>7</MenuItem>
+                <MenuItem value={80}>8</MenuItem>
+                <MenuItem value={90}>9</MenuItem>
+                <MenuItem value={100}>10</MenuItem>
+                <MenuItem value={110}>11</MenuItem>
+                <MenuItem value={120}>12</MenuItem>
+              </Select>
+            </FormControl>
+            <p style={{ paddingLeft: 10 }}>月</p>
+            <p style={{ paddingLeft: 10, paddingRight: 10 }}>~</p>
+            <FormControl>
+              {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
+              <Select
+                // labelId="demo-simple-select-label"
+                style={{
+                  maxWidth: "100px",
+                  maxHeight: "45px",
+                  minWidth: "100px",
+                  minHeight: "45px",
+                  marginTop: "3%",
+                }}
+                className={classes.input}
+                id="demo-simple-select"
+                value={degreeEndYear}
+                label="Age"
+                onChange={handleDegreeEndYearChange}
+              >
+                <MenuItem value={10}>2030</MenuItem>
+                <MenuItem value={20}>2029</MenuItem>
+                <MenuItem value={30}>2028</MenuItem>
+                <MenuItem value={40}>2027</MenuItem>
+                <MenuItem value={50}>2026</MenuItem>
+                <MenuItem value={60}>2025</MenuItem>
+                <MenuItem value={70}>2024</MenuItem>
+                <MenuItem value={80}>2023</MenuItem>
+                <MenuItem value={90}>2022</MenuItem>
+                <MenuItem value={100}>2021</MenuItem>
+                <MenuItem value={110}>2020</MenuItem>
+                <MenuItem value={120}>2019</MenuItem>
+                <MenuItem value={110}>2018</MenuItem>
+                <MenuItem value={120}>2017</MenuItem>
+                <MenuItem value={110}>2016</MenuItem>
+                <MenuItem value={120}>2015</MenuItem>
+              </Select>
+            </FormControl>
+            <p style={{ paddingLeft: 10, paddingRight: 10 }}>年</p>
+            <FormControl>
+              {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
+              <Select
+                // labelId="demo-simple-select-label"
+                style={{
+                  maxWidth: "100px",
+                  maxHeight: "45px",
+                  minWidth: "100px",
+                  minHeight: "45px",
+                  marginTop: "3%",
+                }}
+                className={classes.input}
+                id="demo-simple-select"
+                value={degreeEndMonth}
+                label="Age"
+                onChange={handleDegreeEndMonthChange}
+              >
+                <MenuItem value={10}>1</MenuItem>
+                <MenuItem value={20}>2</MenuItem>
+                <MenuItem value={30}>3</MenuItem>
+                <MenuItem value={40}>4</MenuItem>
+                <MenuItem value={50}>5</MenuItem>
+                <MenuItem value={60}>6</MenuItem>
+                <MenuItem value={70}>7</MenuItem>
+                <MenuItem value={80}>8</MenuItem>
+                <MenuItem value={90}>9</MenuItem>
+                <MenuItem value={100}>10</MenuItem>
+                <MenuItem value={110}>11</MenuItem>
+                <MenuItem value={120}>12</MenuItem>
+              </Select>
+            </FormControl>
+            <p style={{ paddingLeft: 10, paddingRight: 10 }}>月</p>
+          </div>
+        </div>
+        {errors.name && <span>エラーが発生しました</span>}
+        <Link to="/explanation_page">
+          <Button
+            disabled={
+              schoolName == "" ||
+              departmentName == "" ||
+              degree == "" ||
+              degreeStartYear == "" ||
+              degreeStartMonth == "" ||
+              degreeEndYear == "" ||
+              degreeEndMonth == ""
+            }
+            variant="contained"
+            color="primary"
+            onClick={_onPressed}
+            style={{
+              maxWidth: "400px",
+              maxHeight: "45px",
+              minWidth: "300px",
+              minHeight: "45px",
+              marginTop: "3%",
+            }}
+          >
+            登　　録
+          </Button>
+        </Link>
+        <Routes>
+          <Route path="/explanation_page" element={<ExplanationPage />}></Route>
+        </Routes>
       </div>
-      {errors.name && <span>エラーが発生しました</span>}
-      <Link to="/explanation_page">
-        <Button
-          disabled={
-            schoolName == "" ||
-            departmentName == "" ||
-            degree == "" ||
-            degreeStartYear == "" ||
-            degreeStartMonth == "" ||
-            degreeEndYear == "" ||
-            degreeEndMonth == ""
-          }
-          variant="contained"
-          color="primary"
-          onClick={_onPressed}
-          style={{
-            maxWidth: "400px",
-            maxHeight: "45px",
-            minWidth: "300px",
-            minHeight: "45px",
-            marginTop: "3%",
-          }}
-        >
-          登　　録
-        </Button>
-      </Link>
-      <Routes>
-        <Route path="/explanation_page" element={<ExplanationPage />}></Route>
-      </Routes>
     </div>
   );
 };

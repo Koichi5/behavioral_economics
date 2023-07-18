@@ -11,15 +11,24 @@ import { useMedia } from "react-use";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
 
 const useStyles = makeStyles(() => ({
+
   root: {
     position: "relative",
     top: "10%",
   },
 
+  formWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
   fieldWrapper: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "baseline",
+    textAlign: "start",
+    alignItems: "start",
     paddingLeft: "20%",
     paddingRight: "20%",
   },
@@ -60,13 +69,10 @@ export const NicknameAndPhoneAndBirthPage = () => {
       "nicknameAndPhoneAndBirthSubmission",
       "VBWeQgZmJSEwJZ4STudk"
     );
-    updateDoc(
-      nicknameAndPhoneAndBirthSubmitDoc,
-      {
-        count: currentCount + 1,
-      }
-    );
-  }
+    updateDoc(nicknameAndPhoneAndBirthSubmitDoc, {
+      count: currentCount + 1,
+    });
+  };
 
   const updateNickNameCount = () => {
     const nickNameCollectionPath = doc(
@@ -81,7 +87,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
         count: currentNickNameCount + 1,
       });
     }
-  }
+  };
 
   const updatePhoneCount = () => {
     const phoneCollectionPath = doc(
@@ -96,7 +102,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
         count: currentPhoneCount + 1,
       });
     }
-  }
+  };
 
   const updateBirthCount = () => {
     const birthCollectionPath = doc(
@@ -111,7 +117,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
         count: currentBirthCount + 1,
       });
     }
-  }
+  };
 
   const fetchNicknameAndPhoneAndBirthSubmissionCount = async () => {
     var nicknameAndPhoneAndBirthSubmitCount = 0;
@@ -230,6 +236,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={1} /> : <CustomMobileStepper arg1={2} />}
+      <div className={classes.formWrapper}>
       <div className={classes.fieldWrapper}>
         <p>ニックネーム</p>
         <TextField
@@ -287,6 +294,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
           element={<GenderAndWorkAndHobbyPage />}
         ></Route>
       </Routes>
+      </div>
     </div>
   );
 };

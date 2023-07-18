@@ -11,15 +11,24 @@ import { useMedia } from "react-use";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
 
 const useStyles = makeStyles(() => ({
+
   root: {
     position: "relative",
     top: "10%",
   },
 
+  formWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
   fieldWrapper: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "baseline",
+    textAlign: "start",
+    alignItems: "start",
     paddingLeft: "20%",
     paddingRight: "20%",
   },
@@ -223,66 +232,68 @@ export const PostAndAddressPage = () => {
     })();
     window.onpopstate = () => {
       _onBrowserBack();
-    }
+    };
   });
   return (
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={3} /> : <CustomMobileStepper arg1={4} />}
-      <div className={classes.fieldWrapper}>
-        <p>郵便番号</p>
-        <TextField
-          onChange={(event) => setPostNumber(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="例）123-4567"
-          variant="outlined"
-        />
+      <div className={classes.formWrapper}>
+        <div className={classes.fieldWrapper}>
+          <p>郵便番号</p>
+          <TextField
+            onChange={(event) => setPostNumber(event.target.value)}
+            className={classes.field}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="例）123-4567"
+            variant="outlined"
+          />
+        </div>
+        <div className={classes.fieldWrapper}>
+          <p>住所（都道府県、市町村、番地）</p>
+          <TextField
+            onChange={(event) => setAddress(event.target.value)}
+            className={classes.field}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="例）東京都渋谷区渋谷2-15-1"
+            variant="outlined"
+          />
+        </div>
+        <div className={classes.fieldWrapper}>
+          <p>住所（アパート名等）</p>
+          <TextField
+            onChange={(event) => setDetailAddress(event.target.value)}
+            className={classes.field}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="例）クロスタワー12F"
+            variant="outlined"
+          />
+        </div>
+        {errors.name && <span>エラーが発生しました</span>}
+        <Link to="/fifth_page">
+          <Button
+            disabled={postNumber == "" || address == "" || detailAddress == ""}
+            variant="contained"
+            color="primary"
+            onClick={_onPressed}
+            style={{
+              maxWidth: "400px",
+              maxHeight: "45px",
+              minWidth: "300px",
+              minHeight: "45px",
+              marginTop: "3%",
+            }}
+          >
+            次　　へ
+          </Button>
+        </Link>
+        <Routes>
+          <Route path="/fifth_page" element={<OtherPhoneAndNamePage />}></Route>
+        </Routes>
       </div>
-      <div className={classes.fieldWrapper}>
-        <p>住所（都道府県、市町村、番地）</p>
-        <TextField
-          onChange={(event) => setAddress(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="例）東京都渋谷区渋谷2-15-1"
-          variant="outlined"
-        />
-      </div>
-      <div className={classes.fieldWrapper}>
-        <p>住所（アパート名等）</p>
-        <TextField
-          onChange={(event) => setDetailAddress(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="例）クロスタワー12F"
-          variant="outlined"
-        />
-      </div>
-      {errors.name && <span>エラーが発生しました</span>}
-      <Link to="/fifth_page">
-        <Button
-          disabled={postNumber == "" || address == "" || detailAddress == ""}
-          variant="contained"
-          color="primary"
-          onClick={_onPressed}
-          style={{
-            maxWidth: "400px",
-            maxHeight: "45px",
-            minWidth: "300px",
-            minHeight: "45px",
-            marginTop: "3%",
-          }}
-        >
-          次　　へ
-        </Button>
-      </Link>
-      <Routes>
-        <Route path="/fifth_page" element={<OtherPhoneAndNamePage />}></Route>
-      </Routes>
     </div>
   );
 };

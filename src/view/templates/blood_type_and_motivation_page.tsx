@@ -12,15 +12,24 @@ import { CustomMobileStepper } from "../atoms/mobile_stepper";
 import { useMedia } from "react-use";
 
 const useStyles = makeStyles(() => ({
+
   root: {
     position: "relative",
     top: "10%",
   },
 
+  formWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
   fieldWrapper: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "baseline",
+    textAlign: "start",
+    alignItems: "start",
     paddingLeft: "20%",
     paddingRight: "20%",
   },
@@ -188,72 +197,74 @@ export const BloodTypeAndMotivationPage = () => {
     })();
     window.onpopstate = () => {
       _onBrowserBack();
-    }
+    };
   });
   return (
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={5} /> : <CustomMobileStepper arg1={6} />}
-      <div className={classes.fieldWrapper}>
-        <p>血液型</p>
-        <FormControl className={classes.field}>
-          <Select
-            className={classes.input}
-            id="demo-simple-select"
-            value={bloodType}
-            label="Degree"
-            onChange={handleBloodTypeChange}
-          >
-            <MenuItem value={10}>A型</MenuItem>
-            <MenuItem value={20}>B型</MenuItem>
-            <MenuItem value={30}>O型</MenuItem>
-            <MenuItem value={40}>AB型</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
-      <div className={classes.fieldWrapper}>
-        <p>動機</p>
-        <div style={{ display: "flex" }}>
+      <div className={classes.formWrapper}>
+        <div className={classes.fieldWrapper}>
+          <p>血液型</p>
           <FormControl className={classes.field}>
             <Select
               className={classes.input}
               id="demo-simple-select"
-              value={motivation}
-              label="Age"
-              onChange={handleMotivationChange}
+              value={bloodType}
+              label="Degree"
+              onChange={handleBloodTypeChange}
             >
-              <MenuItem value={10}>学校からの紹介</MenuItem>
-              <MenuItem value={20}>友人からの紹介</MenuItem>
-              <MenuItem value={30}>家族からの紹介</MenuItem>
-              <MenuItem value={40}>テレビ、新聞、雑誌で見た</MenuItem>
-              <MenuItem value={50}>SNSで見た</MenuItem>
-              <MenuItem value={60}>Webサイトを見た</MenuItem>
-              <MenuItem value={70}>その他</MenuItem>
+              <MenuItem value={10}>A型</MenuItem>
+              <MenuItem value={20}>B型</MenuItem>
+              <MenuItem value={30}>O型</MenuItem>
+              <MenuItem value={40}>AB型</MenuItem>
             </Select>
           </FormControl>
         </div>
+        <div className={classes.fieldWrapper}>
+          <p>動機</p>
+          <div style={{ display: "flex" }}>
+            <FormControl className={classes.field}>
+              <Select
+                className={classes.input}
+                id="demo-simple-select"
+                value={motivation}
+                label="Age"
+                onChange={handleMotivationChange}
+              >
+                <MenuItem value={10}>学校からの紹介</MenuItem>
+                <MenuItem value={20}>友人からの紹介</MenuItem>
+                <MenuItem value={30}>家族からの紹介</MenuItem>
+                <MenuItem value={40}>テレビ、新聞、雑誌で見た</MenuItem>
+                <MenuItem value={50}>SNSで見た</MenuItem>
+                <MenuItem value={60}>Webサイトを見た</MenuItem>
+                <MenuItem value={70}>その他</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        </div>
+        {errors.name && <span>エラーが発生しました</span>}
+        <Link to="/seventh_page">
+          <Button
+            disabled={bloodType == "" || motivation == ""}
+            variant="contained"
+            color="primary"
+            onClick={_onPressed}
+            style={{
+              maxWidth: "400px",
+              maxHeight: "45px",
+              minWidth: "300px",
+              minHeight: "45px",
+              marginTop: "3%",
+            }}
+          >
+            次　　へ
+          </Button>
+        </Link>
+        <Routes>
+          <Route path="/seventh_page" element={<SchoolInfoPage />}></Route>
+        </Routes>
       </div>
-      {errors.name && <span>エラーが発生しました</span>}
-      <Link to="/seventh_page">
-        <Button
-          disabled={bloodType == "" || motivation == ""}
-          variant="contained"
-          color="primary"
-          onClick={_onPressed}
-          style={{
-            maxWidth: "400px",
-            maxHeight: "45px",
-            minWidth: "300px",
-            minHeight: "45px",
-            marginTop: "3%",
-          }}
-        >
-          次　　へ
-        </Button>
-      </Link>
-      <Routes>
-        <Route path="/seventh_page" element={<SchoolInfoPage />}></Route>
-      </Routes>
     </div>
   );
 };

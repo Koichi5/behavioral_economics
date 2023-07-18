@@ -20,15 +20,24 @@ import { useMedia } from "react-use";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
 
 const useStyles = makeStyles(() => ({
+
   root: {
     position: "relative",
     top: "10%",
   },
 
+  formWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
   fieldWrapper: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "baseline",
+    textAlign: "start",
+    alignItems: "start",
     paddingLeft: "20%",
     paddingRight: "20%",
   },
@@ -174,81 +183,83 @@ function EmailAndPasswordPage() {
       <div>
         {isWide ? <CustomStepper arg1={0} /> : <CustomMobileStepper arg1={1} />}
       </div>
-      <div className={classes.fieldWrapper}>
-        <p>メールアドレス</p>
-        <TextField
-          onChange={(event) => setEmail(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-email"
-          label="メールアドレス"
-          variant="outlined"
-        />
+      <div className={classes.formWrapper}>
+        <div className={classes.fieldWrapper}>
+          <p>メールアドレス</p>
+          <TextField
+            onChange={(event) => setEmail(event.target.value)}
+            className={classes.field}
+            InputProps={{ className: classes.input }}
+            id="outlined-email"
+            label="メールアドレス"
+            variant="outlined"
+          />
+        </div>
+        <div className={classes.fieldWrapper}>
+          <p>パスワード</p>
+          <OutlinedInput
+            onChange={(event) => setPassword(event.target.value)}
+            className={classes.secretField}
+            id="outlined-adornment-password"
+            type={showPassword ? "text" : "password"}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="パスワード"
+          />
+        </div>
+        <div className={classes.fieldWrapper}>
+          <p>パスワード（確認）</p>
+          <OutlinedInput
+            onChange={(event) => setRetypePassword(event.target.value)}
+            className={classes.secretField}
+            id="outlined-adornment-password"
+            type={showConfirmPassword ? "text" : "password"}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickConfirmShowPassword}
+                >
+                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="パスワード（確認）"
+          />
+        </div>
+        {errors.name && <span>エラーが発生しました</span>}
+        <Link to="/second_page">
+          <Button
+            disabled={email == "" || password == "" || retypePassword == ""}
+            variant="contained"
+            color="primary"
+            onClick={onPressed}
+            style={{
+              maxWidth: "400px",
+              maxHeight: "45px",
+              minWidth: "300px",
+              minHeight: "45px",
+              marginTop: "3%",
+            }}
+          >
+            次　　へ
+          </Button>
+        </Link>
+        <Routes>
+          <Route
+            path="/second_page"
+            element={<NicknameAndPhoneAndBirthPage />}
+          ></Route>
+        </Routes>
       </div>
-      <div className={classes.fieldWrapper}>
-        <p>パスワード</p>
-        <OutlinedInput
-          onChange={(event) => setPassword(event.target.value)}
-          className={classes.secretField}
-          id="outlined-adornment-password"
-          type={showPassword ? "text" : "password"}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-          label="パスワード"
-        />
-      </div>
-      <div className={classes.fieldWrapper}>
-        <p>パスワード（確認）</p>
-        <OutlinedInput
-          onChange={(event) => setRetypePassword(event.target.value)}
-          className={classes.secretField}
-          id="outlined-adornment-password"
-          type={showConfirmPassword ? "text" : "password"}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickConfirmShowPassword}
-              >
-                {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-          label="パスワード（確認）"
-        />
-      </div>
-      {errors.name && <span>エラーが発生しました</span>}
-      <Link to="/second_page">
-        <Button
-          disabled={email == "" || password == "" || retypePassword == ""}
-          variant="contained"
-          color="primary"
-          onClick={onPressed}
-          style={{
-            maxWidth: "400px",
-            maxHeight: "45px",
-            minWidth: "300px",
-            minHeight: "45px",
-            marginTop: "3%",
-          }}
-        >
-          次　　へ
-        </Button>
-      </Link>
-      <Routes>
-        <Route
-          path="/second_page"
-          element={<NicknameAndPhoneAndBirthPage />}
-        ></Route>
-      </Routes>
     </div>
   );
 }

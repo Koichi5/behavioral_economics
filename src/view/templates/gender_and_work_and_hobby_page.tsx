@@ -18,13 +18,22 @@ import { useMedia } from "react-use";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
 
 const useStyles = makeStyles(() => ({
+
   root: {
     position: "relative",
     top: "10%",
   },
 
+  formWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
   fieldWrapper: {
     display: "flex",
+    flexDirection: "column",
+    textAlign: "start",
     justifyContent: "space-between",
     alignItems: "baseline",
     paddingLeft: "20%",
@@ -242,6 +251,7 @@ export const GenderAndWorkAndHobbyPage = () => {
       <div>
         {isWide ? <CustomStepper arg1={2} /> : <CustomMobileStepper arg1={3} />}
       </div>
+      <div className={classes.formWrapper}>
       <div className={classes.fieldWrapper}>
         <p>性別</p>
         <FormControl className={classes.field}>
@@ -303,6 +313,7 @@ export const GenderAndWorkAndHobbyPage = () => {
       <Routes>
         <Route path="/fourth_page" element={<PostAndAddressPage />}></Route>
       </Routes>
+      </div>
     </div>
   );
 };

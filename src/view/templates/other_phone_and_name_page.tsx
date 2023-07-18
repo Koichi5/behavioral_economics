@@ -11,15 +11,24 @@ import { CustomMobileStepper } from "../atoms/mobile_stepper";
 import { useMedia } from "react-use";
 
 const useStyles = makeStyles(() => ({
+
   root: {
     position: "relative",
     top: "10%",
   },
 
+  formWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
   fieldWrapper: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "baseline",
+    textAlign: "start",
+    alignItems: "start",
     paddingLeft: "20%",
     paddingRight: "20%",
   },
@@ -223,69 +232,73 @@ export const OtherPhoneAndNamePage = () => {
     })();
     window.onpopstate = () => {
       _onBrowserBack();
-    }
+    };
   });
   return (
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={4} /> : <CustomMobileStepper arg1={5} />}
-      <div className={classes.fieldWrapper}>
-        <p>緊急連絡先</p>
-        <TextField
-          onChange={(event) => setOtherPhone(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="例）01234567890"
-          variant="outlined"
-        />
+      <div className={classes.formWrapper}>
+        <div className={classes.fieldWrapper}>
+          <p>緊急連絡先</p>
+          <TextField
+            onChange={(event) => setOtherPhone(event.target.value)}
+            className={classes.field}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="例）01234567890"
+            variant="outlined"
+          />
+        </div>
+        <div className={classes.fieldWrapper}>
+          <p>緊急連絡先の方の氏名</p>
+          <TextField
+            onChange={(event) => setOtherName(event.target.value)}
+            className={classes.field}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="緊急連絡先の方の氏名"
+            variant="outlined"
+          />
+        </div>
+        <div className={classes.fieldWrapper}>
+          <p>続柄</p>
+          <TextField
+            onChange={(event) => setOtherRelation(event.target.value)}
+            className={classes.field}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="例）母親"
+            variant="outlined"
+          />
+        </div>
+        {errors.name && <span>エラーが発生しました</span>}
+        <Link to="/sixth_page">
+          <Button
+            disabled={
+              otherPhone == "" || otherName == "" || otherRelation == ""
+            }
+            variant="contained"
+            color="primary"
+            onClick={_onPressed}
+            style={{
+              maxWidth: "400px",
+              maxHeight: "45px",
+              minWidth: "300px",
+              minHeight: "45px",
+              marginTop: "3%",
+            }}
+          >
+            次　　へ
+          </Button>
+        </Link>
+        <Routes>
+          <Route
+            path="/sixth_page"
+            element={<BloodTypeAndMotivationPage />}
+          ></Route>
+        </Routes>
       </div>
-      <div className={classes.fieldWrapper}>
-        <p>緊急連絡先の方の氏名</p>
-        <TextField
-          onChange={(event) => setOtherName(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="緊急連絡先の方の氏名"
-          variant="outlined"
-        />
-      </div>
-      <div className={classes.fieldWrapper}>
-        <p>続柄</p>
-        <TextField
-          onChange={(event) => setOtherRelation(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="例）母親"
-          variant="outlined"
-        />
-      </div>
-      {errors.name && <span>エラーが発生しました</span>}
-      <Link to="/sixth_page">
-        <Button
-          disabled={otherPhone == "" || otherName == "" || otherRelation == ""}
-          variant="contained"
-          color="primary"
-          onClick={_onPressed}
-          style={{
-            maxWidth: "400px",
-            maxHeight: "45px",
-            minWidth: "300px",
-            minHeight: "45px",
-            marginTop: "3%",
-          }}
-        >
-          次　　へ
-        </Button>
-      </Link>
-      <Routes>
-        <Route
-          path="/sixth_page"
-          element={<BloodTypeAndMotivationPage />}
-        ></Route>
-      </Routes>
     </div>
   );
 };
