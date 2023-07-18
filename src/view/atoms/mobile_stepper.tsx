@@ -1,34 +1,23 @@
-import { makeStyles } from "@material-ui/core";
-import MobileStepper from "@mui/material/MobileStepper";
+import { LinearProgress } from "@mui/material";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() => ({
   root: {
     marginBottom: "5%",
-    alignContent: "center"
-  },
-
-  mobileStepper: {
-    marginLeft: "15%",
-    marginRight: "15%",
-    backgroundColor: "transparent",
+    margin: "0 auto",
+    paddingBottom: "5%",
+    width: "80%"
   },
 }));
 
 export const CustomMobileStepper = (props: { arg1: number }) => {
   const classes = useStyles();
-
+  const steps = 7;
+  const progress = props.arg1 / steps * 100;
+  
   return (
     <div className={classes.root}>
-      <MobileStepper
-        sx={{ bgcolor: 'transparent' }}
-        variant="progress"
-        steps={7}
-        position="static"
-        activeStep={props.arg1}
-        className={classes.mobileStepper} 
-        backButton={undefined} 
-        nextButton={undefined}        
-      />
+      <LinearProgress variant="determinate" value={progress} />
     </div>
   );
 };

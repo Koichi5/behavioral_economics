@@ -7,6 +7,8 @@ import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
 import { BloodTypeAndMotivationPage } from "./blood_type_and_motivation_page";
+import { CustomMobileStepper } from "../atoms/mobile_stepper";
+import { useMedia } from "react-use";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -41,6 +43,7 @@ export const OtherPhoneAndNamePage = () => {
   const [otherPhone, setOtherPhone] = useState("");
   const [otherName, setOtherName] = useState("");
   const [otherRelation, setOtherRelation] = useState("");
+  const isWide = useMedia("(min-width: 800px)");
 
   const {
     formState: { errors },
@@ -225,7 +228,7 @@ export const OtherPhoneAndNamePage = () => {
   return (
     <div className={classes.root}>
       <CustomParticle />
-      <CustomStepper arg1={4} />
+      {isWide ? <CustomStepper arg1={4} /> : <CustomMobileStepper arg1={5} />}
       <div className={classes.fieldWrapper}>
         <p>緊急連絡先</p>
         <TextField

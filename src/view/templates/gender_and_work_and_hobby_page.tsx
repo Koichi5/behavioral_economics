@@ -14,6 +14,8 @@ import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { PostAndAddressPage } from "./post_and_address_page";
+import { useMedia } from "react-use";
+import { CustomMobileStepper } from "../atoms/mobile_stepper";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -48,6 +50,7 @@ export const GenderAndWorkAndHobbyPage = () => {
   const [gender, setGender] = useState("");
   const [work, setWork] = useState("");
   const [hobby, setHobby] = useState("");
+  const isWide = useMedia("(min-width: 800px)");
 
   const {
     formState: { errors },
@@ -71,7 +74,7 @@ export const GenderAndWorkAndHobbyPage = () => {
     updateDoc(genderAndWorkAndHobbySubmitDoc, {
       count: currentCount + 1,
     });
-  }
+  };
 
   const updateGenderCount = () => {
     const genderCollectionPath = doc(
@@ -86,7 +89,7 @@ export const GenderAndWorkAndHobbyPage = () => {
         count: currentGenderCount + 1,
       });
     }
-  }
+  };
 
   const updateWorkCount = () => {
     const workCollectionPath = doc(
@@ -101,7 +104,7 @@ export const GenderAndWorkAndHobbyPage = () => {
         count: currentWorkCount + 1,
       });
     }
-  }
+  };
 
   const updateHobbyCount = () => {
     const hobbyCollectionPath = doc(
@@ -116,7 +119,7 @@ export const GenderAndWorkAndHobbyPage = () => {
         count: currentHobbyCount + 1,
       });
     }
-  }
+  };
 
   const fetchgenderAndWorkAndHobbySubmissionCount = async () => {
     var genderAndWorkAndHobbySubmissionCount = 0;
@@ -230,13 +233,15 @@ export const GenderAndWorkAndHobbyPage = () => {
       currentHobbyCount = await fetchHobbyCount();
     })();
     window.onpopstate = () => {
-      _onBrowserBack()
-    }
+      _onBrowserBack();
+    };
   });
   return (
     <div className={classes.root}>
       <CustomParticle />
-      <CustomStepper arg1={2} />
+      <div>
+        {isWide ? <CustomStepper arg1={2} /> : <CustomMobileStepper arg1={3} />}
+      </div>
       <div className={classes.fieldWrapper}>
         <p>性別</p>
         <FormControl className={classes.field}>

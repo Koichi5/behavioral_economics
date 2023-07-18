@@ -16,6 +16,8 @@ import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
 import { VisibilityOff, Visibility } from "@material-ui/icons";
 import "firebase/firestore";
+import { useMedia } from "react-use";
+import { CustomMobileStepper } from "../atoms/mobile_stepper";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -60,6 +62,7 @@ function EmailAndPasswordPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [retypePassword, setRetypePassword] = useState("");
+  const isWide = useMedia("(min-width: 800px)");
 
   function handleClickShowPassword() {
     setShowPassword(!showPassword);
@@ -102,7 +105,7 @@ function EmailAndPasswordPage() {
       "emailAndPasswordSubmission",
       "f1l7UtMKxLke8l40C3FZ",
       "emailRegister",
-      "GmE3vIiVFF3agndDBXsh",
+      "GmE3vIiVFF3agndDBXsh"
     );
     if (email != "") {
       updateDoc(emailCollectionPath, {
@@ -158,17 +161,19 @@ function EmailAndPasswordPage() {
   };
 
   useEffect(() => {
-    (async () => {
+    async () => {
       currentCount = await fetchEmailAndPasswordSubmissionCount();
       currentEmailCount = await fetchEmailRegisterCount();
       backButtonListener();
-    });
+    };
   }, []);
 
   return (
     <div className={classes.root}>
       <CustomParticle />
-      <CustomStepper arg1={0} />
+      <div>
+        {isWide ? <CustomStepper arg1={0} /> : <CustomMobileStepper arg1={1} />}
+      </div>
       <div className={classes.fieldWrapper}>
         <p>メールアドレス</p>
         <TextField

@@ -14,6 +14,8 @@ import { CustomStepper } from "../atoms/stepper";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import CustomParticle from "../atoms/particle";
 import { ExplanationPage } from "./explanation_page";
+import { CustomMobileStepper } from "../atoms/mobile_stepper";
+import { useMedia } from "react-use";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -52,6 +54,7 @@ export const SchoolInfoPage = () => {
   const [degreeStartMonth, setDegreeStartMonth] = useState("");
   const [degreeEndYear, setDegreeEndYear] = useState("");
   const [degreeEndMonth, setDegreeEndMonth] = useState("");
+  const isWide = useMedia("(min-width: 800px)");
 
   const handleDegreeChange = (event: SelectChangeEvent) => {
     setDegree(event.target.value);
@@ -303,7 +306,7 @@ export const SchoolInfoPage = () => {
   return (
     <div className={classes.root}>
       <CustomParticle />
-      <CustomStepper arg1={6} />
+      {isWide ? <CustomStepper arg1={6} /> : <CustomMobileStepper arg1={7} />}
       <div className={classes.fieldWrapper}>
         <p>学校名</p>
         <TextField

@@ -7,6 +7,8 @@ import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
 import { GenderAndWorkAndHobbyPage } from "./gender_and_work_and_hobby_page";
+import { useMedia } from "react-use";
+import { CustomMobileStepper } from "../atoms/mobile_stepper";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -41,6 +43,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
   const [nickName, setNickName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [birthDay, setBirthDay] = useState("");
+  const isWide = useMedia("(min-width: 800px)");
 
   const {
     formState: { errors },
@@ -226,7 +229,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
   return (
     <div className={classes.root}>
       <CustomParticle />
-      <CustomStepper arg1={1} />
+      {isWide ? <CustomStepper arg1={1} /> : <CustomMobileStepper arg1={2} />}
       <div className={classes.fieldWrapper}>
         <p>ニックネーム</p>
         <TextField

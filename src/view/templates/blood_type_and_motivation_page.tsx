@@ -8,6 +8,8 @@ import { CustomStepper } from "../atoms/stepper";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import CustomParticle from "../atoms/particle";
 import { SchoolInfoPage } from "./school_info_page";
+import { CustomMobileStepper } from "../atoms/mobile_stepper";
+import { useMedia } from "react-use";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -41,6 +43,7 @@ export const BloodTypeAndMotivationPage = () => {
   const classes = useStyles();
   const [bloodType, setBloodType] = useState("");
   const [motivation, setMotivation] = useState("");
+  const isWide = useMedia("(min-width: 800px)");
 
   var currentCount = 0;
   var currentBloodCount = 0;
@@ -190,7 +193,7 @@ export const BloodTypeAndMotivationPage = () => {
   return (
     <div className={classes.root}>
       <CustomParticle />
-      <CustomStepper arg1={5} />
+      {isWide ? <CustomStepper arg1={5} /> : <CustomMobileStepper arg1={6} />}
       <div className={classes.fieldWrapper}>
         <p>血液型</p>
         <FormControl className={classes.field}>
