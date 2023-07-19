@@ -12,7 +12,6 @@ import { CustomMobileStepper } from "../atoms/mobile_stepper";
 import { useMedia } from "react-use";
 
 const useStyles = makeStyles(() => ({
-
   root: {
     position: "relative",
     top: "10%",
@@ -21,25 +20,17 @@ const useStyles = makeStyles(() => ({
   formWrapper: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
   },
 
   fieldWrapper: {
     display: "flex",
-    flexDirection: "column",
     justifyContent: "space-between",
     textAlign: "start",
     alignItems: "start",
-    paddingLeft: "20%",
-    paddingRight: "20%",
   },
 
   field: {
     paddingBottom: "50px",
-    maxWidth: "400px",
-    maxHeight: "45px",
-    minWidth: "400px",
-    minHeight: "45px",
     marginTop: "2%",
   },
 
@@ -203,10 +194,23 @@ export const BloodTypeAndMotivationPage = () => {
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={5} /> : <CustomMobileStepper arg1={6} />}
-      <div className={classes.formWrapper}>
-        <div className={classes.fieldWrapper}>
+      <div
+        className={classes.formWrapper}
+        style={{ alignItems: isWide ? "inherit" : "center" }}
+      >
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>血液型</p>
-          <FormControl className={classes.field}>
+          <FormControl
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+          >
             <Select
               className={classes.input}
               id="demo-simple-select"
@@ -221,10 +225,20 @@ export const BloodTypeAndMotivationPage = () => {
             </Select>
           </FormControl>
         </div>
-        <div className={classes.fieldWrapper}>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>動機</p>
           <div style={{ display: "flex" }}>
-            <FormControl className={classes.field}>
+            <FormControl
+              className={classes.field}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+            >
               <Select
                 className={classes.input}
                 id="demo-simple-select"

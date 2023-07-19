@@ -18,7 +18,6 @@ import { useMedia } from "react-use";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
 
 const useStyles = makeStyles(() => ({
-
   root: {
     position: "relative",
     top: "10%",
@@ -27,25 +26,17 @@ const useStyles = makeStyles(() => ({
   formWrapper: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
   },
 
   fieldWrapper: {
     display: "flex",
-    flexDirection: "column",
-    textAlign: "start",
     justifyContent: "space-between",
-    alignItems: "baseline",
-    paddingLeft: "20%",
-    paddingRight: "20%",
+    textAlign: "start",
+    alignItems: "start",
   },
 
   field: {
     paddingBottom: "50px",
-    maxWidth: "400px",
-    maxHeight: "45px",
-    minWidth: "400px",
-    minHeight: "45px",
     marginTop: "2%",
   },
 
@@ -251,68 +242,97 @@ export const GenderAndWorkAndHobbyPage = () => {
       <div>
         {isWide ? <CustomStepper arg1={2} /> : <CustomMobileStepper arg1={3} />}
       </div>
-      <div className={classes.formWrapper}>
-      <div className={classes.fieldWrapper}>
-        <p>性別</p>
-        <FormControl className={classes.field}>
-          <Select
-            // labelId="demo-simple-select-label"
-            className={classes.input}
-            id="demo-simple-select"
-            value={gender}
-            label="Degree"
-            onChange={handleGenderChange}
-          >
-            <MenuItem value={10}>男性</MenuItem>
-            <MenuItem value={20}>女性</MenuItem>
-            <MenuItem value={30}>その他</MenuItem>
-            <MenuItem value={40}>選択しない</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
-      <div className={classes.fieldWrapper}>
-        <p>職業</p>
-        <TextField
-          onChange={(event) => setWork(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="例）学生"
-          variant="outlined"
-        />
-      </div>
-      <div className={classes.fieldWrapper}>
-        <p>趣味</p>
-        <TextField
-          onChange={(event) => setHobby(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="例）読書"
-          variant="outlined"
-        />
-      </div>
-      {errors.name && <span>エラーが発生しました</span>}
-      <Link to="/fourth_page">
-        <Button
-          disabled={gender == "" || work == "" || hobby == ""}
-          variant="contained"
-          color="primary"
-          onClick={_onPressed}
+      <div
+        className={classes.formWrapper}
+        style={{ alignItems: isWide ? "inherit" : "center" }}
+      >
+        <div
+          className={classes.fieldWrapper}
           style={{
-            maxWidth: "400px",
-            maxHeight: "45px",
-            minWidth: "300px",
-            minHeight: "45px",
-            marginTop: "3%",
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
           }}
         >
-          次　　へ
-        </Button>
-      </Link>
-      <Routes>
-        <Route path="/fourth_page" element={<PostAndAddressPage />}></Route>
-      </Routes>
+          <p>性別</p>
+          <FormControl
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+          >
+            <Select
+              // labelId="demo-simple-select-label"
+              className={classes.input}
+              id="demo-simple-select"
+              value={gender}
+              label="Degree"
+              onChange={handleGenderChange}
+            >
+              <MenuItem value={10}>男性</MenuItem>
+              <MenuItem value={20}>女性</MenuItem>
+              <MenuItem value={30}>その他</MenuItem>
+              <MenuItem value={40}>選択しない</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
+          <p>職業</p>
+          <TextField
+            onChange={(event) => setWork(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="例）学生"
+            variant="outlined"
+          />
+        </div>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
+          <p>趣味</p>
+          <TextField
+            onChange={(event) => setHobby(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="例）読書"
+            variant="outlined"
+          />
+        </div>
+        {errors.name && <span>エラーが発生しました</span>}
+        <Link to="/fourth_page">
+          <Button
+            disabled={gender == "" || work == "" || hobby == ""}
+            variant="contained"
+            color="primary"
+            onClick={_onPressed}
+            style={{
+              maxWidth: "400px",
+              maxHeight: "45px",
+              minWidth: "300px",
+              minHeight: "45px",
+              marginTop: "3%",
+            }}
+          >
+            次　　へ
+          </Button>
+        </Link>
+        <Routes>
+          <Route path="/fourth_page" element={<PostAndAddressPage />}></Route>
+        </Routes>
       </div>
     </div>
   );

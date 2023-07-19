@@ -98,7 +98,6 @@ export const ExplanationPage = () => {
   return (
     <div className={classes.root}>
       <CustomParticle />
-      <CustomStepper arg1={5} />
       <div className={classes.body}>
         <h1 className="main-title">利用規約</h1>
         <p>

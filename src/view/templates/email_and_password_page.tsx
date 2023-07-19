@@ -20,7 +20,6 @@ import { useMedia } from "react-use";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
 
 const useStyles = makeStyles(() => ({
-
   root: {
     position: "relative",
     top: "10%",
@@ -29,25 +28,17 @@ const useStyles = makeStyles(() => ({
   formWrapper: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
   },
 
   fieldWrapper: {
     display: "flex",
-    flexDirection: "column",
     justifyContent: "space-between",
     textAlign: "start",
     alignItems: "start",
-    paddingLeft: "20%",
-    paddingRight: "20%",
   },
 
   field: {
     marginBottom: "50px",
-    maxWidth: "400px",
-    maxHeight: "45px",
-    minWidth: "400px",
-    minHeight: "45px",
     marginTop: "2%",
   },
 
@@ -58,7 +49,6 @@ const useStyles = makeStyles(() => ({
   secretField: {
     marginBottom: "50px",
     maxWidth: "400px",
-    minWidth: "400px",
     marginTop: "2%",
     background: "GhostWhite",
   },
@@ -183,23 +173,39 @@ function EmailAndPasswordPage() {
       <div>
         {isWide ? <CustomStepper arg1={0} /> : <CustomMobileStepper arg1={1} />}
       </div>
-      <div className={classes.formWrapper}>
-        <div className={classes.fieldWrapper}>
+      <div className={classes.formWrapper} style={{alignItems: isWide ? "inherit" : "center"}}>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>メールアドレス</p>
           <TextField
             onChange={(event) => setEmail(event.target.value)}
             className={classes.field}
+            style={{minWidth: isWide ? "400px" : "300px"}}
             InputProps={{ className: classes.input }}
             id="outlined-email"
             label="メールアドレス"
             variant="outlined"
           />
         </div>
-        <div className={classes.fieldWrapper}>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>パスワード</p>
           <OutlinedInput
             onChange={(event) => setPassword(event.target.value)}
             className={classes.secretField}
+            style={{minWidth: isWide ? "400px" : "300px",}}
             id="outlined-adornment-password"
             type={showPassword ? "text" : "password"}
             endAdornment={
@@ -215,11 +221,19 @@ function EmailAndPasswordPage() {
             label="パスワード"
           />
         </div>
-        <div className={classes.fieldWrapper}>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>パスワード（確認）</p>
           <OutlinedInput
             onChange={(event) => setRetypePassword(event.target.value)}
             className={classes.secretField}
+            style={{minWidth: isWide ? "400px" : "300px",}}
             id="outlined-adornment-password"
             type={showConfirmPassword ? "text" : "password"}
             endAdornment={

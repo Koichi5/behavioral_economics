@@ -11,7 +11,6 @@ import { CustomMobileStepper } from "../atoms/mobile_stepper";
 import { useMedia } from "react-use";
 
 const useStyles = makeStyles(() => ({
-
   root: {
     position: "relative",
     top: "10%",
@@ -20,25 +19,17 @@ const useStyles = makeStyles(() => ({
   formWrapper: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
   },
 
   fieldWrapper: {
     display: "flex",
-    flexDirection: "column",
     justifyContent: "space-between",
     textAlign: "start",
     alignItems: "start",
-    paddingLeft: "20%",
-    paddingRight: "20%",
   },
 
   field: {
     paddingBottom: "50px",
-    maxWidth: "400px",
-    maxHeight: "45px",
-    minWidth: "400px",
-    minHeight: "45px",
     marginTop: "2%",
   },
 
@@ -238,34 +229,61 @@ export const OtherPhoneAndNamePage = () => {
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={4} /> : <CustomMobileStepper arg1={5} />}
-      <div className={classes.formWrapper}>
-        <div className={classes.fieldWrapper}>
+      <div
+        className={classes.formWrapper}
+        style={{ alignItems: isWide ? "inherit" : "center" }}
+      >
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>緊急連絡先</p>
           <TextField
             onChange={(event) => setOtherPhone(event.target.value)}
             className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
             InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）01234567890"
             variant="outlined"
           />
         </div>
-        <div className={classes.fieldWrapper}>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>緊急連絡先の方の氏名</p>
           <TextField
             onChange={(event) => setOtherName(event.target.value)}
             className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
             InputProps={{ className: classes.input }}
             id="outlined-name"
             label="緊急連絡先の方の氏名"
             variant="outlined"
           />
         </div>
-        <div className={classes.fieldWrapper}>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>続柄</p>
           <TextField
             onChange={(event) => setOtherRelation(event.target.value)}
             className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
             InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）母親"

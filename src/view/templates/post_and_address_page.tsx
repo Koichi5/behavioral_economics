@@ -11,7 +11,6 @@ import { useMedia } from "react-use";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
 
 const useStyles = makeStyles(() => ({
-
   root: {
     position: "relative",
     top: "10%",
@@ -20,25 +19,17 @@ const useStyles = makeStyles(() => ({
   formWrapper: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
   },
 
   fieldWrapper: {
     display: "flex",
-    flexDirection: "column",
     justifyContent: "space-between",
     textAlign: "start",
     alignItems: "start",
-    paddingLeft: "20%",
-    paddingRight: "20%",
   },
 
   field: {
     paddingBottom: "50px",
-    maxWidth: "400px",
-    maxHeight: "45px",
-    minWidth: "400px",
-    minHeight: "45px",
     marginTop: "2%",
   },
 
@@ -238,34 +229,61 @@ export const PostAndAddressPage = () => {
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={3} /> : <CustomMobileStepper arg1={4} />}
-      <div className={classes.formWrapper}>
-        <div className={classes.fieldWrapper}>
+      <div
+        className={classes.formWrapper}
+        style={{ alignItems: isWide ? "inherit" : "center" }}
+      >
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>郵便番号</p>
           <TextField
             onChange={(event) => setPostNumber(event.target.value)}
             className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
             InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）123-4567"
             variant="outlined"
           />
         </div>
-        <div className={classes.fieldWrapper}>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>住所（都道府県、市町村、番地）</p>
           <TextField
             onChange={(event) => setAddress(event.target.value)}
             className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
             InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）東京都渋谷区渋谷2-15-1"
             variant="outlined"
           />
         </div>
-        <div className={classes.fieldWrapper}>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>住所（アパート名等）</p>
           <TextField
             onChange={(event) => setDetailAddress(event.target.value)}
             className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
             InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）クロスタワー12F"

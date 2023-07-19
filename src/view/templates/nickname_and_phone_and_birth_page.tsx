@@ -11,7 +11,6 @@ import { useMedia } from "react-use";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
 
 const useStyles = makeStyles(() => ({
-
   root: {
     position: "relative",
     top: "10%",
@@ -20,25 +19,17 @@ const useStyles = makeStyles(() => ({
   formWrapper: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
   },
 
   fieldWrapper: {
     display: "flex",
-    flexDirection: "column",
     justifyContent: "space-between",
     textAlign: "start",
     alignItems: "start",
-    paddingLeft: "20%",
-    paddingRight: "20%",
   },
 
   field: {
-    paddingBottom: "50px",
-    maxWidth: "400px",
-    maxHeight: "45px",
-    minWidth: "400px",
-    minHeight: "45px",
+    marginBottom: "50px",
     marginTop: "2%",
   },
 
@@ -236,64 +227,91 @@ export const NicknameAndPhoneAndBirthPage = () => {
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={1} /> : <CustomMobileStepper arg1={2} />}
-      <div className={classes.formWrapper}>
-      <div className={classes.fieldWrapper}>
-        <p>ニックネーム</p>
-        <TextField
-          onChange={(event) => setNickName(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="ニックネーム"
-          variant="outlined"
-        />
-      </div>
-      <div className={classes.fieldWrapper}>
-        <p>電話番号</p>
-        <TextField
-          onChange={(event) => setPhoneNumber(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="例）090-1234-5678"
-          variant="outlined"
-        />
-      </div>
-      <div className={classes.fieldWrapper}>
-        <p>誕生日</p>
-        <TextField
-          onChange={(event) => setBirthDay(event.target.value)}
-          className={classes.field}
-          InputProps={{ className: classes.input }}
-          id="outlined-name"
-          label="例）2000-01-01"
-          variant="outlined"
-        />
-        {errors.name && <span>エラーが発生しました</span>}
-      </div>
-      <Link to="/third_page">
-        <Button
-          disabled={nickName == "" || phoneNumber == "" || birthDay == ""}
-          variant="contained"
-          color="primary"
-          onClick={_onPressed}
+      <div
+        className={classes.formWrapper}
+        style={{ alignItems: isWide ? "inherit" : "center" }}
+      >
+        <div
+          className={classes.fieldWrapper}
           style={{
-            maxWidth: "400px",
-            maxHeight: "45px",
-            minWidth: "300px",
-            minHeight: "45px",
-            marginTop: "3%",
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
           }}
         >
-          次　　へ
-        </Button>
-      </Link>
-      <Routes>
-        <Route
-          path="/third_page"
-          element={<GenderAndWorkAndHobbyPage />}
-        ></Route>
-      </Routes>
+          <p>ニックネーム</p>
+          <TextField
+            onChange={(event) => setNickName(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="ニックネーム"
+            variant="outlined"
+          />
+        </div>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
+          <p>電話番号</p>
+          <TextField
+            onChange={(event) => setPhoneNumber(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="例）090-1234-5678"
+            variant="outlined"
+          />
+        </div>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
+          <p>誕生日</p>
+          <TextField
+            onChange={(event) => setBirthDay(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            InputProps={{ className: classes.input }}
+            id="outlined-name"
+            label="例）2000-01-01"
+            variant="outlined"
+          />
+          {errors.name && <span>エラーが発生しました</span>}
+        </div>
+        <Link to="/third_page">
+          <Button
+            disabled={nickName == "" || phoneNumber == "" || birthDay == ""}
+            variant="contained"
+            color="primary"
+            onClick={_onPressed}
+            style={{
+              maxWidth: "400px",
+              maxHeight: "45px",
+              minWidth: "300px",
+              minHeight: "45px",
+              marginTop: "3%",
+            }}
+          >
+            次　　へ
+          </Button>
+        </Link>
+        <Routes>
+          <Route
+            path="/third_page"
+            element={<GenderAndWorkAndHobbyPage />}
+          ></Route>
+        </Routes>
       </div>
     </div>
   );

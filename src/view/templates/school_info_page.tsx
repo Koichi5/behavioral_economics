@@ -18,7 +18,6 @@ import { CustomMobileStepper } from "../atoms/mobile_stepper";
 import { useMedia } from "react-use";
 
 const useStyles = makeStyles(() => ({
-
   root: {
     position: "relative",
     top: "10%",
@@ -27,25 +26,17 @@ const useStyles = makeStyles(() => ({
   formWrapper: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
   },
 
   fieldWrapper: {
     display: "flex",
-    flexDirection: "column",
     justifyContent: "space-between",
     textAlign: "start",
     alignItems: "start",
-    paddingLeft: "20%",
-    paddingRight: "20%",
   },
 
   field: {
     paddingBottom: "50px",
-    maxWidth: "400px",
-    maxHeight: "45px",
-    minWidth: "400px",
-    minHeight: "45px",
     marginTop: "2%",
   },
 
@@ -316,32 +307,61 @@ export const SchoolInfoPage = () => {
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={6} /> : <CustomMobileStepper arg1={7} />}
-      <div className={classes.formWrapper}>
-        <div className={classes.fieldWrapper}>
+      <div
+        className={classes.formWrapper}
+        style={{ alignItems: isWide ? "inherit" : "center" }}
+      >
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>学校名</p>
           <TextField
             onChange={(event) => setSchoolName(event.target.value)}
             className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
             InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）太郎大学"
             variant="outlined"
           />
         </div>
-        <div className={classes.fieldWrapper}>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>学部・学科</p>
           <TextField
             onChange={(event) => setDepartmentName(event.target.value)}
             className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
             InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）文学部文学科"
             variant="outlined"
           />
         </div>
-        <div className={classes.fieldWrapper}>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>学位</p>
-          <FormControl className={classes.field}>
+          <FormControl
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+          >
             {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
             <Select
               // labelId="demo-simple-select-label"
@@ -361,7 +381,14 @@ export const SchoolInfoPage = () => {
             </Select>
           </FormControl>
         </div>
-        <div className={classes.fieldWrapper}>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
           <p>在学期間</p>
           <div style={{ display: "flex" }}>
             <FormControl>
@@ -369,9 +396,9 @@ export const SchoolInfoPage = () => {
               <Select
                 // labelId="demo-simple-select-label"
                 style={{
-                  maxWidth: "100px",
+                  maxWidth: isWide ? "100px" : "50px",
                   maxHeight: "45px",
-                  minWidth: "100px",
+                  minWidth: isWide ? "100px" : "50px",
                   minHeight: "45px",
                   marginTop: "3%",
                 }}
@@ -401,9 +428,9 @@ export const SchoolInfoPage = () => {
               <Select
                 // labelId="demo-simple-select-label"
                 style={{
-                  maxWidth: "100px",
+                  maxWidth: isWide ? "100px" : "50px",
                   maxHeight: "45px",
-                  minWidth: "100px",
+                  minWidth: isWide ? "100px" : "50px",
                   minHeight: "45px",
                   marginTop: "3%",
                 }}
@@ -434,9 +461,9 @@ export const SchoolInfoPage = () => {
               <Select
                 // labelId="demo-simple-select-label"
                 style={{
-                  maxWidth: "100px",
+                  maxWidth: isWide ? "100px" : "50px",
                   maxHeight: "45px",
-                  minWidth: "100px",
+                  minWidth: isWide ? "100px" : "50px",
                   minHeight: "45px",
                   marginTop: "3%",
                 }}
@@ -470,9 +497,9 @@ export const SchoolInfoPage = () => {
               <Select
                 // labelId="demo-simple-select-label"
                 style={{
-                  maxWidth: "100px",
+                  maxWidth: isWide ? "100px" : "50px",
                   maxHeight: "45px",
-                  minWidth: "100px",
+                  minWidth: isWide ? "100px" : "50px",
                   minHeight: "45px",
                   marginTop: "3%",
                 }}
