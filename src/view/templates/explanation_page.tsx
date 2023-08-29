@@ -4,7 +4,6 @@ import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
-import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
 import Checkbox from '@mui/material/Checkbox';
 import { FinalPage } from "./final_page";
@@ -40,15 +39,6 @@ export const ExplanationPage = () => {
     setIsConfirmed(!isConfirmd);
     console.log(isConfirmd)
   }
-
-//   const toggleVisibility = () => {
-//     window.scrollY > 500 ? setIsVisible(true) : setIsVisible(false);
-//   };
-
-//   useEffect(() => {
-//     window.addEventListener("scroll", toggleVisibility);
-//     return () => window.removeEventListener("scroll", toggleVisibility);
-//   }, []);
 
   const {
     formState: { errors },
