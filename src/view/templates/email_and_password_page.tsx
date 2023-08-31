@@ -52,6 +52,13 @@ const useStyles = makeStyles(() => ({
     marginTop: "2%",
     background: "GhostWhite",
   },
+
+  buttonRow: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 }));
 
 function EmailAndPasswordPage() {
@@ -173,7 +180,10 @@ function EmailAndPasswordPage() {
       <div>
         {isWide ? <CustomStepper arg1={0} /> : <CustomMobileStepper arg1={1} />}
       </div>
-      <div className={classes.formWrapper} style={{alignItems: isWide ? "inherit" : "center"}}>
+      <div
+        className={classes.formWrapper}
+        style={{ alignItems: isWide ? "inherit" : "center" }}
+      >
         <div
           className={classes.fieldWrapper}
           style={{
@@ -186,7 +196,7 @@ function EmailAndPasswordPage() {
           <TextField
             onChange={(event) => setEmail(event.target.value)}
             className={classes.field}
-            style={{minWidth: isWide ? "400px" : "300px"}}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
             InputProps={{ className: classes.input }}
             id="outlined-email"
             label="メールアドレス"
@@ -205,7 +215,7 @@ function EmailAndPasswordPage() {
           <OutlinedInput
             onChange={(event) => setPassword(event.target.value)}
             className={classes.secretField}
-            style={{minWidth: isWide ? "400px" : "300px",}}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
             id="outlined-adornment-password"
             type={showPassword ? "text" : "password"}
             endAdornment={
@@ -233,7 +243,7 @@ function EmailAndPasswordPage() {
           <OutlinedInput
             onChange={(event) => setRetypePassword(event.target.value)}
             className={classes.secretField}
-            style={{minWidth: isWide ? "400px" : "300px",}}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
             id="outlined-adornment-password"
             type={showConfirmPassword ? "text" : "password"}
             endAdornment={
@@ -250,23 +260,42 @@ function EmailAndPasswordPage() {
           />
         </div>
         {errors.name && <span>エラーが発生しました</span>}
-        <Link to="/second_page">
-          <Button
-            disabled={email == "" || password == "" || retypePassword == ""}
-            variant="contained"
-            color="primary"
-            onClick={onPressed}
-            style={{
-              maxWidth: "400px",
-              maxHeight: "45px",
-              minWidth: "300px",
-              minHeight: "45px",
-              marginTop: "3%",
-            }}
-          >
-            次　　へ
-          </Button>
-        </Link>
+        <div className={classes.buttonRow}>
+          <Link to="/second_page" style={{ paddingRight: "3%" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onPressed}
+              style={{
+                maxWidth: "400px",
+                maxHeight: "45px",
+                minWidth: "300px",
+                minHeight: "45px",
+                marginTop: "3%",
+              }}
+            >
+              やめる
+            </Button>
+          </Link>
+          <Link to="/second_page" style={{ paddingLeft: "3%" }}>
+            <Button
+              disabled={email == "" || password == "" || retypePassword == ""}
+              variant="contained"
+              color="primary"
+              onClick={onPressed}
+              style={{
+                maxWidth: "400px",
+                maxHeight: "45px",
+                minWidth: "300px",
+                minHeight: "45px",
+                marginTop: "3%",
+                paddingLeft: "1%",
+              }}
+            >
+              次　　へ
+            </Button>
+          </Link>
+        </div>
         <Routes>
           <Route
             path="/second_page"

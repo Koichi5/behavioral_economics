@@ -43,6 +43,13 @@ const useStyles = makeStyles(() => ({
   input: {
     background: "GhostWhite",
   },
+
+  buttonRow: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 }));
 
 export const SchoolInfoPage = () => {
@@ -527,7 +534,24 @@ export const SchoolInfoPage = () => {
           </div>
         </div>
         {errors.name && <span>エラーが発生しました</span>}
-        <Link to="/explanation_page">
+        <div className={classes.buttonRow}>
+        <Link to="/explanation_page" style={{ paddingRight: "3%" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={_onPressed}
+              style={{
+                maxWidth: "400px",
+                maxHeight: "45px",
+                minWidth: "300px",
+                minHeight: "45px",
+                marginTop: "3%",
+              }}
+            >
+              やめる
+            </Button>
+          </Link>
+        <Link to="/explanation_page" style={{ paddingLeft: "3%" }}>
           <Button
             disabled={
               schoolName == "" ||
@@ -552,6 +576,7 @@ export const SchoolInfoPage = () => {
             登　　録
           </Button>
         </Link>
+        </div>
         <Routes>
           <Route path="/explanation_page" element={<ExplanationPage />}></Route>
         </Routes>

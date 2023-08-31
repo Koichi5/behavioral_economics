@@ -36,6 +36,13 @@ const useStyles = makeStyles(() => ({
   input: {
     background: "GhostWhite",
   },
+
+  buttonRow: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 }));
 
 export const PostAndAddressPage = () => {
@@ -291,7 +298,24 @@ export const PostAndAddressPage = () => {
           />
         </div>
         {errors.name && <span>エラーが発生しました</span>}
-        <Link to="/fifth_page">
+        <div className={classes.buttonRow}>
+        <Link to="/fifth_page" style={{ paddingRight: "3%" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={_onPressed}
+              style={{
+                maxWidth: "400px",
+                maxHeight: "45px",
+                minWidth: "300px",
+                minHeight: "45px",
+                marginTop: "3%",
+              }}
+            >
+              やめる
+            </Button>
+          </Link>
+        <Link to="/fifth_page" style={{ paddingLeft: "3%" }}>
           <Button
             disabled={postNumber == "" || address == "" || detailAddress == ""}
             variant="contained"
@@ -308,6 +332,7 @@ export const PostAndAddressPage = () => {
             次　　へ
           </Button>
         </Link>
+        </div>
         <Routes>
           <Route path="/fifth_page" element={<OtherPhoneAndNamePage />}></Route>
         </Routes>
