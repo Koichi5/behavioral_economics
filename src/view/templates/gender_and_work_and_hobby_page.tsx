@@ -225,6 +225,13 @@ export const GenderAndWorkAndHobbyPage = () => {
     updateHobbyCount();
   };
 
+  const _onCancel = () => {
+    var result = window.confirm('今までの記録が破棄されますが、よろしいですか？')
+    if(result) {
+      window.location.href = "https://behavioral-economics-8d29e.web.app/"
+    }
+  }
+
   const _onPressed = () => {
     updateGenderAndWorkAndHobbyCount();
     updateGenderCount();
@@ -325,7 +332,7 @@ export const GenderAndWorkAndHobbyPage = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={_onPressed}
+              onClick={_onCancel}
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",

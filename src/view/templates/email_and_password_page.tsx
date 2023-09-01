@@ -123,7 +123,7 @@ function EmailAndPasswordPage() {
   const onCancel = () => {
     var result = window.confirm('今までの記録が破棄されますが、よろしいですか？')
     if(result) {
-      window.close()
+      window.location.href = "https://behavioral-economics-8d29e.web.app/"
     }
   }
 
