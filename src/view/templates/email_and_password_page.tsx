@@ -120,6 +120,13 @@ function EmailAndPasswordPage() {
     }
   };
 
+  const onCancel = () => {
+    var result = window.confirm('今までの記録が破棄されますが、よろしいですか？')
+    if(result) {
+      window.close()
+    }
+  }
+
   const fetchEmailAndPasswordSubmissionCount = async () => {
     var emailAndPasswordSubmitCount = 0;
     const emailAndPasswordSubmissitRef = doc(
@@ -265,7 +272,7 @@ function EmailAndPasswordPage() {
             <Button
               variant="contained"
               color="primary"
-              onClick={onPressed}
+              onClick={onCancel}
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
