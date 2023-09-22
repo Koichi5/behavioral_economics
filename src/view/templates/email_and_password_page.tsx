@@ -47,13 +47,6 @@ const useStyles = makeStyles(() => ({
     maxWidth: "400px",
     marginTop: "2%",
   },
-
-  buttonRow: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
 }));
 
 function EmailAndPasswordPage() {
@@ -261,8 +254,8 @@ function EmailAndPasswordPage() {
           />
         </div>
         {errors.name && <span>エラーが発生しました</span>}
-        <div className={classes.buttonRow}>
-          <Link to="/second_page" style={{ paddingRight: "3%" }}>
+        <div>
+          <Link to="/second_page" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
               variant="contained"
               color="primary"
@@ -278,7 +271,7 @@ function EmailAndPasswordPage() {
               やめる
             </Button>
           </Link>
-          <Link to="/second_page" style={{ paddingLeft: "3%" }}>
+          <Link to="/second_page" style={{ paddingLeft: isWide ? "3%" : "0" }}>
             <Button
               disabled={email == "" || password == "" || retypePassword == ""}
               variant="contained"

@@ -32,13 +32,6 @@ const useStyles = makeStyles(() => ({
     marginBottom: "50px",
     marginTop: "2%",
   },
-
-  buttonRow: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
 }));
 
 export const NicknameAndPhoneAndBirthPage = () => {
@@ -297,8 +290,8 @@ export const NicknameAndPhoneAndBirthPage = () => {
           />
           {errors.name && <span>エラーが発生しました</span>}
         </div>
-        <div className={classes.buttonRow}>
-        <Link to="/third_page" style={{ paddingRight: "3%" }}>
+        <div>
+        <Link to="/third_page" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
               variant="contained"
               color="primary"
@@ -314,7 +307,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
               やめる
             </Button>
           </Link>
-        <Link to="/third_page" style={{ paddingLeft: "3%" }}>
+        <Link to="/third_page" style={{ paddingLeft: isWide ? "3%" : "0" }}>
           <Button
             disabled={nickName == "" || phoneNumber == "" || birthDay == ""}
             variant="contained"

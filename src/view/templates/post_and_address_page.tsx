@@ -32,13 +32,6 @@ const useStyles = makeStyles(() => ({
     paddingBottom: "50px",
     marginTop: "2%",
   },
-
-  buttonRow: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
 }));
 
 export const PostAndAddressPage = () => {
@@ -298,8 +291,8 @@ export const PostAndAddressPage = () => {
           />
         </div>
         {errors.name && <span>エラーが発生しました</span>}
-        <div className={classes.buttonRow}>
-        <Link to="/fifth_page" style={{ paddingRight: "3%" }}>
+        <div>
+        <Link to="/fifth_page" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
               variant="contained"
               color="primary"
@@ -315,7 +308,7 @@ export const PostAndAddressPage = () => {
               やめる
             </Button>
           </Link>
-        <Link to="/fifth_page" style={{ paddingLeft: "3%" }}>
+        <Link to="/fifth_page" style={{ paddingLeft: isWide ? "3%" : "0" }}>
           <Button
             disabled={postNumber == "" || address == "" || detailAddress == ""}
             variant="contained"
