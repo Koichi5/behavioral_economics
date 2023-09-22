@@ -19,6 +19,8 @@ import { SecondIntroductionPage } from "./view/templates/second_introduction_pag
 import { ThirdIntroductionPage } from "./view/templates/third_introduction_page";
 import { FourthIntroductionPage } from "./view/templates/fourth_introduction_page";
 import { GenderAndWorkAndHobbyPage } from "./view/templates/gender_and_work_and_hobby_page";
+import { AskCommentsPage } from "./view/templates/ask_ comments_page";
+import { ApologizePage } from "./view/templates/apologize_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -93,6 +95,8 @@ function App() {
           <Route path="/sixth_page" element={<BloodTypeAndMotivationPage />} />
           <Route path="/seventh_page" element={<SchoolInfoPage />} />
           <Route path="/explanation_page" element={<ExplanationPage />} />
+          <Route path="/apologize_page" element={<ApologizePage />} />
+          <Route path="/ask_comments_page" element={<AskCommentsPage />} />
           <Route path="/final_page" element={<FinalPage />} />
         </Routes>
       </div>

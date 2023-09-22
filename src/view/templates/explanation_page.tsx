@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import CustomParticle from "../atoms/particle";
-import Checkbox from '@mui/material/Checkbox';
-import { FinalPage } from "./final_page";
+import Checkbox from "@mui/material/Checkbox";
+import { ApologizePage } from "./apologize_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -21,14 +21,14 @@ const useStyles = makeStyles(() => ({
   },
 
   ruleName: {
-    textAlign: "left"
+    textAlign: "left",
   },
 
   confirm: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-  }
+  },
 }));
 
 export const ExplanationPage = () => {
@@ -37,8 +37,8 @@ export const ExplanationPage = () => {
 
   const handleIsConfirmedChange = () => {
     setIsConfirmed(!isConfirmd);
-    console.log(isConfirmd)
-  }
+    console.log(isConfirmd);
+  };
 
   const {
     formState: { errors },
@@ -121,7 +121,9 @@ export const ExplanationPage = () => {
         </p>
         <br />
 
-        <p className={classes.ruleName}>第3条（ユーザーIDおよびパスワードの管理）</p>
+        <p className={classes.ruleName}>
+          第3条（ユーザーIDおよびパスワードの管理）
+        </p>
         <p className={classes.ruleName}>
           1.ユーザーは，自己の責任において，本サービスのユーザーIDおよびパスワードを適切に管理するものとします。
           <br />
@@ -348,12 +350,12 @@ export const ExplanationPage = () => {
       </div>
       {errors.name && <span>エラーが発生しました</span>}
       <div className={classes.confirm}>
-        <Checkbox onChange={handleIsConfirmedChange}/>
+        <Checkbox onChange={handleIsConfirmedChange} />
         <p>利用規約に同意します。</p>
       </div>
-      <Link to="/final_page">
+      <Link to="/apologize_page">
         <Button
-          disabled = {!isConfirmd}
+          disabled={!isConfirmd}
           variant="contained"
           color="primary"
           onClick={onPressed}
@@ -363,14 +365,14 @@ export const ExplanationPage = () => {
             minWidth: "300px",
             minHeight: "45px",
             marginTop: "3%",
-            marginBottom: "10%"
+            marginBottom: "10%",
           }}
         >
           次　　へ
         </Button>
       </Link>
       <Routes>
-        <Route path="/final_page" element={<FinalPage />}></Route>
+        <Route path="/apologize_page" element={<ApologizePage />}></Route>
       </Routes>
     </div>
   );
