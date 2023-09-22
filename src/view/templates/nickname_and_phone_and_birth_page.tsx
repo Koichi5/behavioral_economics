@@ -33,10 +33,6 @@ const useStyles = makeStyles(() => ({
     marginTop: "2%",
   },
 
-  input: {
-    background: "GhostWhite",
-  },
-
   buttonRow: {
     display: "flex",
     flexDirection: "row",
@@ -259,7 +255,6 @@ export const NicknameAndPhoneAndBirthPage = () => {
             onChange={(event) => setNickName(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="ニックネーム"
             variant="outlined"
@@ -278,7 +273,6 @@ export const NicknameAndPhoneAndBirthPage = () => {
             onChange={(event) => setPhoneNumber(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）090-1234-5678"
             variant="outlined"
@@ -297,7 +291,6 @@ export const NicknameAndPhoneAndBirthPage = () => {
             onChange={(event) => setBirthDay(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）2000-01-01"
             variant="outlined"

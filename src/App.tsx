@@ -10,7 +10,6 @@ import { Route, Routes } from "react-router-dom";
 import { PostAndAddressPage } from "./view/templates/post_and_address_page";
 import { SchoolInfoPage } from "./view/templates/school_info_page";
 import { NicknameAndPhoneAndBirthPage } from "./view/templates/nickname_and_phone_and_birth_page";
-import { GenderAndWorkAndHobbyPage } from "./view/templates/gender_and_work_and_hobby_page";
 import { FinalPage } from "./view/templates/final_page";
 import { BloodTypeAndMotivationPage } from "./view/templates/blood_type_and_motivation_page";
 import { OtherPhoneAndNamePage } from "./view/templates/other_phone_and_name_page";
@@ -19,6 +18,7 @@ import { FirstIntroductionPage } from "./view/templates/first_introduction_page"
 import { SecondIntroductionPage } from "./view/templates/second_introduction_page";
 import { ThirdIntroductionPage } from "./view/templates/third_introduction_page";
 import { FourthIntroductionPage } from "./view/templates/fourth_introduction_page";
+import { GenderAndWorkAndHobbyPage } from "./view/templates/gender_and_work_and_hobby_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
 
 // const useBackListener = (callback: unknown) => {
 //    const navigator = useContext(UNSAFE_NavigationContext).navigator;
-  
+
 //     useEffect(() => {
 //       const listener = ({ location, action }) => {
 //         console.log("listener", { location, action });
@@ -44,12 +44,12 @@ const useStyles = makeStyles(() => ({
 //      return unlisten;
 //     }, [callback, navigator]);
 //   };
-  
+
 //   const HeaderWithListener = () => {
 //     useBackListener(({ location, action }) => {
 //       console.log(location, action);
 //     });
-  
+
 //     return <Header />;
 //   }
 
@@ -70,9 +70,18 @@ function App() {
       <div className={classes.root}>
         <Routes>
           <Route path="/" element={<FirstIntroductionPage />} />
-          <Route path="/second_introduction_page" element={<SecondIntroductionPage />} />
-          <Route path="/third_introduction_page" element={< ThirdIntroductionPage/>} />
-          <Route path="/fourth_introduction_page" element={<FourthIntroductionPage />} />
+          <Route
+            path="/second_introduction_page"
+            element={<SecondIntroductionPage />}
+          />
+          <Route
+            path="/third_introduction_page"
+            element={<ThirdIntroductionPage />}
+          />
+          <Route
+            path="/fourth_introduction_page"
+            element={<FourthIntroductionPage />}
+          />
           <Route path="/initial_page" element={<EmailAndPasswordPage />} />
           <Route
             path="/second_page"

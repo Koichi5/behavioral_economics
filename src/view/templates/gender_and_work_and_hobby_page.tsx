@@ -40,10 +40,6 @@ const useStyles = makeStyles(() => ({
     marginTop: "2%",
   },
 
-  input: {
-    background: "GhostWhite",
-  },
-
   buttonRow: {
     display: "flex",
     flexDirection: "row",
@@ -275,7 +271,6 @@ export const GenderAndWorkAndHobbyPage = () => {
           >
             <Select
               // labelId="demo-simple-select-label"
-              className={classes.input}
               id="demo-simple-select"
               value={gender}
               label="Degree"
@@ -301,7 +296,6 @@ export const GenderAndWorkAndHobbyPage = () => {
             onChange={(event) => setWork(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）学生"
             variant="outlined"
@@ -320,7 +314,6 @@ export const GenderAndWorkAndHobbyPage = () => {
             onChange={(event) => setHobby(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）読書"
             variant="outlined"

@@ -33,10 +33,6 @@ const useStyles = makeStyles(() => ({
     marginTop: "2%",
   },
 
-  input: {
-    background: "GhostWhite",
-  },
-
   buttonRow: {
     display: "flex",
     flexDirection: "row",
@@ -260,7 +256,6 @@ export const PostAndAddressPage = () => {
             onChange={(event) => setPostNumber(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）123-4567"
             variant="outlined"
@@ -279,7 +274,6 @@ export const PostAndAddressPage = () => {
             onChange={(event) => setAddress(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）東京都渋谷区渋谷2-15-1"
             variant="outlined"
@@ -298,7 +292,6 @@ export const PostAndAddressPage = () => {
             onChange={(event) => setDetailAddress(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）クロスタワー12F"
             variant="outlined"

@@ -34,10 +34,6 @@ const useStyles = makeStyles(() => ({
     marginTop: "2%",
   },
 
-  input: {
-    background: "GhostWhite",
-  },
-
   buttonRow: {
     display: "flex",
     flexDirection: "row",
@@ -219,7 +215,6 @@ export const BloodTypeAndMotivationPage = () => {
             style={{ minWidth: isWide ? "400px" : "300px" }}
           >
             <Select
-              className={classes.input}
               id="demo-simple-select"
               value={bloodType}
               label="Degree"
@@ -247,7 +242,6 @@ export const BloodTypeAndMotivationPage = () => {
               style={{ minWidth: isWide ? "400px" : "300px" }}
             >
               <Select
-                className={classes.input}
                 id="demo-simple-select"
                 value={motivation}
                 label="Age"

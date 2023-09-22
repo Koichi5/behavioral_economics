@@ -42,15 +42,10 @@ const useStyles = makeStyles(() => ({
     marginTop: "2%",
   },
 
-  input: {
-    background: "GhostWhite",
-  },
-
   secretField: {
     marginBottom: "50px",
     maxWidth: "400px",
     marginTop: "2%",
-    background: "GhostWhite",
   },
 
   buttonRow: {
@@ -204,7 +199,6 @@ function EmailAndPasswordPage() {
             onChange={(event) => setEmail(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-email"
             label="メールアドレス"
             variant="outlined"

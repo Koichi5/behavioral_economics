@@ -40,10 +40,6 @@ const useStyles = makeStyles(() => ({
     marginTop: "2%",
   },
 
-  input: {
-    background: "GhostWhite",
-  },
-
   buttonRow: {
     display: "flex",
     flexDirection: "row",
@@ -338,7 +334,6 @@ export const SchoolInfoPage = () => {
             onChange={(event) => setSchoolName(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）太郎大学"
             variant="outlined"
@@ -357,7 +352,6 @@ export const SchoolInfoPage = () => {
             onChange={(event) => setDepartmentName(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）文学部文学科"
             variant="outlined"
@@ -379,7 +373,6 @@ export const SchoolInfoPage = () => {
             {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
             <Select
               // labelId="demo-simple-select-label"
-              className={classes.input}
               id="demo-simple-select"
               value={degree}
               label="Degree"
@@ -416,7 +409,6 @@ export const SchoolInfoPage = () => {
                   minHeight: "45px",
                   marginTop: "3%",
                 }}
-                className={classes.input}
                 id="demo-simple-select"
                 value={degreeStartYear}
                 label="Age"
@@ -448,7 +440,6 @@ export const SchoolInfoPage = () => {
                   minHeight: "45px",
                   marginTop: "3%",
                 }}
-                className={classes.input}
                 id="demo-simple-select"
                 value={degreeStartMonth}
                 label="Age"
@@ -481,7 +472,6 @@ export const SchoolInfoPage = () => {
                   minHeight: "45px",
                   marginTop: "3%",
                 }}
-                className={classes.input}
                 id="demo-simple-select"
                 value={degreeEndYear}
                 label="Age"
@@ -517,7 +507,6 @@ export const SchoolInfoPage = () => {
                   minHeight: "45px",
                   marginTop: "3%",
                 }}
-                className={classes.input}
                 id="demo-simple-select"
                 value={degreeEndMonth}
                 label="Age"

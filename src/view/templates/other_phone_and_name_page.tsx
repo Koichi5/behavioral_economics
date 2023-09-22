@@ -33,10 +33,6 @@ const useStyles = makeStyles(() => ({
     marginTop: "2%",
   },
 
-  input: {
-    background: "GhostWhite",
-  },
-
   buttonRow: {
     display: "flex",
     flexDirection: "row",
@@ -260,7 +256,6 @@ export const OtherPhoneAndNamePage = () => {
             onChange={(event) => setOtherPhone(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）01234567890"
             variant="outlined"
@@ -279,7 +274,6 @@ export const OtherPhoneAndNamePage = () => {
             onChange={(event) => setOtherName(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="緊急連絡先の方の氏名"
             variant="outlined"
@@ -298,7 +292,6 @@ export const OtherPhoneAndNamePage = () => {
             onChange={(event) => setOtherRelation(event.target.value)}
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
-            InputProps={{ className: classes.input }}
             id="outlined-name"
             label="例）母親"
             variant="outlined"

@@ -3,6 +3,7 @@ import { Link, Routes, Route } from "react-router-dom";
 import CustomParticle from "../atoms/particle";
 import { SecondIntroductionPage } from "./second_introduction_page";
 
+
 const useStyles = makeStyles(() => ({
   root: {
     position: "relative",
