@@ -253,11 +253,10 @@ export const BloodTypeAndMotivationPage = () => {
         </div>
         {errors.name && <span>エラーが発生しました</span>}
         <div>
-        <Link to="/second_page" style={{ paddingRight: isWide ? "3%" : "0" }}>
+        <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
               variant="contained"
               color="primary"
-              onClick={_onPressed}
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",

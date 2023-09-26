@@ -214,12 +214,12 @@ export const GenderAndWorkAndHobbyPage = () => {
     updateHobbyCount();
   };
 
-  const _onCancel = () => {
-    var result = window.confirm('今までの記録が破棄されますが、よろしいですか？')
-    if(result) {
-      window.location.href = "https://behavioral-economics-8d29e.web.app/"
-    }
-  }
+  // const _onCancel = () => {
+  //   var result = window.confirm('今までの記録が破棄されますが、よろしいですか？')
+  //   if(result) {
+  //     window.location.href = "https://behavioral-economics-8d29e.web.app/"
+  //   }
+  // }
 
   const _onPressed = () => {
     updateGenderAndWorkAndHobbyCount();
@@ -314,11 +314,10 @@ export const GenderAndWorkAndHobbyPage = () => {
         </div>
         {errors.name && <span>エラーが発生しました</span>}
         <div>
-          <Link to="/fourth_page" style={{ paddingRight: isWide ? "3%" : "0" }}>
+          <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
               variant="contained"
               color="primary"
-              onClick={_onCancel}
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",

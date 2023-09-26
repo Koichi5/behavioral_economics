@@ -108,12 +108,12 @@ function EmailAndPasswordPage() {
     }
   };
 
-  const onCancel = () => {
-    var result = window.confirm('今までの記録が破棄されますが、よろしいですか？')
-    if(result) {
-      window.location.href = "https://behavioral-economics-8d29e.web.app/"
-    }
-  }
+  // const onCancel = () => {
+  //   var result = window.confirm('今までの記録が破棄されますが、よろしいですか？')
+  //   if(result) {
+  //     window.location.href = "https://behavioral-economics-8d29e.web.app/"
+  //   }
+  // }
 
   const fetchEmailAndPasswordSubmissionCount = async () => {
     var emailAndPasswordSubmitCount = 0;
@@ -255,11 +255,10 @@ function EmailAndPasswordPage() {
         </div>
         {errors.name && <span>エラーが発生しました</span>}
         <div>
-          <Link to="/second_page" style={{ paddingRight: isWide ? "3%" : "0" }}>
+          <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
               variant="contained"
               color="primary"
-              onClick={onCancel}
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
