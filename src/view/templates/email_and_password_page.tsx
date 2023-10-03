@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { NicknameAndPhoneAndBirthPage } from "./nickname_and_phone_and_birth_page";
 import {
   Button,
+  FormHelperText,
   IconButton,
   InputAdornment,
   OutlinedInput,
@@ -43,23 +44,18 @@ const useStyles = makeStyles(() => ({
   },
 
   secretField: {
-    marginBottom: "50px",
     maxWidth: "400px",
     marginTop: "2%",
   },
 }));
 
-// const navigate = useNavigate()
-
-// const onClickUserListLink = useCallback((e: MouseEvent) => {
-//   e.preventDefault()
-//   navigate("/second_page")
-// }, [navigate])
-
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+const passwordRegex = /^(?=.*[A-Z])(?=.*[.?/+=&%$#-])[a-zA-Z0-9.?/+=&%$#-]{8,}$/;
+const retypePasswordRegex = /^(?=.*[A-Z])(?=.*[.?/+=&%$#-])[a-zA-Z0-9.?/+=&%$#-]{8,}$/;
 
 function EmailAndPasswordPage() {
   const classes = useStyles();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -73,10 +69,10 @@ function EmailAndPasswordPage() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = () => {
+    console.log("onSubmit fired");
     onPressed;
-    console.log(data);
-    // ここでフォームの送信処理を行います
+    navigate("/second_page");
   };
 
   function handleClickShowPassword() {
@@ -107,6 +103,7 @@ function EmailAndPasswordPage() {
     const countUpdateDocumentRef = updateDoc(emailAndPasswordSubmissionDoc, {
       count: currentCount + 1,
     });
+    console.log("email and password count updated");
     console.log(countUpdateDocumentRef);
   };
 
@@ -233,24 +230,37 @@ function EmailAndPasswordPage() {
             }}
           >
             <p>パスワード</p>
-            <OutlinedInput
-              onChange={(event) => setPassword(event.target.value)}
-              className={classes.secretField}
-              style={{ minWidth: isWide ? "400px" : "300px" }}
-              id="outlined-adornment-password"
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="パスワード"
-            />
+            <div style={{ marginBottom: "50px" }}>
+              <OutlinedInput
+                {...register("password", {
+                  required: "パスワードは必須です",
+                  pattern: {
+                    value: passwordRegex,
+                    message: "小文字、大文字、記号、数字を含む８文字以上にしてください",
+                  },
+                })}
+                error={Boolean(errors.password)}
+                onChange={(event) => setPassword(event.target.value)}
+                className={classes.secretField}
+                style={{ minWidth: isWide ? "400px" : "300px" }}
+                id="outlined-adornment-password"
+                type={showPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="パスワード"
+              />
+              <FormHelperText error>
+                {errors.password && errors.password.message}
+              </FormHelperText>
+            </div>
           </div>
           <div
             className={classes.fieldWrapper}
@@ -261,24 +271,37 @@ function EmailAndPasswordPage() {
             }}
           >
             <p>パスワード（確認）</p>
-            <OutlinedInput
-              onChange={(event) => setRetypePassword(event.target.value)}
-              className={classes.secretField}
-              style={{ minWidth: isWide ? "400px" : "300px" }}
-              id="outlined-adornment-password"
-              type={showConfirmPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickConfirmShowPassword}
-                  >
-                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="パスワード（確認）"
-            />
+            <div style={{ marginBottom: "50px" }}>
+              <OutlinedInput
+                {...register("retypePassword", {
+                  required: "パスワードは必須です",
+                  pattern: {
+                    value: retypePasswordRegex,
+                    message: "小文字、大文字、記号、数字を含む８文字以上にしてください",
+                  },
+                })}
+                error={Boolean(errors.retypePassword)}
+                onChange={(event) => setRetypePassword(event.target.value)}
+                className={classes.secretField}
+                style={{ minWidth: isWide ? "400px" : "300px" }}
+                id="outlined-adornment-password"
+                type={showConfirmPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickConfirmShowPassword}
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="パスワード（確認）"
+              />
+              <FormHelperText error>
+                {errors.retypePassword && errors.retypePassword.message}
+              </FormHelperText>
+            </div>
           </div>
           {errors.name && <span>エラーが発生しました</span>}
           <div>
@@ -297,28 +320,22 @@ function EmailAndPasswordPage() {
                 やめる
               </Button>
             </Link>
-            {/* <Link
-              to={false ? "/second_page": "#"}
-              style={{ paddingLeft: isWide ? "3%" : "0" }}
-            > */}
-              <Button
-                type="submit"
-                disabled={email == "" || password == "" || retypePassword == ""}
-                variant="contained"
-                color="primary"
-                onClick={onPressed}
-                style={{
-                  maxWidth: "400px",
-                  maxHeight: "45px",
-                  minWidth: "300px",
-                  minHeight: "45px",
-                  marginTop: "3%",
-                  paddingLeft: "1%",
-                }}
-              >
-                次　　へ
-              </Button>
-            {/* </Link> */}
+            <Button
+              type="submit"
+              disabled={email == "" || password == "" || retypePassword == ""}
+              variant="contained"
+              color="primary"
+              style={{
+                maxWidth: "400px",
+                maxHeight: "45px",
+                minWidth: "300px",
+                minHeight: "45px",
+                marginTop: "3%",
+                paddingLeft: "1%",
+              }}
+            >
+              次　　へ
+            </Button>
           </div>
           <Routes>
             <Route

@@ -1,5 +1,5 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
@@ -8,6 +8,7 @@ import CustomParticle from "../atoms/particle";
 import { GenderAndWorkAndHobbyPage } from "./gender_and_work_and_hobby_page";
 import { useMedia } from "react-use";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
+import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -33,12 +34,28 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const phoneNumRegex = /^\d{3}-\d{4}-\d{4}$/;
+const birthdayRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
+
 export const NicknameAndPhoneAndBirthPage = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const [nickName, setNickName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [birthDay, setBirthDay] = useState("");
   const isWide = useMedia("(min-width: 800px)");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = () => {
+    console.log("onSubmit fired");
+    _onPressed;
+    navigate("/third_page");
+  };
 
   var currentCount = 0;
   var currentNickNameCount = 0;
@@ -225,69 +242,115 @@ export const NicknameAndPhoneAndBirthPage = () => {
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={1} /> : <CustomMobileStepper arg1={2} />}
-      <div
-        className={classes.formWrapper}
-        style={{ alignItems: isWide ? "inherit" : "center" }}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div
-          className={classes.fieldWrapper}
-          style={{
-            flexDirection: isWide ? "row" : "column",
-            paddingLeft: isWide ? "20%" : "0",
-            paddingRight: isWide ? "20%" : "0",
-          }}
+          className={classes.formWrapper}
+          style={{ alignItems: isWide ? "inherit" : "center" }}
         >
-          <p>ニックネーム</p>
-          <TextField
-            onChange={(event) => setNickName(event.target.value)}
-            className={classes.field}
-            style={{ minWidth: isWide ? "400px" : "300px" }}
-            id="outlined-name"
-            label="ニックネーム"
-            variant="outlined"
-          />
-        </div>
-        <div
-          className={classes.fieldWrapper}
-          style={{
-            flexDirection: isWide ? "row" : "column",
-            paddingLeft: isWide ? "20%" : "0",
-            paddingRight: isWide ? "20%" : "0",
-          }}
-        >
-          <p>電話番号</p>
-          <TextField
-            onChange={(event) => setPhoneNumber(event.target.value)}
-            className={classes.field}
-            style={{ minWidth: isWide ? "400px" : "300px" }}
-            id="outlined-name"
-            label="例）090-1234-5678"
-            variant="outlined"
-          />
-        </div>
-        <div
-          className={classes.fieldWrapper}
-          style={{
-            flexDirection: isWide ? "row" : "column",
-            paddingLeft: isWide ? "20%" : "0",
-            paddingRight: isWide ? "20%" : "0",
-          }}
-        >
-          <p>誕生日</p>
-          <TextField
-            onChange={(event) => setBirthDay(event.target.value)}
-            className={classes.field}
-            style={{ minWidth: isWide ? "400px" : "300px" }}
-            id="outlined-name"
-            label="例）2000-01-01"
-            variant="outlined"
-          />
-        </div>
-        <div>
-        <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+          <div
+            className={classes.fieldWrapper}
+            style={{
+              flexDirection: isWide ? "row" : "column",
+              paddingLeft: isWide ? "20%" : "0",
+              paddingRight: isWide ? "20%" : "0",
+            }}
+          >
+            <p>ニックネーム</p>
+            <TextField
+              {...register("nickName", {
+                required: "ニックネームは必須です",
+                minLength: {
+                  value: 3,
+                  message: "３文字以上である必要があります",
+                },
+              })}
+              onChange={(event) => setNickName(event.target.value)}
+              className={classes.field}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+              id="outlined-name"
+              label="ニックネーム"
+              variant="outlined"
+              error={Boolean(errors.nickName)}
+              helperText={errors.nickName && errors.nickName.message}
+            />
+          </div>
+          <div
+            className={classes.fieldWrapper}
+            style={{
+              flexDirection: isWide ? "row" : "column",
+              paddingLeft: isWide ? "20%" : "0",
+              paddingRight: isWide ? "20%" : "0",
+            }}
+          >
+            <p>電話番号</p>
+            <TextField
+              {...register("phone", {
+                required: "電話番号は必須です",
+                pattern: {
+                  value: phoneNumRegex,
+                  message: "電話番号の形式が適当ではありません",
+                },
+              })}
+              onChange={(event) => setPhoneNumber(event.target.value)}
+              className={classes.field}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+              id="outlined-name"
+              label="例）090-1234-5678"
+              variant="outlined"
+              error={Boolean(errors.phone)}
+              helperText={errors.phone && errors.phone.message}
+            />
+          </div>
+          <div
+            className={classes.fieldWrapper}
+            style={{
+              flexDirection: isWide ? "row" : "column",
+              paddingLeft: isWide ? "20%" : "0",
+              paddingRight: isWide ? "20%" : "0",
+            }}
+          >
+            <p>誕生日</p>
+            <TextField
+              {...register("birthday", {
+                required: "誕生日は必須です",
+                pattern: {
+                  value: birthdayRegex,
+                  message: "誕生日の形式が適当ではありません",
+                },
+              })}
+              onChange={(event) => setBirthDay(event.target.value)}
+              className={classes.field}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+              id="outlined-name"
+              label="例）2000-01-01"
+              variant="outlined"
+              error={Boolean(errors.birthday)}
+              helperText={errors.birthday && errors.birthday.message}
+            />
+          </div>
+          <div>
+            <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{
+                  maxWidth: "400px",
+                  maxHeight: "45px",
+                  minWidth: "300px",
+                  minHeight: "45px",
+                  marginTop: "3%",
+                }}
+              >
+                やめる
+              </Button>
+            </Link>
+            {/* <Link to="/third_page" style={{ paddingLeft: isWide ? "3%" : "0" }}> */}
             <Button
+              type="submit"
+              disabled={nickName == "" || phoneNumber == "" || birthDay == ""}
               variant="contained"
               color="primary"
+              // onClick={_onPressed}
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -296,34 +359,18 @@ export const NicknameAndPhoneAndBirthPage = () => {
                 marginTop: "3%",
               }}
             >
-              やめる
+              次　　へ
             </Button>
-          </Link>
-        <Link to="/third_page" style={{ paddingLeft: isWide ? "3%" : "0" }}>
-          <Button
-            disabled={nickName == "" || phoneNumber == "" || birthDay == ""}
-            variant="contained"
-            color="primary"
-            onClick={_onPressed}
-            style={{
-              maxWidth: "400px",
-              maxHeight: "45px",
-              minWidth: "300px",
-              minHeight: "45px",
-              marginTop: "3%",
-            }}
-          >
-            次　　へ
-          </Button>
-        </Link>
+            {/* </Link> */}
+          </div>
+          <Routes>
+            <Route
+              path="/third_page"
+              element={<GenderAndWorkAndHobbyPage />}
+            ></Route>
+          </Routes>
         </div>
-        <Routes>
-          <Route
-            path="/third_page"
-            element={<GenderAndWorkAndHobbyPage />}
-          ></Route>
-        </Routes>
-      </div>
+      </form>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
@@ -8,6 +8,7 @@ import CustomParticle from "../atoms/particle";
 import { BloodTypeAndMotivationPage } from "./blood_type_and_motivation_page";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
 import { useMedia } from "react-use";
+import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -33,12 +34,27 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const otherPhoneNumRegex = /^\d{3}-\d{4}-\d{4}$/;
+
 export const OtherPhoneAndNamePage = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const [otherPhone, setOtherPhone] = useState("");
   const [otherName, setOtherName] = useState("");
   const [otherRelation, setOtherRelation] = useState("");
   const isWide = useMedia("(min-width: 800px)");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = () => {
+    console.log("onSubmit fired");
+    _onPressed;
+    navigate("/sixth_page");
+  };
 
   var currentCount = 0;
   var currentOtherPhoneCount = 0;
@@ -227,69 +243,99 @@ export const OtherPhoneAndNamePage = () => {
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={4} /> : <CustomMobileStepper arg1={5} />}
-      <div
-        className={classes.formWrapper}
-        style={{ alignItems: isWide ? "inherit" : "center" }}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div
-          className={classes.fieldWrapper}
-          style={{
-            flexDirection: isWide ? "row" : "column",
-            paddingLeft: isWide ? "20%" : "0",
-            paddingRight: isWide ? "20%" : "0",
-          }}
+          className={classes.formWrapper}
+          style={{ alignItems: isWide ? "inherit" : "center" }}
         >
-          <p>緊急連絡先</p>
-          <TextField
-            onChange={(event) => setOtherPhone(event.target.value)}
-            className={classes.field}
-            style={{ minWidth: isWide ? "400px" : "300px" }}
-            id="outlined-name"
-            label="例）01234567890"
-            variant="outlined"
-          />
-        </div>
-        <div
-          className={classes.fieldWrapper}
-          style={{
-            flexDirection: isWide ? "row" : "column",
-            paddingLeft: isWide ? "20%" : "0",
-            paddingRight: isWide ? "20%" : "0",
-          }}
-        >
-          <p>緊急連絡先の方の氏名</p>
-          <TextField
-            onChange={(event) => setOtherName(event.target.value)}
-            className={classes.field}
-            style={{ minWidth: isWide ? "400px" : "300px" }}
-            id="outlined-name"
-            label="緊急連絡先の方の氏名"
-            variant="outlined"
-          />
-        </div>
-        <div
-          className={classes.fieldWrapper}
-          style={{
-            flexDirection: isWide ? "row" : "column",
-            paddingLeft: isWide ? "20%" : "0",
-            paddingRight: isWide ? "20%" : "0",
-          }}
-        >
-          <p>続柄</p>
-          <TextField
-            onChange={(event) => setOtherRelation(event.target.value)}
-            className={classes.field}
-            style={{ minWidth: isWide ? "400px" : "300px" }}
-            id="outlined-name"
-            label="例）母親"
-            variant="outlined"
-          />
-        </div>
-        <div>
-        <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+          <div
+            className={classes.fieldWrapper}
+            style={{
+              flexDirection: isWide ? "row" : "column",
+              paddingLeft: isWide ? "20%" : "0",
+              paddingRight: isWide ? "20%" : "0",
+            }}
+          >
+            <p>緊急連絡先</p>
+            <TextField
+              {...register("otherPhoneNum", {
+                required: "電話番号は必須です",
+                pattern: {
+                  value: otherPhoneNumRegex,
+                  message: "電話番号の形式が適当ではありません",
+                },
+              })}
+              onChange={(event) => setOtherPhone(event.target.value)}
+              className={classes.field}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+              id="outlined-name"
+              label="例）012-3456-7890"
+              variant="outlined"
+              error={Boolean(errors.otherPhoneNum)}
+              helperText={errors.otherPhoneNum && errors.otherPhoneNum.message}
+            />
+          </div>
+          <div
+            className={classes.fieldWrapper}
+            style={{
+              flexDirection: isWide ? "row" : "column",
+              paddingLeft: isWide ? "20%" : "0",
+              paddingRight: isWide ? "20%" : "0",
+            }}
+          >
+            <p>緊急連絡先の方の氏名</p>
+            <TextField
+              onChange={(event) => setOtherName(event.target.value)}
+              className={classes.field}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+              id="outlined-name"
+              label="緊急連絡先の方の氏名"
+              variant="outlined"
+            />
+          </div>
+          <div
+            className={classes.fieldWrapper}
+            style={{
+              flexDirection: isWide ? "row" : "column",
+              paddingLeft: isWide ? "20%" : "0",
+              paddingRight: isWide ? "20%" : "0",
+            }}
+          >
+            <p>続柄</p>
+            <TextField
+              onChange={(event) => setOtherRelation(event.target.value)}
+              className={classes.field}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+              id="outlined-name"
+              label="例）母親"
+              variant="outlined"
+            />
+          </div>
+          <div>
+            <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{
+                  maxWidth: "400px",
+                  maxHeight: "45px",
+                  minWidth: "300px",
+                  minHeight: "45px",
+                  marginTop: "3%",
+                }}
+              >
+                やめる
+              </Button>
+            </Link>
+            {/* <Link to="/sixth_page" style={{ paddingLeft: isWide ? "3%" : "0" }}> */}
             <Button
+              type="submit"
+              disabled={
+                otherPhone == "" || otherName == "" || otherRelation == ""
+              }
               variant="contained"
               color="primary"
+              // onClick={_onPressed}
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -298,36 +344,18 @@ export const OtherPhoneAndNamePage = () => {
                 marginTop: "3%",
               }}
             >
-              やめる
+              次　　へ
             </Button>
-          </Link>
-        <Link to="/sixth_page" style={{ paddingLeft: isWide ? "3%" : "0" }}>
-          <Button
-            disabled={
-              otherPhone == "" || otherName == "" || otherRelation == ""
-            }
-            variant="contained"
-            color="primary"
-            onClick={_onPressed}
-            style={{
-              maxWidth: "400px",
-              maxHeight: "45px",
-              minWidth: "300px",
-              minHeight: "45px",
-              marginTop: "3%",
-            }}
-          >
-            次　　へ
-          </Button>
-        </Link>
+            {/* </Link> */}
+          </div>
+          <Routes>
+            <Route
+              path="/sixth_page"
+              element={<BloodTypeAndMotivationPage />}
+            ></Route>
+          </Routes>
         </div>
-        <Routes>
-          <Route
-            path="/sixth_page"
-            element={<BloodTypeAndMotivationPage />}
-          ></Route>
-        </Routes>
-      </div>
+      </form>
     </div>
   );
 };

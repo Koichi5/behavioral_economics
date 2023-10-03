@@ -1,5 +1,5 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
@@ -8,6 +8,7 @@ import CustomParticle from "../atoms/particle";
 import { OtherPhoneAndNamePage } from "./other_phone_and_name_page";
 import { useMedia } from "react-use";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
+import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -33,12 +34,27 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const postCodeRegex = /^\d{3}-\d{4}$/;
+
 export const PostAndAddressPage = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const [postNumber, setPostNumber] = useState("");
   const [address, setAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
   const isWide = useMedia("(min-width: 800px)");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = () => {
+    console.log("onSubmit fired");
+    _onPressed;
+    navigate("/fifth_page");
+  };
 
   var currentCount = 0;
   var currentPostCount = 0;
@@ -227,69 +243,99 @@ export const PostAndAddressPage = () => {
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={3} /> : <CustomMobileStepper arg1={4} />}
-      <div
-        className={classes.formWrapper}
-        style={{ alignItems: isWide ? "inherit" : "center" }}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div
-          className={classes.fieldWrapper}
-          style={{
-            flexDirection: isWide ? "row" : "column",
-            paddingLeft: isWide ? "20%" : "0",
-            paddingRight: isWide ? "20%" : "0",
-          }}
+          className={classes.formWrapper}
+          style={{ alignItems: isWide ? "inherit" : "center" }}
         >
-          <p>郵便番号</p>
-          <TextField
-            onChange={(event) => setPostNumber(event.target.value)}
-            className={classes.field}
-            style={{ minWidth: isWide ? "400px" : "300px" }}
-            id="outlined-name"
-            label="例）123-4567"
-            variant="outlined"
-          />
-        </div>
-        <div
-          className={classes.fieldWrapper}
-          style={{
-            flexDirection: isWide ? "row" : "column",
-            paddingLeft: isWide ? "20%" : "0",
-            paddingRight: isWide ? "20%" : "0",
-          }}
-        >
-          <p>住所（都道府県、市町村、番地）</p>
-          <TextField
-            onChange={(event) => setAddress(event.target.value)}
-            className={classes.field}
-            style={{ minWidth: isWide ? "400px" : "300px" }}
-            id="outlined-name"
-            label="例）東京都渋谷区渋谷2-15-1"
-            variant="outlined"
-          />
-        </div>
-        <div
-          className={classes.fieldWrapper}
-          style={{
-            flexDirection: isWide ? "row" : "column",
-            paddingLeft: isWide ? "20%" : "0",
-            paddingRight: isWide ? "20%" : "0",
-          }}
-        >
-          <p>住所（アパート名等）</p>
-          <TextField
-            onChange={(event) => setDetailAddress(event.target.value)}
-            className={classes.field}
-            style={{ minWidth: isWide ? "400px" : "300px" }}
-            id="outlined-name"
-            label="例）クロスタワー12F"
-            variant="outlined"
-          />
-        </div>
-        <div>
-        <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+          <div
+            className={classes.fieldWrapper}
+            style={{
+              flexDirection: isWide ? "row" : "column",
+              paddingLeft: isWide ? "20%" : "0",
+              paddingRight: isWide ? "20%" : "0",
+            }}
+          >
+            <p>郵便番号</p>
+            <TextField
+              {...register("postCode", {
+                required: "郵便番号は必須です",
+                pattern: {
+                  value: postCodeRegex,
+                  message: "郵便番号の形式が適当ではありません",
+                },
+              })}
+              onChange={(event) => setPostNumber(event.target.value)}
+              className={classes.field}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+              id="outlined-name"
+              label="例）123-4567"
+              variant="outlined"
+              error={Boolean(errors.postCode)}
+              helperText={errors.postCode && errors.postCode.message}
+            />
+          </div>
+          <div
+            className={classes.fieldWrapper}
+            style={{
+              flexDirection: isWide ? "row" : "column",
+              paddingLeft: isWide ? "20%" : "0",
+              paddingRight: isWide ? "20%" : "0",
+            }}
+          >
+            <p>住所（都道府県、市町村、番地）</p>
+            <TextField
+              onChange={(event) => setAddress(event.target.value)}
+              className={classes.field}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+              id="outlined-name"
+              label="例）東京都渋谷区渋谷2-15-1"
+              variant="outlined"
+            />
+          </div>
+          <div
+            className={classes.fieldWrapper}
+            style={{
+              flexDirection: isWide ? "row" : "column",
+              paddingLeft: isWide ? "20%" : "0",
+              paddingRight: isWide ? "20%" : "0",
+            }}
+          >
+            <p>住所（アパート名等）</p>
+            <TextField
+              onChange={(event) => setDetailAddress(event.target.value)}
+              className={classes.field}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+              id="outlined-name"
+              label="例）クロスタワー12F"
+              variant="outlined"
+            />
+          </div>
+          <div>
+            <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{
+                  maxWidth: "400px",
+                  maxHeight: "45px",
+                  minWidth: "300px",
+                  minHeight: "45px",
+                  marginTop: "3%",
+                }}
+              >
+                やめる
+              </Button>
+            </Link>
+            {/* <Link to="/fifth_page" style={{ paddingLeft: isWide ? "3%" : "0" }}> */}
             <Button
+              type="submit"
+              disabled={
+                postNumber == "" || address == "" || detailAddress == ""
+              }
               variant="contained"
               color="primary"
+              // onClick={_onPressed}
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -298,31 +344,18 @@ export const PostAndAddressPage = () => {
                 marginTop: "3%",
               }}
             >
-              やめる
+              次　　へ
             </Button>
-          </Link>
-        <Link to="/fifth_page" style={{ paddingLeft: isWide ? "3%" : "0" }}>
-          <Button
-            disabled={postNumber == "" || address == "" || detailAddress == ""}
-            variant="contained"
-            color="primary"
-            onClick={_onPressed}
-            style={{
-              maxWidth: "400px",
-              maxHeight: "45px",
-              minWidth: "300px",
-              minHeight: "45px",
-              marginTop: "3%",
-            }}
-          >
-            次　　へ
-          </Button>
-        </Link>
+            {/* </Link> */}
+          </div>
+          <Routes>
+            <Route
+              path="/fifth_page"
+              element={<OtherPhoneAndNamePage />}
+            ></Route>
+          </Routes>
         </div>
-        <Routes>
-          <Route path="/fifth_page" element={<OtherPhoneAndNamePage />}></Route>
-        </Routes>
-      </div>
+      </form>
     </div>
   );
 };

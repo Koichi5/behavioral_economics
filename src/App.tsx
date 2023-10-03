@@ -21,6 +21,7 @@ import { FourthIntroductionPage } from "./view/templates/fourth_introduction_pag
 import { GenderAndWorkAndHobbyPage } from "./view/templates/gender_and_work_and_hobby_page";
 import { AskCommentsPage } from "./view/templates/ask_ comments_page";
 import { ApologizePage } from "./view/templates/apologize_page";
+import { InitialExplanationPage } from "./view/templates/initial_explanation_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -71,7 +72,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
         <Routes>
-          <Route path="/" element={<FirstIntroductionPage />} />
+          <Route path="/" element={<InitialExplanationPage />} />
+          <Route
+            path="/first_introduction_page"
+            element={<FirstIntroductionPage />}
+          />
           <Route
             path="/second_introduction_page"
             element={<SecondIntroductionPage />}
