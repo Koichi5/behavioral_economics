@@ -2,7 +2,6 @@ import { Button, TextField, makeStyles } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
@@ -40,10 +39,6 @@ export const NicknameAndPhoneAndBirthPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [birthDay, setBirthDay] = useState("");
   const isWide = useMedia("(min-width: 800px)");
-
-  const {
-    formState: { errors },
-  } = useForm<User>();
 
   var currentCount = 0;
   var currentNickNameCount = 0;
@@ -287,7 +282,6 @@ export const NicknameAndPhoneAndBirthPage = () => {
             label="例）2000-01-01"
             variant="outlined"
           />
-          {errors.name && <span>エラーが発生しました</span>}
         </div>
         <div>
         <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>

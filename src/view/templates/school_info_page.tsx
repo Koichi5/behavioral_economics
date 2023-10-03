@@ -8,7 +8,6 @@ import {
 import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -71,10 +70,6 @@ export const SchoolInfoPage = () => {
   const handleDegreeEndMonthChange = (event: SelectChangeEvent) => {
     setDegreeEndMonth(event.target.value);
   };
-
-  const {
-    formState: { errors },
-  } = useForm<User>();
 
   var currentCount = 0;
   var currentSchoolNameCount = 0;
@@ -522,7 +517,6 @@ export const SchoolInfoPage = () => {
             <p style={{ paddingLeft: 10, paddingRight: 10 }}>月</p>
           </div>
         </div>
-        {errors.name && <span>エラーが発生しました</span>}
         <div>
         <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button

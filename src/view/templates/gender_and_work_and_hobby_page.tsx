@@ -8,7 +8,6 @@ import {
 import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
@@ -47,10 +46,6 @@ export const GenderAndWorkAndHobbyPage = () => {
   const [work, setWork] = useState("");
   const [hobby, setHobby] = useState("");
   const isWide = useMedia("(min-width: 800px)");
-
-  const {
-    formState: { errors },
-  } = useForm<User>();
 
   var currentCount = 0;
   var currentGenderCount = 0;
@@ -312,7 +307,6 @@ export const GenderAndWorkAndHobbyPage = () => {
             variant="outlined"
           />
         </div>
-        {errors.name && <span>エラーが発生しました</span>}
         <div>
           <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button

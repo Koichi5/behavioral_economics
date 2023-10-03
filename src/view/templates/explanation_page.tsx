@@ -2,7 +2,6 @@ import { Button, makeStyles } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import CustomParticle from "../atoms/particle";
 import Checkbox from "@mui/material/Checkbox";
@@ -39,10 +38,6 @@ export const ExplanationPage = () => {
     setIsConfirmed(!isConfirmd);
     console.log(isConfirmd);
   };
-
-  const {
-    formState: { errors },
-  } = useForm<User>();
 
   var currentCount = 0;
 
@@ -348,7 +343,6 @@ export const ExplanationPage = () => {
           2.当社及び利用者は、本サービスに関し、当社と利用者との間で生じた紛争の解決について、東京地方裁判所を第一審の専属的合意管轄裁判所とすることにあらかじめ合意します。
         </p>
       </div>
-      {errors.name && <span>エラーが発生しました</span>}
       <div className={classes.confirm}>
         <Checkbox onChange={handleIsConfirmedChange} />
         <p>利用規約に同意します。</p>

@@ -49,6 +49,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+// const navigate = useNavigate()
+
+// const onClickUserListLink = useCallback((e: MouseEvent) => {
+//   e.preventDefault()
+//   navigate("/second_page")
+// }, [navigate])
+
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+
 function EmailAndPasswordPage() {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
@@ -57,6 +66,18 @@ function EmailAndPasswordPage() {
   const [password, setPassword] = useState("");
   const [retypePassword, setRetypePassword] = useState("");
   const isWide = useMedia("(min-width: 800px)");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data: any) => {
+    onPressed;
+    console.log(data);
+    // ここでフォームの送信処理を行います
+  };
 
   function handleClickShowPassword() {
     setShowPassword(!showPassword);
@@ -73,10 +94,6 @@ function EmailAndPasswordPage() {
       };
     });
   };
-
-  const {
-    formState: { errors },
-  } = useForm<User>();
 
   var currentCount = 0;
   var currentEmailCount = 0;
@@ -175,127 +192,142 @@ function EmailAndPasswordPage() {
       <div>
         {isWide ? <CustomStepper arg1={0} /> : <CustomMobileStepper arg1={1} />}
       </div>
-      <div
-        className={classes.formWrapper}
-        style={{ alignItems: isWide ? "inherit" : "center" }}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div
-          className={classes.fieldWrapper}
-          style={{
-            flexDirection: isWide ? "row" : "column",
-            paddingLeft: isWide ? "20%" : "0",
-            paddingRight: isWide ? "20%" : "0",
-          }}
+          className={classes.formWrapper}
+          style={{ alignItems: isWide ? "inherit" : "center" }}
         >
-          <p>メールアドレス</p>
-          <TextField
-            onChange={(event) => setEmail(event.target.value)}
-            className={classes.field}
-            style={{ minWidth: isWide ? "400px" : "300px" }}
-            id="outlined-email"
-            label="メールアドレス"
-            variant="outlined"
-          />
+          <div
+            className={classes.fieldWrapper}
+            style={{
+              flexDirection: isWide ? "row" : "column",
+              paddingLeft: isWide ? "20%" : "0",
+              paddingRight: isWide ? "20%" : "0",
+            }}
+          >
+            <p>メールアドレス</p>
+            <TextField
+              {...register("email", {
+                required: "メールアドレスは必須です",
+                pattern: {
+                  value: emailRegex,
+                  message: "メールアドレスが適当ではありません",
+                },
+              })}
+              onChange={(event) => setEmail(event.target.value)}
+              className={classes.field}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+              id="outlined-email"
+              label="メールアドレス"
+              variant="outlined"
+              error={Boolean(errors.email)}
+              helperText={errors.email && errors.email.message}
+            />
+          </div>
+          <div
+            className={classes.fieldWrapper}
+            style={{
+              flexDirection: isWide ? "row" : "column",
+              paddingLeft: isWide ? "20%" : "0",
+              paddingRight: isWide ? "20%" : "0",
+            }}
+          >
+            <p>パスワード</p>
+            <OutlinedInput
+              onChange={(event) => setPassword(event.target.value)}
+              className={classes.secretField}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+              id="outlined-adornment-password"
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="パスワード"
+            />
+          </div>
+          <div
+            className={classes.fieldWrapper}
+            style={{
+              flexDirection: isWide ? "row" : "column",
+              paddingLeft: isWide ? "20%" : "0",
+              paddingRight: isWide ? "20%" : "0",
+            }}
+          >
+            <p>パスワード（確認）</p>
+            <OutlinedInput
+              onChange={(event) => setRetypePassword(event.target.value)}
+              className={classes.secretField}
+              style={{ minWidth: isWide ? "400px" : "300px" }}
+              id="outlined-adornment-password"
+              type={showConfirmPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickConfirmShowPassword}
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="パスワード（確認）"
+            />
+          </div>
+          {errors.name && <span>エラーが発生しました</span>}
+          <div>
+            <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{
+                  maxWidth: "400px",
+                  maxHeight: "45px",
+                  minWidth: "300px",
+                  minHeight: "45px",
+                  marginTop: "3%",
+                }}
+              >
+                やめる
+              </Button>
+            </Link>
+            {/* <Link
+              to={false ? "/second_page": "#"}
+              style={{ paddingLeft: isWide ? "3%" : "0" }}
+            > */}
+              <Button
+                type="submit"
+                disabled={email == "" || password == "" || retypePassword == ""}
+                variant="contained"
+                color="primary"
+                onClick={onPressed}
+                style={{
+                  maxWidth: "400px",
+                  maxHeight: "45px",
+                  minWidth: "300px",
+                  minHeight: "45px",
+                  marginTop: "3%",
+                  paddingLeft: "1%",
+                }}
+              >
+                次　　へ
+              </Button>
+            {/* </Link> */}
+          </div>
+          <Routes>
+            <Route
+              path="/second_page"
+              element={<NicknameAndPhoneAndBirthPage />}
+            ></Route>
+          </Routes>
         </div>
-        <div
-          className={classes.fieldWrapper}
-          style={{
-            flexDirection: isWide ? "row" : "column",
-            paddingLeft: isWide ? "20%" : "0",
-            paddingRight: isWide ? "20%" : "0",
-          }}
-        >
-          <p>パスワード</p>
-          <OutlinedInput
-            onChange={(event) => setPassword(event.target.value)}
-            className={classes.secretField}
-            style={{ minWidth: isWide ? "400px" : "300px" }}
-            id="outlined-adornment-password"
-            type={showPassword ? "text" : "password"}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="パスワード"
-          />
-        </div>
-        <div
-          className={classes.fieldWrapper}
-          style={{
-            flexDirection: isWide ? "row" : "column",
-            paddingLeft: isWide ? "20%" : "0",
-            paddingRight: isWide ? "20%" : "0",
-          }}
-        >
-          <p>パスワード（確認）</p>
-          <OutlinedInput
-            onChange={(event) => setRetypePassword(event.target.value)}
-            className={classes.secretField}
-            style={{ minWidth: isWide ? "400px" : "300px" }}
-            id="outlined-adornment-password"
-            type={showConfirmPassword ? "text" : "password"}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickConfirmShowPassword}
-                >
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="パスワード（確認）"
-          />
-        </div>
-        {errors.name && <span>エラーが発生しました</span>}
-        <div>
-          <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{
-                maxWidth: "400px",
-                maxHeight: "45px",
-                minWidth: "300px",
-                minHeight: "45px",
-                marginTop: "3%",
-              }}
-            >
-              やめる
-            </Button>
-          </Link>
-          <Link to="/second_page" style={{ paddingLeft: isWide ? "3%" : "0" }}>
-            <Button
-              disabled={email == "" || password == "" || retypePassword == ""}
-              variant="contained"
-              color="primary"
-              onClick={onPressed}
-              style={{
-                maxWidth: "400px",
-                maxHeight: "45px",
-                minWidth: "300px",
-                minHeight: "45px",
-                marginTop: "3%",
-                paddingLeft: "1%",
-              }}
-            >
-              次　　へ
-            </Button>
-          </Link>
-        </div>
-        <Routes>
-          <Route
-            path="/second_page"
-            element={<NicknameAndPhoneAndBirthPage />}
-          ></Route>
-        </Routes>
-      </div>
+      </form>
     </div>
   );
 }

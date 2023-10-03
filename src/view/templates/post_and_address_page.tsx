@@ -2,7 +2,6 @@ import { Button, TextField, makeStyles } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
@@ -40,10 +39,6 @@ export const PostAndAddressPage = () => {
   const [address, setAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
   const isWide = useMedia("(min-width: 800px)");
-
-  const {
-    formState: { errors },
-  } = useForm<User>();
 
   var currentCount = 0;
   var currentPostCount = 0;
@@ -290,7 +285,6 @@ export const PostAndAddressPage = () => {
             variant="outlined"
           />
         </div>
-        {errors.name && <span>エラーが発生しました</span>}
         <div>
         <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
