@@ -214,13 +214,6 @@ export const OtherPhoneAndNamePage = () => {
     updateOtherRelationCount();
   };
 
-  // const _onCancel = () => {
-  //   var result = window.confirm('今までの記録が破棄されますが、よろしいですか？')
-  //   if(result) {
-  //     window.location.href = "https://behavioral-economics-8d29e.web.app/"
-  //   }
-  // }
-
   const _onPressed = () => {
     updateOtherPhoneAndNameAndRelation();
     updateOtherPhoneCount();
@@ -327,7 +320,6 @@ export const OtherPhoneAndNamePage = () => {
                 やめる
               </Button>
             </Link>
-            {/* <Link to="/sixth_page" style={{ paddingLeft: isWide ? "3%" : "0" }}> */}
             <Button
               type="submit"
               disabled={
@@ -335,7 +327,6 @@ export const OtherPhoneAndNamePage = () => {
               }
               variant="contained"
               color="primary"
-              // onClick={_onPressed}
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -346,7 +337,6 @@ export const OtherPhoneAndNamePage = () => {
             >
               次　　へ
             </Button>
-            {/* </Link> */}
           </div>
           <Routes>
             <Route

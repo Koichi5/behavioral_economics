@@ -274,13 +274,6 @@ export const SchoolInfoPage = () => {
     updateDegreeYearsCount();
   };
 
-  // const _onCancel = () => {
-  //   var result = window.confirm('今までの記録が破棄されますが、よろしいですか？')
-  //   if(result) {
-  //     window.location.href = "https://behavioral-economics-8d29e.web.app/"
-  //   }
-  // }
-
   const _onPressed = () => {
     updateSchoolInfoCount();
     updateSchoolNameCount();
@@ -387,9 +380,7 @@ export const SchoolInfoPage = () => {
           <p>在学期間</p>
           <div style={{ display: "flex" }}>
             <FormControl>
-              {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
               <Select
-                // labelId="demo-simple-select-label"
                 style={{
                   maxWidth: isWide ? "100px" : "50px",
                   maxHeight: "45px",
@@ -450,9 +441,7 @@ export const SchoolInfoPage = () => {
             <p style={{ paddingLeft: 10 }}>月</p>
             <p style={{ paddingLeft: 10, paddingRight: 10 }}>~</p>
             <FormControl>
-              {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
               <Select
-                // labelId="demo-simple-select-label"
                 style={{
                   maxWidth: isWide ? "100px" : "50px",
                   maxHeight: "45px",
@@ -485,9 +474,7 @@ export const SchoolInfoPage = () => {
             </FormControl>
             <p style={{ paddingLeft: 10, paddingRight: 10 }}>年</p>
             <FormControl>
-              {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
               <Select
-                // labelId="demo-simple-select-label"
                 style={{
                   maxWidth: isWide ? "100px" : "50px",
                   maxHeight: "45px",

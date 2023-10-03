@@ -14,6 +14,3 @@ export default function ColorButtons() {
    </Stack>
   );
 }
-
-// color must be one of below
-// inherit, primary, secondary, success, error, info, warning

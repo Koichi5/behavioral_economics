@@ -209,13 +209,6 @@ export const GenderAndWorkAndHobbyPage = () => {
     updateHobbyCount();
   };
 
-  // const _onCancel = () => {
-  //   var result = window.confirm('今までの記録が破棄されますが、よろしいですか？')
-  //   if(result) {
-  //     window.location.href = "https://behavioral-economics-8d29e.web.app/"
-  //   }
-  // }
-
   const _onPressed = () => {
     updateGenderAndWorkAndHobbyCount();
     updateGenderCount();
@@ -258,7 +251,6 @@ export const GenderAndWorkAndHobbyPage = () => {
             style={{ minWidth: isWide ? "400px" : "300px" }}
           >
             <Select
-              // labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={gender}
               label="Degree"
