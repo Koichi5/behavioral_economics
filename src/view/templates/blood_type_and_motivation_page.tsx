@@ -2,7 +2,6 @@ import { Button, FormControl, MenuItem, makeStyles } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -52,10 +51,6 @@ export const BloodTypeAndMotivationPage = () => {
   const handleMotivationChange = (event: SelectChangeEvent) => {
     setMotivation(event.target.value);
   };
-
-  const {
-    formState: { errors },
-  } = useForm<User>();
 
   const updateBloodTypeAndMotivationCount = () => {
     const bloodTypeAndMotivationSubmitDoc = doc(
@@ -251,7 +246,6 @@ export const BloodTypeAndMotivationPage = () => {
             </FormControl>
           </div>
         </div>
-        {errors.name && <span>エラーが発生しました</span>}
         <div>
         <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
