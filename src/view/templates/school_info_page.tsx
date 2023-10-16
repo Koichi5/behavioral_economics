@@ -351,9 +351,7 @@ export const SchoolInfoPage = () => {
             className={classes.field}
             style={{ minWidth: isWide ? "400px" : "300px" }}
           >
-            {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
             <Select
-              // labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={degree}
               label="Degree"
