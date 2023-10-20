@@ -50,6 +50,11 @@ export const SchoolInfoPage = () => {
   const [degreeEndYear, setDegreeEndYear] = useState("");
   const [degreeEndMonth, setDegreeEndMonth] = useState("");
   const isWide = useMedia("(min-width: 800px)");
+  const [currentCount, setCurrentCount] = useState(0);
+  const [currentSchoolNameCount, setCurrentSchoolNameCount] = useState(0);
+  const [currentDepartmentNameCount, setCurrentDepartmentNameCount] = useState(0);
+  const [currentDegreeCount, setCurrentDegreeCount] = useState(0);
+  const [currentDegreeYearsCount, setCurrentDegreeYearsCount] = useState(0);
 
   const handleDegreeChange = (event: SelectChangeEvent) => {
     setDegree(event.target.value);
@@ -71,24 +76,19 @@ export const SchoolInfoPage = () => {
     setDegreeEndMonth(event.target.value);
   };
 
-  var currentCount = 0;
-  var currentSchoolNameCount = 0;
-  var currentDepartmentNameCount = 0;
-  var currentDegreeCount = 0;
-  var currentDegreeYearsCount = 0;
-
-  const updateSchoolInfoCount = () => {
+  const updateSchoolInfoCount = async () => {
     const schoolInfoSubmitDoc = doc(
       db,
       "schoolInfoSubmission",
       "P0GIu0A69M2u9dGD3oKX"
     );
-    updateDoc(schoolInfoSubmitDoc, {
+    await updateDoc(schoolInfoSubmitDoc, {
       count: currentCount + 1,
     });
+    setCurrentCount(prev => prev + 1);
   };
 
-  const updateSchoolNameCount = () => {
+  const updateSchoolNameCount = async () => {
     const schoolNameCollectionPath = doc(
       db,
       "schoolInfoSubmission",
@@ -97,13 +97,14 @@ export const SchoolInfoPage = () => {
       "9hrSr3eAGujdTbXPBoz7"
     );
     if (schoolName != "") {
-      updateDoc(schoolNameCollectionPath, {
+      await updateDoc(schoolNameCollectionPath, {
         count: currentSchoolNameCount + 1,
       });
+      setCurrentSchoolNameCount(prev => prev + 1);
     }
   };
 
-  const updateDepartmentNameCount = () => {
+  const updateDepartmentNameCount = async () => {
     const departmentNameCollectionPath = doc(
       db,
       "schoolInfoSubmission",
@@ -112,13 +113,14 @@ export const SchoolInfoPage = () => {
       "xaZiKRD6NeJizO6lJmJ2"
     );
     if (departmentName != "") {
-      updateDoc(departmentNameCollectionPath, {
+      await updateDoc(departmentNameCollectionPath, {
         count: currentDepartmentNameCount + 1,
       });
+      setCurrentDepartmentNameCount(prev => prev + 1);
     }
   };
 
-  const updateDegreeCount = () => {
+  const updateDegreeCount = async () => {
     const degreeCollectionPath = doc(
       db,
       "schoolInfoSubmission",
@@ -127,13 +129,14 @@ export const SchoolInfoPage = () => {
       "le1MU9KzmFxjs5m67Pq1"
     );
     if (degree != "") {
-      updateDoc(degreeCollectionPath, {
+      await updateDoc(degreeCollectionPath, {
         count: currentDegreeCount + 1,
       });
+      setCurrentDegreeCount(prev => prev + 1);
     }
   };
 
-  const updateDegreeYearsCount = () => {
+  const updateDegreeYearsCount = async () => {
     const degreeYearsCollectionPath = doc(
       db,
       "schoolInfoSubmission",
@@ -147,9 +150,10 @@ export const SchoolInfoPage = () => {
       degreeEndYear != "" &&
       degreeEndMonth != ""
     ) {
-      updateDoc(degreeYearsCollectionPath, {
+      await updateDoc(degreeYearsCollectionPath, {
         count: currentDegreeYearsCount + 1,
       });
+      setCurrentDegreeYearsCount(prev => prev + 1);
     }
   };
 
@@ -284,16 +288,25 @@ export const SchoolInfoPage = () => {
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchSchoolInfoSubmissionCount();
-      currentSchoolNameCount = await fetchSchoolNameCount();
-      currentDepartmentNameCount = await fetchDepartmentNameCount();
-      currentDegreeCount = await fetchDegreeCount();
-      currentDegreeYearsCount = await fetchDegreeYearsCount();
+      const initialCount = await fetchSchoolInfoSubmissionCount();
+      setCurrentCount(initialCount);
+
+      const initialSchoolNameCount = await fetchSchoolNameCount();
+      setCurrentSchoolNameCount(initialSchoolNameCount);
+
+      const initialDepartmentNameCount = await fetchDepartmentNameCount();
+      setCurrentDepartmentNameCount(initialDepartmentNameCount);
+
+      const initialDegreeCount = await fetchDegreeCount();
+      setCurrentDegreeCount(initialDegreeCount);
+
+      const initialDegreeYearsCount = await fetchDegreeYearsCount();
+      setCurrentDegreeYearsCount(initialDegreeYearsCount);
     })();
     window.onpopstate = () => {
       _onBrowserBack();
     };
-  });
+  }, []);
   return (
     <div className={classes.root}>
       <CustomParticle />
@@ -407,9 +420,7 @@ export const SchoolInfoPage = () => {
             </FormControl>
             <p style={{ paddingLeft: 10, paddingRight: 10 }}>年</p>
             <FormControl>
-              {/* <InputLabel id="demo-simple-select-label">学位</InputLabel> */}
               <Select
-                // labelId="demo-simple-select-label"
                 style={{
                   maxWidth: isWide ? "100px" : "50px",
                   maxHeight: "45px",
@@ -503,7 +514,7 @@ export const SchoolInfoPage = () => {
           </div>
         </div>
         <div>
-        <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+          <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
               variant="contained"
               color="primary"
@@ -514,35 +525,39 @@ export const SchoolInfoPage = () => {
                 minHeight: "45px",
                 marginTop: "3%",
               }}
+              onClick={_onBrowserBack}
             >
               やめる
             </Button>
           </Link>
-        <Link to="/explanation_page" style={{ paddingLeft: isWide ? "3%" : "0" }}>
-          <Button
-            disabled={
-              schoolName == "" ||
-              departmentName == "" ||
-              degree == "" ||
-              degreeStartYear == "" ||
-              degreeStartMonth == "" ||
-              degreeEndYear == "" ||
-              degreeEndMonth == ""
-            }
-            variant="contained"
-            color="primary"
-            onClick={_onPressed}
-            style={{
-              maxWidth: "400px",
-              maxHeight: "45px",
-              minWidth: "300px",
-              minHeight: "45px",
-              marginTop: "3%",
-            }}
+          <Link
+            to="/explanation_page"
+            style={{ paddingLeft: isWide ? "3%" : "0" }}
           >
-            登　　録
-          </Button>
-        </Link>
+            <Button
+              disabled={
+                schoolName == "" ||
+                departmentName == "" ||
+                degree == "" ||
+                degreeStartYear == "" ||
+                degreeStartMonth == "" ||
+                degreeEndYear == "" ||
+                degreeEndMonth == ""
+              }
+              variant="contained"
+              color="primary"
+              onClick={_onPressed}
+              style={{
+                maxWidth: "400px",
+                maxHeight: "45px",
+                minWidth: "300px",
+                minHeight: "45px",
+                marginTop: "3%",
+              }}
+            >
+              登　　録
+            </Button>
+          </Link>
         </div>
         <Routes>
           <Route path="/explanation_page" element={<ExplanationPage />}></Route>

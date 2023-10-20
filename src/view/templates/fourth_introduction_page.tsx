@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => ({
 
 export const FourthIntroductionPage = () => {
   const classes = useStyles();
-  
+
   return (
     <div className={classes.root}>
       <CustomParticle />
@@ -59,7 +59,6 @@ export const FourthIntroductionPage = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => {}}
           style={{
             maxWidth: "400px",
             maxHeight: "45px",

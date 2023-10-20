@@ -1,5 +1,5 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
-import { Link, Routes, Route, useNavigate } from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
@@ -38,41 +38,33 @@ const postCodeRegex = /^\d{3}-\d{4}$/;
 
 export const PostAndAddressPage = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const [postNumber, setPostNumber] = useState("");
   const [address, setAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
   const isWide = useMedia("(min-width: 800px)");
+  const [currentCount, setCurrentCount] = useState(0);
+  const [currentPostCount, setCurrentPostCount] = useState(0);
+  const [currentAddressCount, setCurrentAddressCount] = useState(0);
+  const [currentDetailAddressCount, setCurrentDetailAddressCount] = useState(0);
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = () => {
-    console.log("onSubmit fired");
-    _onPressed;
-    navigate("/fifth_page");
-  };
-
-  var currentCount = 0;
-  var currentPostCount = 0;
-  var currentAddressCount = 0;
-  var currentDetailAddressCount = 0;
-
-  const updatePostAndAddressCount = () => {
+  const updatePostAndAddressCount = async () => {
     const postAndAddressSubmitDoc = doc(
       db,
       "postAndAddressSubmission",
       "inOV9RPe59p1ZG6TO831"
     );
-    updateDoc(postAndAddressSubmitDoc, {
+    await updateDoc(postAndAddressSubmitDoc, {
       count: currentCount + 1,
     });
+    setCurrentCount(prev => prev + 1);
   };
 
-  const updatePostCount = () => {
+  const updatePostCount = async () => {
     const postCollectionPath = doc(
       db,
       "postAndAddressSubmission",
@@ -81,13 +73,14 @@ export const PostAndAddressPage = () => {
       "7KoO3rPoHTWyrrey91k4"
     );
     if (postNumber != "") {
-      updateDoc(postCollectionPath, {
+      await updateDoc(postCollectionPath, {
         count: currentPostCount + 1,
       });
+      setCurrentPostCount(prev => prev + 1);
     }
   };
 
-  const updateAddressCount = () => {
+  const updateAddressCount = async () => {
     const addressCollectionPath = doc(
       db,
       "postAndAddressSubmission",
@@ -96,13 +89,14 @@ export const PostAndAddressPage = () => {
       "d61Fl4OHDJS88Vlgqwdx"
     );
     if (address != "") {
-      updateDoc(addressCollectionPath, {
+      await updateDoc(addressCollectionPath, {
         count: currentAddressCount + 1,
       });
+      setCurrentAddressCount(prev => prev + 1);
     }
   };
 
-  const updateDetailAddressCount = () => {
+  const updateDetailAddressCount = async () => {
     const detailAddressCollectionPath = doc(
       db,
       "postAndAddressSubmission",
@@ -111,9 +105,10 @@ export const PostAndAddressPage = () => {
       "p1vwGJTbvPi3zA0XRwPW"
     );
     if (detailAddress != "") {
-      updateDoc(detailAddressCollectionPath, {
+      await updateDoc(detailAddressCollectionPath, {
         count: currentDetailAddressCount + 1,
       });
+      setCurrentDetailAddressCount(prev => prev + 1);
     }
   };
 
@@ -223,20 +218,26 @@ export const PostAndAddressPage = () => {
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchPostAndAddressSubmissionCount();
-      currentPostCount = await fetchPostCount();
-      currentAddressCount = await fetchAddressCount();
-      currentDetailAddressCount = await fetchDetailAddressCount();
+      const initialCount = await fetchPostAndAddressSubmissionCount();
+      setCurrentCount(initialCount);
+
+      const initialPostCount = await fetchPostCount();
+      setCurrentPostCount(initialPostCount);
+
+      const initialAddressCount = await fetchAddressCount();
+      setCurrentAddressCount(initialAddressCount);
+      
+      const initialDetailAddressCount = await fetchDetailAddressCount();
+      setCurrentDetailAddressCount(initialDetailAddressCount);
     })();
     window.onpopstate = () => {
       _onBrowserBack();
     };
-  });
+  }, []);
   return (
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={3} /> : <CustomMobileStepper arg1={4} />}
-      <form onSubmit={handleSubmit(onSubmit)}>
         <div
           className={classes.formWrapper}
           style={{ alignItems: isWide ? "inherit" : "center" }}
@@ -316,17 +317,19 @@ export const PostAndAddressPage = () => {
                   minHeight: "45px",
                   marginTop: "3%",
                 }}
+                onClick={_onBrowserBack}
               >
                 やめる
               </Button>
             </Link>
+            <Link to='/fifth_page'>
             <Button
-              type="submit"
               disabled={
                 postNumber == "" || address == "" || detailAddress == ""
               }
               variant="contained"
               color="primary"
+              onClick={_onPressed}
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -337,6 +340,7 @@ export const PostAndAddressPage = () => {
             >
               次　　へ
             </Button>
+            </Link>
           </div>
           <Routes>
             <Route
@@ -345,7 +349,6 @@ export const PostAndAddressPage = () => {
             ></Route>
           </Routes>
         </div>
-      </form>
     </div>
   );
 };

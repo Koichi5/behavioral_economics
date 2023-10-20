@@ -1,5 +1,5 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
-import { Link, Routes, Route, useNavigate } from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
@@ -38,41 +38,33 @@ const otherPhoneNumRegex = /^\d{3}-\d{4}-\d{4}$/;
 
 export const OtherPhoneAndNamePage = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const [otherPhone, setOtherPhone] = useState("");
   const [otherName, setOtherName] = useState("");
   const [otherRelation, setOtherRelation] = useState("");
   const isWide = useMedia("(min-width: 800px)");
+  const [currentCount, setCurrentCount] = useState(0);
+  const [currentOtherPhoneCount, setCurrentOtherPhoneCount] = useState(0);
+  const [currentOtherNameCount, setCurrentOtherNameCount] = useState(0);
+  const [currentOtherRelationCount, setCurrentOtherRelationCount] = useState(0);
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = () => {
-    console.log("onSubmit fired");
-    _onPressed;
-    navigate("/sixth_page");
-  };
-
-  var currentCount = 0;
-  var currentOtherPhoneCount = 0;
-  var currentOtherNameCount = 0;
-  var currentOtherRelationCount = 0;
-
-  const updateOtherPhoneAndNameAndRelation = () => {
+  const updateOtherPhoneAndNameAndRelation = async () => {
     const otherPhoneAndNameSubmitDoc = doc(
       db,
       "otherPhoneAndNameSubmission",
       "wSTeNxF4tp4LK6QOnC7k"
     );
-    updateDoc(otherPhoneAndNameSubmitDoc, {
+    await updateDoc(otherPhoneAndNameSubmitDoc, {
       count: currentCount + 1,
     });
+    setCurrentCount(prev => prev + 1);
   };
 
-  const updateOtherPhoneCount = () => {
+  const updateOtherPhoneCount = async () => {
     const otherPhoneCollectionPath = doc(
       db,
       "otherPhoneAndNameSubmission",
@@ -81,13 +73,14 @@ export const OtherPhoneAndNamePage = () => {
       "pLxO66ORBxCNZSMUcGmc"
     );
     if (otherPhone != "") {
-      updateDoc(otherPhoneCollectionPath, {
+      await updateDoc(otherPhoneCollectionPath, {
         count: currentOtherPhoneCount + 1,
       });
+      setCurrentOtherPhoneCount(prev => prev + 1);
     }
   };
 
-  const updateOtherNameCount = () => {
+  const updateOtherNameCount = async () => {
     const otherNameCollectionPath = doc(
       db,
       "otherPhoneAndNameSubmission",
@@ -96,13 +89,14 @@ export const OtherPhoneAndNamePage = () => {
       "VjS0kT9lHBcibqvxdCch"
     );
     if (otherName != "") {
-      updateDoc(otherNameCollectionPath, {
+      await updateDoc(otherNameCollectionPath, {
         count: currentOtherNameCount + 1,
       });
+      setCurrentOtherNameCount(prev => prev + 1);
     }
   };
 
-  const updateOtherRelationCount = () => {
+  const updateOtherRelationCount = async () => {
     const otherRelationCollectionPath = doc(
       db,
       "otherPhoneAndNameSubmission",
@@ -111,9 +105,10 @@ export const OtherPhoneAndNamePage = () => {
       "BMJmc7A6sA9ch0cJiM9L"
     );
     if (otherRelation != "") {
-      updateDoc(otherRelationCollectionPath, {
+      await updateDoc(otherRelationCollectionPath, {
         count: currentOtherRelationCount + 1,
       });
+      setCurrentOtherRelationCount(prev => prev + 1);
     }
   };
 
@@ -223,110 +218,118 @@ export const OtherPhoneAndNamePage = () => {
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchotherPhoneAndNameSubmissionCount();
-      currentOtherPhoneCount = await fetchOtherPhoneCount();
-      currentOtherNameCount = await fetchOtherNameCount();
-      currentOtherRelationCount = await fetchOtherRelationCount();
+      const initialCount = await fetchotherPhoneAndNameSubmissionCount();
+      setCurrentCount(initialCount);
+
+      const initialOtherPhoneCount = await fetchOtherPhoneCount();
+      setCurrentOtherPhoneCount(initialOtherPhoneCount);
+
+      const initialOtherNameCount = await fetchOtherNameCount();
+      setCurrentOtherNameCount(initialOtherNameCount);
+
+      const initialOtherRelationCount = await fetchOtherRelationCount();
+      setCurrentOtherRelationCount(initialOtherRelationCount);
     })();
     window.onpopstate = () => {
       _onBrowserBack();
     };
-  });
+  }, []);
   return (
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={4} /> : <CustomMobileStepper arg1={5} />}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <div
+        className={classes.formWrapper}
+        style={{ alignItems: isWide ? "inherit" : "center" }}
+      >
         <div
-          className={classes.formWrapper}
-          style={{ alignItems: isWide ? "inherit" : "center" }}
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
         >
-          <div
-            className={classes.fieldWrapper}
-            style={{
-              flexDirection: isWide ? "row" : "column",
-              paddingLeft: isWide ? "20%" : "0",
-              paddingRight: isWide ? "20%" : "0",
-            }}
-          >
-            <p>緊急連絡先</p>
-            <TextField
-              {...register("otherPhoneNum", {
-                required: "電話番号は必須です",
-                pattern: {
-                  value: otherPhoneNumRegex,
-                  message: "電話番号の形式が適当ではありません",
-                },
-              })}
-              onChange={(event) => setOtherPhone(event.target.value)}
-              className={classes.field}
-              style={{ minWidth: isWide ? "400px" : "300px" }}
-              id="outlined-name"
-              label="例）012-3456-7890"
-              variant="outlined"
-              error={Boolean(errors.otherPhoneNum)}
-              helperText={errors.otherPhoneNum && errors.otherPhoneNum.message}
-            />
-          </div>
-          <div
-            className={classes.fieldWrapper}
-            style={{
-              flexDirection: isWide ? "row" : "column",
-              paddingLeft: isWide ? "20%" : "0",
-              paddingRight: isWide ? "20%" : "0",
-            }}
-          >
-            <p>緊急連絡先の方の氏名</p>
-            <TextField
-              onChange={(event) => setOtherName(event.target.value)}
-              className={classes.field}
-              style={{ minWidth: isWide ? "400px" : "300px" }}
-              id="outlined-name"
-              label="緊急連絡先の方の氏名"
-              variant="outlined"
-            />
-          </div>
-          <div
-            className={classes.fieldWrapper}
-            style={{
-              flexDirection: isWide ? "row" : "column",
-              paddingLeft: isWide ? "20%" : "0",
-              paddingRight: isWide ? "20%" : "0",
-            }}
-          >
-            <p>続柄</p>
-            <TextField
-              onChange={(event) => setOtherRelation(event.target.value)}
-              className={classes.field}
-              style={{ minWidth: isWide ? "400px" : "300px" }}
-              id="outlined-name"
-              label="例）母親"
-              variant="outlined"
-            />
-          </div>
-          <div>
-            <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{
-                  maxWidth: "400px",
-                  maxHeight: "45px",
-                  minWidth: "300px",
-                  minHeight: "45px",
-                  marginTop: "3%",
-                }}
-              >
-                やめる
-              </Button>
-            </Link>
+          <p>緊急連絡先</p>
+          <TextField
+            {...register("otherPhoneNum", {
+              required: "電話番号は必須です",
+              pattern: {
+                value: otherPhoneNumRegex,
+                message: "電話番号の形式が適当ではありません",
+              },
+            })}
+            onChange={(event) => setOtherPhone(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            id="outlined-name"
+            label="例）012-3456-7890"
+            variant="outlined"
+            error={Boolean(errors.otherPhoneNum)}
+            helperText={errors.otherPhoneNum && errors.otherPhoneNum.message}
+          />
+        </div>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
+          <p>緊急連絡先の方の氏名</p>
+          <TextField
+            onChange={(event) => setOtherName(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            id="outlined-name"
+            label="緊急連絡先の方の氏名"
+            variant="outlined"
+          />
+        </div>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
+          <p>続柄</p>
+          <TextField
+            onChange={(event) => setOtherRelation(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            id="outlined-name"
+            label="例）母親"
+            variant="outlined"
+          />
+        </div>
+        <div>
+          <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
-              type="submit"
+              variant="contained"
+              color="primary"
+              style={{
+                maxWidth: "400px",
+                maxHeight: "45px",
+                minWidth: "300px",
+                minHeight: "45px",
+                marginTop: "3%",
+              }}
+              onClick={_onBrowserBack}
+            >
+              やめる
+            </Button>
+          </Link>
+          <Link to="/sixth_page">
+            <Button
               disabled={
                 otherPhone == "" || otherName == "" || otherRelation == ""
               }
               variant="contained"
               color="primary"
+              onClick={_onPressed}
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -337,15 +340,15 @@ export const OtherPhoneAndNamePage = () => {
             >
               次　　へ
             </Button>
-          </div>
-          <Routes>
-            <Route
-              path="/sixth_page"
-              element={<BloodTypeAndMotivationPage />}
-            ></Route>
-          </Routes>
+          </Link>
         </div>
-      </form>
+        <Routes>
+          <Route
+            path="/sixth_page"
+            element={<BloodTypeAndMotivationPage />}
+          ></Route>
+        </Routes>
+      </div>
     </div>
   );
 };

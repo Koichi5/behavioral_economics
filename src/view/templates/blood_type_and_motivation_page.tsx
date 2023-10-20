@@ -39,10 +39,9 @@ export const BloodTypeAndMotivationPage = () => {
   const [bloodType, setBloodType] = useState("");
   const [motivation, setMotivation] = useState("");
   const isWide = useMedia("(min-width: 800px)");
-
-  var currentCount = 0;
-  var currentBloodCount = 0;
-  var currentMotivationCount = 0;
+  const [currentCount, setCurrentCount] = useState(0);
+  const [currentBloodCount, setCurrentBloodCount] = useState(0);
+  const [currentMotivationCount, setCurrentMotivationCount] = useState(0);
 
   const handleBloodTypeChange = (event: SelectChangeEvent) => {
     setBloodType(event.target.value);
@@ -52,18 +51,19 @@ export const BloodTypeAndMotivationPage = () => {
     setMotivation(event.target.value);
   };
 
-  const updateBloodTypeAndMotivationCount = () => {
+  const updateBloodTypeAndMotivationCount = async () => {
     const bloodTypeAndMotivationSubmitDoc = doc(
       db,
       "bloodTypeAndMotivationSubmission",
       "YkUZ38YRtTgjXKbPshm6"
     );
-    updateDoc(bloodTypeAndMotivationSubmitDoc, {
+    await updateDoc(bloodTypeAndMotivationSubmitDoc, {
       count: currentCount + 1,
     });
+    setCurrentCount(prev => prev + 1);
   };
 
-  const updateBloodCount = () => {
+  const updateBloodCount = async () => {
     const bloodCollectionPath = doc(
       db,
       "bloodTypeAndMotivationSubmission",
@@ -72,13 +72,14 @@ export const BloodTypeAndMotivationPage = () => {
       "9nvY1Fx8O4tR5ZXM7H40"
     );
     if (bloodType != "") {
-      updateDoc(bloodCollectionPath, {
+      await updateDoc(bloodCollectionPath, {
         count: currentBloodCount + 1,
       });
+      setCurrentBloodCount(prev => prev + 1);
     }
   };
 
-  const updateMotivationCount = () => {
+  const updateMotivationCount = async () => {
     const motivationCollectionPath = doc(
       db,
       "bloodTypeAndMotivationSubmission",
@@ -87,9 +88,10 @@ export const BloodTypeAndMotivationPage = () => {
       "V7XfOwzoIs4Oxm00PygN"
     );
     if (motivation != "") {
-      updateDoc(motivationCollectionPath, {
+      await updateDoc(motivationCollectionPath, {
         count: currentMotivationCount + 1,
       });
+      setCurrentMotivationCount(prev => prev + 1);
     }
   };
 
@@ -136,7 +138,7 @@ export const BloodTypeAndMotivationPage = () => {
     return bloodCount;
   };
 
-  const fetchmotivationCount = async () => {
+  const fetchMotivationCount = async () => {
     var motivationCount = 0;
     const motivationCountRef = doc(
       db,
@@ -173,14 +175,17 @@ export const BloodTypeAndMotivationPage = () => {
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchBloodTypeAndMotivationSubmissionCount();
-      currentBloodCount = await fetchBloodCount();
-      currentMotivationCount = await fetchmotivationCount();
+      const initialCount = await fetchBloodTypeAndMotivationSubmissionCount();
+      setCurrentCount(initialCount);
+      const initialBloodCount = await fetchBloodCount();
+      setCurrentBloodCount(initialBloodCount);
+      const initialMotivationCount = await fetchMotivationCount();
+      setCurrentMotivationCount(initialMotivationCount);
     })();
     window.onpopstate = () => {
       _onBrowserBack();
     };
-  });
+  }, []);
   return (
     <div className={classes.root}>
       <CustomParticle />
@@ -258,6 +263,7 @@ export const BloodTypeAndMotivationPage = () => {
                 minHeight: "45px",
                 marginTop: "3%",
               }}
+              onClick={_onBrowserBack}
             >
               やめる
             </Button>

@@ -33,24 +33,23 @@ const useStyles = makeStyles(() => ({
 export const ExplanationPage = () => {
   const classes = useStyles();
   const [isConfirmd, setIsConfirmed] = useState(false);
+  const [currentCount, setCurrentCount] = useState(0);
 
   const handleIsConfirmedChange = () => {
     setIsConfirmed(!isConfirmd);
     console.log(isConfirmd);
   };
 
-  var currentCount = 0;
-
-  const onPressed = () => {
+  const _onPressed = async () => {
     const explanationSubmitDoc = doc(
       db,
       "explanationSubmission",
       "36ux8s9JsMTbswlQzGYN"
     );
-    const countUpdateDocumentRef = updateDoc(explanationSubmitDoc, {
+    await updateDoc(explanationSubmitDoc, {
       count: currentCount + 1,
     });
-    console.log(countUpdateDocumentRef);
+    setCurrentCount(prev => prev + 1);
   };
 
   const fetchExplanationSubmissionCount = async () => {
@@ -76,9 +75,10 @@ export const ExplanationPage = () => {
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchExplanationSubmissionCount();
+      const initialCount = await fetchExplanationSubmissionCount();
+      setCurrentCount(initialCount);
     })();
-  });
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -352,7 +352,7 @@ export const ExplanationPage = () => {
           disabled={!isConfirmd}
           variant="contained"
           color="primary"
-          onClick={onPressed}
+          onClick={_onPressed}
           style={{
             maxWidth: "400px",
             maxHeight: "45px",

@@ -46,28 +46,28 @@ export const GenderAndWorkAndHobbyPage = () => {
   const [work, setWork] = useState("");
   const [hobby, setHobby] = useState("");
   const isWide = useMedia("(min-width: 800px)");
-
-  var currentCount = 0;
-  var currentGenderCount = 0;
-  var currentWorkCount = 0;
-  var currentHobbyCount = 0;
+  const [currentCount, setCurrentCount] = useState(0);
+  const [currentGenderCount, setCurrentGenderCount] = useState(0);
+  const [currentWorkCount, setCurrentWorkCount] = useState(0);
+  const [currentHobbyCount, setCurrentHobbyCount] = useState(0);
 
   const handleGenderChange = (event: SelectChangeEvent) => {
     setGender(event.target.value);
   };
 
-  const updateGenderAndWorkAndHobbyCount = () => {
+  const updateGenderAndWorkAndHobbyCount = async () => {
     const genderAndWorkAndHobbySubmitDoc = doc(
       db,
       "genderAndWorkAndHobbySubmission",
       "ur6R8Avm4P55AUAtFTX2"
     );
-    updateDoc(genderAndWorkAndHobbySubmitDoc, {
+    await updateDoc(genderAndWorkAndHobbySubmitDoc, {
       count: currentCount + 1,
     });
+    setCurrentCount(prev => prev + 1);
   };
 
-  const updateGenderCount = () => {
+  const updateGenderCount = async () => {
     const genderCollectionPath = doc(
       db,
       "genderAndWorkAndHobbySubmission",
@@ -76,13 +76,14 @@ export const GenderAndWorkAndHobbyPage = () => {
       "GkekzDOTmJP1FGHvdgj0"
     );
     if (gender != "") {
-      updateDoc(genderCollectionPath, {
+      await updateDoc(genderCollectionPath, {
         count: currentGenderCount + 1,
       });
+      setCurrentGenderCount(prev => prev + 1);
     }
   };
 
-  const updateWorkCount = () => {
+  const updateWorkCount = async () => {
     const workCollectionPath = doc(
       db,
       "genderAndWorkAndHobbySubmission",
@@ -91,13 +92,14 @@ export const GenderAndWorkAndHobbyPage = () => {
       "r0LK8sEDjAxYMCfjY8Mv"
     );
     if (work != "") {
-      updateDoc(workCollectionPath, {
+      await updateDoc(workCollectionPath, {
         count: currentWorkCount + 1,
       });
+      setCurrentWorkCount(prev => prev + 1);
     }
   };
 
-  const updateHobbyCount = () => {
+  const updateHobbyCount = async () => {
     const hobbyCollectionPath = doc(
       db,
       "genderAndWorkAndHobbySubmission",
@@ -106,9 +108,10 @@ export const GenderAndWorkAndHobbyPage = () => {
       "ChTom4Cvys1I6eKTN786"
     );
     if (hobby != "") {
-      updateDoc(hobbyCollectionPath, {
+      await updateDoc(hobbyCollectionPath, {
         count: currentHobbyCount + 1,
       });
+      setCurrentHobbyCount(prev => prev + 1);
     }
   };
 
@@ -218,15 +221,22 @@ export const GenderAndWorkAndHobbyPage = () => {
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchgenderAndWorkAndHobbySubmissionCount();
-      currentGenderCount = await fetchGenderCount();
-      currentWorkCount = await fetchWorkCount();
-      currentHobbyCount = await fetchHobbyCount();
+      const initialCount = await fetchgenderAndWorkAndHobbySubmissionCount();
+      setCurrentCount(initialCount);
+
+      const initialGenderCount = await fetchGenderCount();
+      setCurrentGenderCount(initialGenderCount);
+
+      const initialWorkCount = await fetchWorkCount();
+      setCurrentWorkCount(initialWorkCount);
+
+      const initialHobbyCount = await fetchHobbyCount();
+      setCurrentHobbyCount(initialHobbyCount);
     })();
     window.onpopstate = () => {
       _onBrowserBack();
     };
-  });
+  }, []);
   return (
     <div className={classes.root}>
       <CustomParticle />
@@ -311,6 +321,7 @@ export const GenderAndWorkAndHobbyPage = () => {
                 minHeight: "45px",
                 marginTop: "3%",
               }}
+              onClick={_onBrowserBack}
             >
               やめる
             </Button>

@@ -1,5 +1,5 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
-import { Link, Routes, Route, useNavigate } from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
@@ -39,41 +39,33 @@ const birthdayRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
 
 export const NicknameAndPhoneAndBirthPage = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const [nickName, setNickName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [birthDay, setBirthDay] = useState("");
   const isWide = useMedia("(min-width: 800px)");
+  const [currentCount, setCurrentCount] = useState(0);
+  const [currentNickNameCount, setCurrentNickNameCount] = useState(0);
+  const [currentPhoneCount, setCurrentPhoneCount] = useState(0);
+  const [currentBirthCount, setCurrentBirthCount] = useState(0);
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = () => {
-    console.log("onSubmit fired");
-    _onPressed;
-    navigate("/third_page");
-  };
-
-  var currentCount = 0;
-  var currentNickNameCount = 0;
-  var currentPhoneCount = 0;
-  var currentBirthCount = 0;
-
-  const updateNickNameAndPhoneAndBirthCount = () => {
+  const updateNickNameAndPhoneAndBirthCount = async () => {
     const nicknameAndPhoneAndBirthSubmitDoc = doc(
       db,
       "nicknameAndPhoneAndBirthSubmission",
       "VBWeQgZmJSEwJZ4STudk"
     );
-    updateDoc(nicknameAndPhoneAndBirthSubmitDoc, {
+    await updateDoc(nicknameAndPhoneAndBirthSubmitDoc, {
       count: currentCount + 1,
     });
+    setCurrentCount(prev => prev + 1);
   };
 
-  const updateNickNameCount = () => {
+  const updateNickNameCount = async () => {
     const nickNameCollectionPath = doc(
       db,
       "nicknameAndPhoneAndBirthSubmission",
@@ -82,13 +74,14 @@ export const NicknameAndPhoneAndBirthPage = () => {
       "Ao7DYTETqqe6tUQYNSHV"
     );
     if (nickName != "") {
-      updateDoc(nickNameCollectionPath, {
+      await updateDoc(nickNameCollectionPath, {
         count: currentNickNameCount + 1,
       });
+      setCurrentNickNameCount(prev => prev + 1);
     }
   };
 
-  const updatePhoneCount = () => {
+  const updatePhoneCount = async () => {
     const phoneCollectionPath = doc(
       db,
       "nicknameAndPhoneAndBirthSubmission",
@@ -97,13 +90,14 @@ export const NicknameAndPhoneAndBirthPage = () => {
       "hG6rf4GftXlDxu9qsI13"
     );
     if (phoneNumber != "") {
-      updateDoc(phoneCollectionPath, {
+      await updateDoc(phoneCollectionPath, {
         count: currentPhoneCount + 1,
       });
+      setCurrentPhoneCount(prev => prev + 1);
     }
   };
 
-  const updateBirthCount = () => {
+  const updateBirthCount = async () => {
     const birthCollectionPath = doc(
       db,
       "nicknameAndPhoneAndBirthSubmission",
@@ -112,9 +106,10 @@ export const NicknameAndPhoneAndBirthPage = () => {
       "gv9RkSKdABBnbSnSD5Ms"
     );
     if (birthDay != "") {
-      updateDoc(birthCollectionPath, {
+      await updateDoc(birthCollectionPath, {
         count: currentBirthCount + 1,
       });
+      setCurrentBirthCount(prev => prev + 1);
     }
   };
 
@@ -221,21 +216,24 @@ export const NicknameAndPhoneAndBirthPage = () => {
 
   useEffect(() => {
     (async () => {
-      currentCount = await fetchNicknameAndPhoneAndBirthSubmissionCount();
-      currentNickNameCount = await fetchNicknameCount();
-      currentPhoneCount = await fetchPhoneCount();
-      currentBirthCount = await fetchBirthCount();
+      const initialCount = await fetchNicknameAndPhoneAndBirthSubmissionCount();
+      setCurrentCount(initialCount);
+      const initialNickNameCount = await fetchNicknameCount();
+      setCurrentNickNameCount(initialNickNameCount);
+      const initialPhoneCount = await fetchPhoneCount();
+      setCurrentPhoneCount(initialPhoneCount);
+      const initialBirthCount = await fetchBirthCount();
+      setCurrentBirthCount(initialBirthCount);
     })();
     window.onpopstate = () => {
       _onBrowserBack();
     };
-  });
+  }, []);
 
   return (
     <div className={classes.root}>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={1} /> : <CustomMobileStepper arg1={2} />}
-      <form onSubmit={handleSubmit(onSubmit)}>
         <div
           className={classes.formWrapper}
           style={{ alignItems: isWide ? "inherit" : "center" }}
@@ -333,15 +331,17 @@ export const NicknameAndPhoneAndBirthPage = () => {
                   minHeight: "45px",
                   marginTop: "3%",
                 }}
+                onClick={_onBrowserBack}
               >
                 やめる
               </Button>
             </Link>
+            <Link to='/third_page'>
             <Button
-              type="submit"
               disabled={nickName == "" || phoneNumber == "" || birthDay == ""}
               variant="contained"
               color="primary"
+              onClick={_onPressed}
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -352,6 +352,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
             >
               次　　へ
             </Button>
+            </Link>
           </div>
           <Routes>
             <Route
@@ -360,7 +361,6 @@ export const NicknameAndPhoneAndBirthPage = () => {
             ></Route>
           </Routes>
         </div>
-      </form>
     </div>
   );
 };
