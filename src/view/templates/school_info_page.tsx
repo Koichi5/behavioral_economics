@@ -5,7 +5,7 @@ import {
   TextField,
   makeStyles,
 } from "@material-ui/core";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useLocation } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
@@ -42,6 +42,7 @@ const useStyles = makeStyles(() => ({
 
 export const SchoolInfoPage = () => {
   const classes = useStyles();
+  const { state } = useLocation();
   const [schoolName, setSchoolName] = useState("");
   const [departmentName, setDepartmentName] = useState("");
   const [degree, setDegree] = useState("");
@@ -270,12 +271,84 @@ export const SchoolInfoPage = () => {
     return degreeYearsCount;
   };
 
+  const fetchAndUpdateTotalGender = async () => {
+    const interruptedGenderRef = doc(
+      db,
+      "interruptedUserGender",
+      "KFwuzSDtYDtpszPF4amu"
+    );
+    if (state.state == "10") {
+      var interruptedMaleCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.male) {
+          interruptedMaleCount = Number(docData.male);
+        }
+        console.log(interruptedMaleCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        male: interruptedMaleCount + 1,
+      });
+    } else if (state.state == "20") {
+      var interruptedFemaleCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.female) {
+          interruptedFemaleCount = Number(docData.female);
+        }
+        console.log(interruptedFemaleCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        female: interruptedFemaleCount + 1,
+      });
+    } else if (state.state == "30") {
+      var interruptedOtherCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.other) {
+          interruptedOtherCount = Number(docData.other);
+        }
+        console.log(interruptedOtherCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        other: interruptedOtherCount + 1,
+      });
+    } else if (state.state == "40") {
+      var interruptedNotSelectedCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.notSelected) {
+          interruptedNotSelectedCount = Number(docData.notSelected);
+        }
+        console.log(interruptedNotSelectedCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        notSelected: interruptedNotSelectedCount + 1,
+      });
+    } else {
+      console.error("Firestoreの更新処理に失敗しました");
+    }
+  };
+
   const _onBrowserBack = () => {
     console.log("browser back fired !");
     updateSchoolNameCount();
     updateDepartmentNameCount();
     updateDegreeCount();
     updateDegreeYearsCount();
+    fetchAndUpdateTotalGender();
   };
 
   const _onPressed = () => {

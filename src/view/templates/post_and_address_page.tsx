@@ -1,7 +1,7 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useLocation } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
@@ -37,7 +37,9 @@ const useStyles = makeStyles(() => ({
 const postCodeRegex = /^\d{3}-\d{4}$/;
 
 export const PostAndAddressPage = () => {
+  const ref: React.MutableRefObject<HTMLDialogElement | null> = useRef(null);
   const classes = useStyles();
+  const { state } = useLocation();
   const [postNumber, setPostNumber] = useState("");
   const [address, setAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
@@ -52,6 +54,18 @@ export const PostAndAddressPage = () => {
     formState: { errors },
   } = useForm();
 
+  const showModal = useCallback(() => {
+    if (ref.current) {
+      ref.current.showModal();
+    }
+  }, []);
+
+  const closeModal = useCallback(() => {
+    if (ref.current) {
+      ref.current.close();
+    }
+  }, []);
+
   const updatePostAndAddressCount = async () => {
     const postAndAddressSubmitDoc = doc(
       db,
@@ -61,7 +75,7 @@ export const PostAndAddressPage = () => {
     await updateDoc(postAndAddressSubmitDoc, {
       count: currentCount + 1,
     });
-    setCurrentCount(prev => prev + 1);
+    setCurrentCount((prev) => prev + 1);
   };
 
   const updatePostCount = async () => {
@@ -76,7 +90,7 @@ export const PostAndAddressPage = () => {
       await updateDoc(postCollectionPath, {
         count: currentPostCount + 1,
       });
-      setCurrentPostCount(prev => prev + 1);
+      setCurrentPostCount((prev) => prev + 1);
     }
   };
 
@@ -92,7 +106,7 @@ export const PostAndAddressPage = () => {
       await updateDoc(addressCollectionPath, {
         count: currentAddressCount + 1,
       });
-      setCurrentAddressCount(prev => prev + 1);
+      setCurrentAddressCount((prev) => prev + 1);
     }
   };
 
@@ -108,7 +122,7 @@ export const PostAndAddressPage = () => {
       await updateDoc(detailAddressCollectionPath, {
         count: currentDetailAddressCount + 1,
       });
-      setCurrentDetailAddressCount(prev => prev + 1);
+      setCurrentDetailAddressCount((prev) => prev + 1);
     }
   };
 
@@ -202,11 +216,83 @@ export const PostAndAddressPage = () => {
     return detailAddressCount;
   };
 
+  const fetchAndUpdateTotalGender = async () => {
+    const interruptedGenderRef = doc(
+      db,
+      "interruptedUserGender",
+      "KFwuzSDtYDtpszPF4amu"
+    );
+    if (state.state == "10") {
+      var interruptedMaleCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.male) {
+          interruptedMaleCount = Number(docData.male);
+        }
+        console.log(interruptedMaleCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        male: interruptedMaleCount + 1,
+      });
+    } else if (state.state == "20") {
+      var interruptedFemaleCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.female) {
+          interruptedFemaleCount = Number(docData.female);
+        }
+        console.log(interruptedFemaleCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        female: interruptedFemaleCount + 1,
+      });
+    } else if (state.state == "30") {
+      var interruptedOtherCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.other) {
+          interruptedOtherCount = Number(docData.other);
+        }
+        console.log(interruptedOtherCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        other: interruptedOtherCount + 1,
+      });
+    } else if (state.state == "40") {
+      var interruptedNotSelectedCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.notSelected) {
+          interruptedNotSelectedCount = Number(docData.notSelected);
+        }
+        console.log(interruptedNotSelectedCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        notSelected: interruptedNotSelectedCount + 1,
+      });
+    } else {
+      console.error("Firestoreの更新処理に失敗しました");
+    }
+  };
+
   const _onBrowserBack = () => {
     console.log("browser back fired !");
     updatePostCount();
     updateAddressCount();
     updateDetailAddressCount();
+    fetchAndUpdateTotalGender();
   };
 
   const _onPressed = () => {
@@ -226,9 +312,11 @@ export const PostAndAddressPage = () => {
 
       const initialAddressCount = await fetchAddressCount();
       setCurrentAddressCount(initialAddressCount);
-      
+
       const initialDetailAddressCount = await fetchDetailAddressCount();
       setCurrentDetailAddressCount(initialDetailAddressCount);
+
+      console.log(`gender state: ${state.state}`);
     })();
     window.onpopstate = () => {
       _onBrowserBack();
@@ -236,100 +324,118 @@ export const PostAndAddressPage = () => {
   }, []);
   return (
     <div className={classes.root}>
+      <dialog ref={ref} style={{ top: "30px" }}>
+        <p>郵便番号の形式が適当ではありません</p>
+        <p>郵便番号は〇〇〇-〇〇〇〇の形式にしてください</p>
+        <br />
+        <button type="button" onClick={closeModal}>
+          閉じる
+        </button>
+      </dialog>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={3} /> : <CustomMobileStepper arg1={4} />}
+      <div
+        className={classes.formWrapper}
+        style={{ alignItems: isWide ? "inherit" : "center" }}
+      >
         <div
-          className={classes.formWrapper}
-          style={{ alignItems: isWide ? "inherit" : "center" }}
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
         >
-          <div
-            className={classes.fieldWrapper}
-            style={{
-              flexDirection: isWide ? "row" : "column",
-              paddingLeft: isWide ? "20%" : "0",
-              paddingRight: isWide ? "20%" : "0",
-            }}
+          <p>郵便番号</p>
+          <TextField
+            {...register("postCode", {
+              required: "郵便番号は必須です",
+              pattern: {
+                value: postCodeRegex,
+                message: "郵便番号の形式が適当ではありません",
+              },
+            })}
+            onChange={(event) => setPostNumber(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            id="outlined-name"
+            label="例）123-4567"
+            variant="outlined"
+            error={Boolean(errors.postCode)}
+            helperText={errors.postCode && errors.postCode.message}
+          />
+        </div>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
+          <p>住所（都道府県、市町村、番地）</p>
+          <TextField
+            onChange={(event) => setAddress(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            id="outlined-name"
+            label="例）東京都渋谷区渋谷2-15-1"
+            variant="outlined"
+          />
+        </div>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
+          <p>住所（アパート名等）</p>
+          <TextField
+            onChange={(event) => setDetailAddress(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            id="outlined-name"
+            label="例）クロスタワー12F"
+            variant="outlined"
+          />
+        </div>
+        <div>
+          <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{
+                maxWidth: "400px",
+                maxHeight: "45px",
+                minWidth: "300px",
+                minHeight: "45px",
+                marginTop: "3%",
+              }}
+              onClick={_onBrowserBack}
+            >
+              やめる
+            </Button>
+          </Link>
+          <Link
+            to={postCodeRegex.test(postNumber) ? "/fifth_page" : "#"}
+            style={{ paddingLeft: isWide ? "3%" : "0" }}
+            state={{ state: state.state }}
           >
-            <p>郵便番号</p>
-            <TextField
-              {...register("postCode", {
-                required: "郵便番号は必須です",
-                pattern: {
-                  value: postCodeRegex,
-                  message: "郵便番号の形式が適当ではありません",
-                },
-              })}
-              onChange={(event) => setPostNumber(event.target.value)}
-              className={classes.field}
-              style={{ minWidth: isWide ? "400px" : "300px" }}
-              id="outlined-name"
-              label="例）123-4567"
-              variant="outlined"
-              error={Boolean(errors.postCode)}
-              helperText={errors.postCode && errors.postCode.message}
-            />
-          </div>
-          <div
-            className={classes.fieldWrapper}
-            style={{
-              flexDirection: isWide ? "row" : "column",
-              paddingLeft: isWide ? "20%" : "0",
-              paddingRight: isWide ? "20%" : "0",
-            }}
-          >
-            <p>住所（都道府県、市町村、番地）</p>
-            <TextField
-              onChange={(event) => setAddress(event.target.value)}
-              className={classes.field}
-              style={{ minWidth: isWide ? "400px" : "300px" }}
-              id="outlined-name"
-              label="例）東京都渋谷区渋谷2-15-1"
-              variant="outlined"
-            />
-          </div>
-          <div
-            className={classes.fieldWrapper}
-            style={{
-              flexDirection: isWide ? "row" : "column",
-              paddingLeft: isWide ? "20%" : "0",
-              paddingRight: isWide ? "20%" : "0",
-            }}
-          >
-            <p>住所（アパート名等）</p>
-            <TextField
-              onChange={(event) => setDetailAddress(event.target.value)}
-              className={classes.field}
-              style={{ minWidth: isWide ? "400px" : "300px" }}
-              id="outlined-name"
-              label="例）クロスタワー12F"
-              variant="outlined"
-            />
-          </div>
-          <div>
-            <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{
-                  maxWidth: "400px",
-                  maxHeight: "45px",
-                  minWidth: "300px",
-                  minHeight: "45px",
-                  marginTop: "3%",
-                }}
-                onClick={_onBrowserBack}
-              >
-                やめる
-              </Button>
-            </Link>
-            <Link to='/fifth_page'>
             <Button
               disabled={
                 postNumber == "" || address == "" || detailAddress == ""
               }
               variant="contained"
               color="primary"
-              onClick={_onPressed}
+              onClick={
+                postCodeRegex.test(postNumber)
+                  ? _onPressed
+                  : () => {
+                      showModal();
+                    }
+              }
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -340,15 +446,12 @@ export const PostAndAddressPage = () => {
             >
               次　　へ
             </Button>
-            </Link>
-          </div>
-          <Routes>
-            <Route
-              path="/fifth_page"
-              element={<OtherPhoneAndNamePage />}
-            ></Route>
-          </Routes>
+          </Link>
         </div>
+        <Routes>
+          <Route path="/fifth_page" element={<OtherPhoneAndNamePage />}></Route>
+        </Routes>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
@@ -34,10 +34,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const nicknameRegex = /^.{5,}$/;
 const phoneNumRegex = /^\d{3}-\d{4}-\d{4}$/;
 const birthdayRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
 
 export const NicknameAndPhoneAndBirthPage = () => {
+  const ref: React.MutableRefObject<HTMLDialogElement | null> = useRef(null);
   const classes = useStyles();
   const [nickName, setNickName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -53,6 +55,18 @@ export const NicknameAndPhoneAndBirthPage = () => {
     formState: { errors },
   } = useForm();
 
+  const showModal = useCallback(() => {
+    if (ref.current) {
+      ref.current.showModal();
+    }
+  }, []);
+
+  const closeModal = useCallback(() => {
+    if (ref.current) {
+      ref.current.close();
+    }
+  }, []);
+
   const updateNickNameAndPhoneAndBirthCount = async () => {
     const nicknameAndPhoneAndBirthSubmitDoc = doc(
       db,
@@ -62,7 +76,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
     await updateDoc(nicknameAndPhoneAndBirthSubmitDoc, {
       count: currentCount + 1,
     });
-    setCurrentCount(prev => prev + 1);
+    setCurrentCount((prev) => prev + 1);
   };
 
   const updateNickNameCount = async () => {
@@ -77,7 +91,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
       await updateDoc(nickNameCollectionPath, {
         count: currentNickNameCount + 1,
       });
-      setCurrentNickNameCount(prev => prev + 1);
+      setCurrentNickNameCount((prev) => prev + 1);
     }
   };
 
@@ -93,7 +107,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
       await updateDoc(phoneCollectionPath, {
         count: currentPhoneCount + 1,
       });
-      setCurrentPhoneCount(prev => prev + 1);
+      setCurrentPhoneCount((prev) => prev + 1);
     }
   };
 
@@ -109,7 +123,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
       await updateDoc(birthCollectionPath, {
         count: currentBirthCount + 1,
       });
-      setCurrentBirthCount(prev => prev + 1);
+      setCurrentBirthCount((prev) => prev + 1);
     }
   };
 
@@ -218,10 +232,13 @@ export const NicknameAndPhoneAndBirthPage = () => {
     (async () => {
       const initialCount = await fetchNicknameAndPhoneAndBirthSubmissionCount();
       setCurrentCount(initialCount);
+
       const initialNickNameCount = await fetchNicknameCount();
       setCurrentNickNameCount(initialNickNameCount);
+
       const initialPhoneCount = await fetchPhoneCount();
       setCurrentPhoneCount(initialPhoneCount);
+
       const initialBirthCount = await fetchBirthCount();
       setCurrentBirthCount(initialBirthCount);
     })();
@@ -232,116 +249,140 @@ export const NicknameAndPhoneAndBirthPage = () => {
 
   return (
     <div className={classes.root}>
+      <dialog ref={ref} style={{ top: "30px" }}>
+        <p>ニックネーム、電話番号、または誕生日の形式が正しくありません</p>
+        <p>ニックネームは５文字以上にしてください。</p>
+        <br />
+        <button type="button" onClick={closeModal}>
+          閉じる
+        </button>
+      </dialog>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={1} /> : <CustomMobileStepper arg1={2} />}
+      <div
+        className={classes.formWrapper}
+        style={{ alignItems: isWide ? "inherit" : "center" }}
+      >
         <div
-          className={classes.formWrapper}
-          style={{ alignItems: isWide ? "inherit" : "center" }}
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
         >
-          <div
-            className={classes.fieldWrapper}
-            style={{
-              flexDirection: isWide ? "row" : "column",
-              paddingLeft: isWide ? "20%" : "0",
-              paddingRight: isWide ? "20%" : "0",
-            }}
+          <p>ニックネーム</p>
+          <TextField
+            {...register("nickName", {
+              required: "ニックネームは必須です",
+              minLength: {
+                value: 5,
+                message: "５文字以上である必要があります",
+              },
+            })}
+            onChange={(event) => setNickName(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            id="outlined-name"
+            label="ニックネーム"
+            variant="outlined"
+            error={Boolean(errors.nickName)}
+            helperText={errors.nickName && errors.nickName.message}
+          />
+        </div>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
+          <p>電話番号</p>
+          <TextField
+            {...register("phone", {
+              required: "電話番号は必須です",
+              pattern: {
+                value: phoneNumRegex,
+                message: "電話番号の形式が適当ではありません",
+              },
+            })}
+            onChange={(event) => setPhoneNumber(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            id="outlined-name"
+            label="例）090-1234-5678"
+            variant="outlined"
+            error={Boolean(errors.phone)}
+            helperText={errors.phone && errors.phone.message}
+          />
+        </div>
+        <div
+          className={classes.fieldWrapper}
+          style={{
+            flexDirection: isWide ? "row" : "column",
+            paddingLeft: isWide ? "20%" : "0",
+            paddingRight: isWide ? "20%" : "0",
+          }}
+        >
+          <p>誕生日</p>
+          <TextField
+            {...register("birthday", {
+              required: "誕生日は必須です",
+              pattern: {
+                value: birthdayRegex,
+                message: "誕生日の形式が適当ではありません",
+              },
+            })}
+            onChange={(event) => setBirthDay(event.target.value)}
+            className={classes.field}
+            style={{ minWidth: isWide ? "400px" : "300px" }}
+            id="outlined-name"
+            label="例）2000-01-01"
+            variant="outlined"
+            error={Boolean(errors.birthday)}
+            helperText={errors.birthday && errors.birthday.message}
+          />
+        </div>
+        <div>
+          <Link to={"/"} style={{ paddingRight: isWide ? "3%" : "0" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{
+                maxWidth: "400px",
+                maxHeight: "45px",
+                minWidth: "300px",
+                minHeight: "45px",
+                marginTop: "3%",
+              }}
+              onClick={_onBrowserBack}
+            >
+              やめる
+            </Button>
+          </Link>
+          <Link
+            to={
+              nicknameRegex.test(nickName) &&
+              phoneNumRegex.test(phoneNumber) &&
+              birthdayRegex.test(birthDay)
+                ? "/third_page"
+                : "#"
+            }
           >
-            <p>ニックネーム</p>
-            <TextField
-              {...register("nickName", {
-                required: "ニックネームは必須です",
-                minLength: {
-                  value: 3,
-                  message: "３文字以上である必要があります",
-                },
-              })}
-              onChange={(event) => setNickName(event.target.value)}
-              className={classes.field}
-              style={{ minWidth: isWide ? "400px" : "300px" }}
-              id="outlined-name"
-              label="ニックネーム"
-              variant="outlined"
-              error={Boolean(errors.nickName)}
-              helperText={errors.nickName && errors.nickName.message}
-            />
-          </div>
-          <div
-            className={classes.fieldWrapper}
-            style={{
-              flexDirection: isWide ? "row" : "column",
-              paddingLeft: isWide ? "20%" : "0",
-              paddingRight: isWide ? "20%" : "0",
-            }}
-          >
-            <p>電話番号</p>
-            <TextField
-              {...register("phone", {
-                required: "電話番号は必須です",
-                pattern: {
-                  value: phoneNumRegex,
-                  message: "電話番号の形式が適当ではありません",
-                },
-              })}
-              onChange={(event) => setPhoneNumber(event.target.value)}
-              className={classes.field}
-              style={{ minWidth: isWide ? "400px" : "300px" }}
-              id="outlined-name"
-              label="例）090-1234-5678"
-              variant="outlined"
-              error={Boolean(errors.phone)}
-              helperText={errors.phone && errors.phone.message}
-            />
-          </div>
-          <div
-            className={classes.fieldWrapper}
-            style={{
-              flexDirection: isWide ? "row" : "column",
-              paddingLeft: isWide ? "20%" : "0",
-              paddingRight: isWide ? "20%" : "0",
-            }}
-          >
-            <p>誕生日</p>
-            <TextField
-              {...register("birthday", {
-                required: "誕生日は必須です",
-                pattern: {
-                  value: birthdayRegex,
-                  message: "誕生日の形式が適当ではありません",
-                },
-              })}
-              onChange={(event) => setBirthDay(event.target.value)}
-              className={classes.field}
-              style={{ minWidth: isWide ? "400px" : "300px" }}
-              id="outlined-name"
-              label="例）2000-01-01"
-              variant="outlined"
-              error={Boolean(errors.birthday)}
-              helperText={errors.birthday && errors.birthday.message}
-            />
-          </div>
-          <div>
-            <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{
-                  maxWidth: "400px",
-                  maxHeight: "45px",
-                  minWidth: "300px",
-                  minHeight: "45px",
-                  marginTop: "3%",
-                }}
-                onClick={_onBrowserBack}
-              >
-                やめる
-              </Button>
-            </Link>
-            <Link to='/third_page'>
             <Button
               disabled={nickName == "" || phoneNumber == "" || birthDay == ""}
               variant="contained"
               color="primary"
-              onClick={_onPressed}
+              onClick={
+                nicknameRegex.test(nickName) &&
+                phoneNumRegex.test(phoneNumber) &&
+                birthdayRegex.test(birthDay)
+                  ? _onPressed
+                  : () => {
+                      showModal();
+                    }
+              }
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -352,15 +393,15 @@ export const NicknameAndPhoneAndBirthPage = () => {
             >
               次　　へ
             </Button>
-            </Link>
-          </div>
-          <Routes>
-            <Route
-              path="/third_page"
-              element={<GenderAndWorkAndHobbyPage />}
-            ></Route>
-          </Routes>
+          </Link>
         </div>
+        <Routes>
+          <Route
+            path="/third_page"
+            element={<GenderAndWorkAndHobbyPage />}
+          ></Route>
+        </Routes>
+      </div>
     </div>
   );
 };

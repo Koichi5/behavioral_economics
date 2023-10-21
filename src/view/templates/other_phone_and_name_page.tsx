@@ -1,7 +1,7 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useLocation } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
@@ -37,7 +37,9 @@ const useStyles = makeStyles(() => ({
 const otherPhoneNumRegex = /^\d{3}-\d{4}-\d{4}$/;
 
 export const OtherPhoneAndNamePage = () => {
+  const ref: React.MutableRefObject<HTMLDialogElement | null> = useRef(null);
   const classes = useStyles();
+  const { state } = useLocation();
   const [otherPhone, setOtherPhone] = useState("");
   const [otherName, setOtherName] = useState("");
   const [otherRelation, setOtherRelation] = useState("");
@@ -52,6 +54,18 @@ export const OtherPhoneAndNamePage = () => {
     formState: { errors },
   } = useForm();
 
+  const showModal = useCallback(() => {
+    if (ref.current) {
+      ref.current.showModal();
+    }
+  }, []);
+
+  const closeModal = useCallback(() => {
+    if (ref.current) {
+      ref.current.close();
+    }
+  }, []);
+
   const updateOtherPhoneAndNameAndRelation = async () => {
     const otherPhoneAndNameSubmitDoc = doc(
       db,
@@ -61,7 +75,7 @@ export const OtherPhoneAndNamePage = () => {
     await updateDoc(otherPhoneAndNameSubmitDoc, {
       count: currentCount + 1,
     });
-    setCurrentCount(prev => prev + 1);
+    setCurrentCount((prev) => prev + 1);
   };
 
   const updateOtherPhoneCount = async () => {
@@ -76,7 +90,7 @@ export const OtherPhoneAndNamePage = () => {
       await updateDoc(otherPhoneCollectionPath, {
         count: currentOtherPhoneCount + 1,
       });
-      setCurrentOtherPhoneCount(prev => prev + 1);
+      setCurrentOtherPhoneCount((prev) => prev + 1);
     }
   };
 
@@ -92,7 +106,7 @@ export const OtherPhoneAndNamePage = () => {
       await updateDoc(otherNameCollectionPath, {
         count: currentOtherNameCount + 1,
       });
-      setCurrentOtherNameCount(prev => prev + 1);
+      setCurrentOtherNameCount((prev) => prev + 1);
     }
   };
 
@@ -108,7 +122,7 @@ export const OtherPhoneAndNamePage = () => {
       await updateDoc(otherRelationCollectionPath, {
         count: currentOtherRelationCount + 1,
       });
-      setCurrentOtherRelationCount(prev => prev + 1);
+      setCurrentOtherRelationCount((prev) => prev + 1);
     }
   };
 
@@ -202,11 +216,83 @@ export const OtherPhoneAndNamePage = () => {
     return otherRelationCount;
   };
 
+  const fetchAndUpdateTotalGender = async () => {
+    const interruptedGenderRef = doc(
+      db,
+      "interruptedUserGender",
+      "KFwuzSDtYDtpszPF4amu"
+    );
+    if (state.state == "10") {
+      var interruptedMaleCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.male) {
+          interruptedMaleCount = Number(docData.male);
+        }
+        console.log(interruptedMaleCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        male: interruptedMaleCount + 1,
+      });
+    } else if (state.state == "20") {
+      var interruptedFemaleCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.female) {
+          interruptedFemaleCount = Number(docData.female);
+        }
+        console.log(interruptedFemaleCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        female: interruptedFemaleCount + 1,
+      });
+    } else if (state.state == "30") {
+      var interruptedOtherCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.other) {
+          interruptedOtherCount = Number(docData.other);
+        }
+        console.log(interruptedOtherCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        other: interruptedOtherCount + 1,
+      });
+    } else if (state.state == "40") {
+      var interruptedNotSelectedCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.notSelected) {
+          interruptedNotSelectedCount = Number(docData.notSelected);
+        }
+        console.log(interruptedNotSelectedCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        notSelected: interruptedNotSelectedCount + 1,
+      });
+    } else {
+      console.error("Firestoreの更新処理に失敗しました");
+    }
+  };
+
   const _onBrowserBack = () => {
     console.log("browser back fired !");
     updateOtherPhoneCount();
     updateOtherNameCount();
     updateOtherRelationCount();
+    fetchAndUpdateTotalGender();
   };
 
   const _onPressed = () => {
@@ -229,6 +315,8 @@ export const OtherPhoneAndNamePage = () => {
 
       const initialOtherRelationCount = await fetchOtherRelationCount();
       setCurrentOtherRelationCount(initialOtherRelationCount);
+
+      console.log(`gender state: ${state.state}`);
     })();
     window.onpopstate = () => {
       _onBrowserBack();
@@ -236,6 +324,14 @@ export const OtherPhoneAndNamePage = () => {
   }, []);
   return (
     <div className={classes.root}>
+      <dialog ref={ref} style={{ top: "30px" }}>
+        <p>緊急連絡先の形式が適当ではありません</p>
+        <p>緊急連絡先は〇〇〇-〇〇〇〇-〇〇〇〇の形式にしてください</p>
+        <br />
+        <button type="button" onClick={closeModal}>
+          閉じる
+        </button>
+      </dialog>
       <CustomParticle />
       {isWide ? <CustomStepper arg1={4} /> : <CustomMobileStepper arg1={5} />}
       <div
@@ -322,14 +418,23 @@ export const OtherPhoneAndNamePage = () => {
               やめる
             </Button>
           </Link>
-          <Link to="/sixth_page">
+          <Link
+            to={otherPhoneNumRegex.test(otherPhone) ? "/sixth_page" : "#"}
+            state={{ state: state.state }}
+          >
             <Button
               disabled={
                 otherPhone == "" || otherName == "" || otherRelation == ""
               }
               variant="contained"
               color="primary"
-              onClick={_onPressed}
+              onClick={
+                otherPhoneNumRegex.test(otherPhone)
+                  ? _onPressed
+                  : () => {
+                      showModal();
+                    }
+              }
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",

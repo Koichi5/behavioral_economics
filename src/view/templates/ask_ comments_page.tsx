@@ -65,6 +65,27 @@ export const AskCommentsPage = () => {
   const [isDegreeConfirmd, setIsDegreeConfirmed] = useState(true);
   const [isDegreeYearsConfirmd, setIsDegreeYearsConfirmed] = useState(true);
 
+  const [currentEmailCount, setCurrentEmailCount] = useState(0);
+  const [currentPasswordCount, setCurrentPasswordCount] = useState(0);
+  const [currentRetypePasswordCount, setCurrentRetypePasswordCount] = useState(0);
+  const [currentNicknameCount, setCurrentNicknameCount] = useState(0);
+  const [currentPhoneNumCount, setCurrentPhoneNumCount] = useState(0);
+  const [currentBirthdayCount, setCurrentBirthdayCount] = useState(0);
+  const [currentGenderCount, setCurrentGenderCount] = useState(0);
+  const [currentWorkCount, setCurrentWorkCount] = useState(0);
+  const [currentHobbyCount, setCurrentHobbyCount] = useState(0);
+  const [currentPostCodeCount, setCurrentPostCodeCount] = useState(0);
+  const [currentAddressCount, setCurrentAddressCount] = useState(0);
+  const [currentOtherPhoneNumCount, setCurrentOtherPhoneNumCount] = useState(0);
+  const [currentOtherNameCount, setCurrentOtherNameCount] = useState(0);
+  const [currentOtherRelationCount, setCurrentOtherRelationCount] = useState(0);
+  const [currentBloodTypeCount, setCurrentBloodTypeCount] = useState(0);
+  const [currentMotivationCount, setCurrentMotivationCount] = useState(0);
+  const [currentSchoolNameCount, setCurrentSchoolNameCount] = useState(0);
+  const [currentDepartmentNameCount, setCurrentDepartmentNameCount] = useState(0);
+  const [currentDegreeCount, setCurrentDegreeCount] = useState(0);
+  const [currentDegreeYearsCount, setCurrentDegreeYearsCount] = useState(0);
+
   const handleIsEmailConfirmedChange = () => {
     setIsEmailConfirmed(!isEmailConfirmd);
     console.log(isEmailConfirmd);
@@ -166,27 +187,6 @@ export const AskCommentsPage = () => {
   };
 
   const isWide = useMedia("(min-width: 800px)");
-
-  var currentEmailCount = 0;
-  var currentPasswordCount = 0;
-  var currentRetypePasswordCount = 0;
-  var currentNicknameCount = 0;
-  var currentPhoneNumCount = 0;
-  var currentBirthdayCount = 0;
-  var currentGenderCount = 0;
-  var currentWorkCount = 0;
-  var currentHobbyCount = 0;
-  var currentPostCodeCount = 0;
-  var currentAddressCount = 0;
-  var currentOtherPhoneNumCount = 0;
-  var currentOtherNameCount = 0;
-  var currentOtherRelationCount = 0;
-  var currentBloodTypeCount = 0;
-  var currentMotivationCount = 0;
-  var currentSchoolNameCount = 0;
-  var currentDepartmentNameCount = 0;
-  var currentDegreeCount = 0;
-  var currentDegreeYearsCount = 0;
 
   const fetchEmailCount = async () => {
     var emailCount = 0;
@@ -378,7 +378,7 @@ export const AskCommentsPage = () => {
       "finalAssessment",
       "GES0oRlPBfQhkiJbrokI",
       "birthdayCount",
-      "U8H2X1bwtVB2ilP10EgY"
+      "eBKXQXQk8uaEsFoOGMb4"
     );
     try {
       const snapshot = await getDoc(birthdayCountPath);
@@ -400,7 +400,7 @@ export const AskCommentsPage = () => {
       "finalAssessment",
       "GES0oRlPBfQhkiJbrokI",
       "birthdayCount",
-      "U8H2X1bwtVB2ilP10EgY"
+      "eBKXQXQk8uaEsFoOGMb4"
     );
     updateDoc(birthdayCountPath, {
       count: currentBirthdayCount + 1,
@@ -450,7 +450,7 @@ export const AskCommentsPage = () => {
       "finalAssessment",
       "GES0oRlPBfQhkiJbrokI",
       "workCount",
-      "U8H2X1bwtVB2ilP10EgY"
+      "C3TK0Cn4KJ25DMSZWTNA"
     );
     try {
       const snapshot = await getDoc(workCountPath);
@@ -472,7 +472,7 @@ export const AskCommentsPage = () => {
       "finalAssessment",
       "GES0oRlPBfQhkiJbrokI",
       "workCount",
-      "U8H2X1bwtVB2ilP10EgY"
+      "C3TK0Cn4KJ25DMSZWTNA"
     );
     updateDoc(workCountPath, {
       count: currentWorkCount + 1,
@@ -630,7 +630,7 @@ export const AskCommentsPage = () => {
       "finalAssessment",
       "GES0oRlPBfQhkiJbrokI",
       "otherNameCount",
-      "U8H2X1bwtVB2ilP10EgY"
+      "y7vfEF76Df6eWtD0DzK8"
     );
     try {
       const snapshot = await getDoc(otherNameCountPath);
@@ -652,7 +652,7 @@ export const AskCommentsPage = () => {
       "finalAssessment",
       "GES0oRlPBfQhkiJbrokI",
       "otherNameCount",
-      "U8H2X1bwtVB2ilP10EgY"
+      "y7vfEF76Df6eWtD0DzK8"
     );
     updateDoc(otherNameCountPath, {
       count: currentOtherNameCount + 1,
@@ -979,28 +979,67 @@ export const AskCommentsPage = () => {
 
   useEffect(() => {(
     async () => {
-      currentEmailCount = await fetchEmailCount();
-      currentPasswordCount = await fetchPasswordCount();
-      currentRetypePasswordCount = await fetchRetypePasswordCount();
-      currentNicknameCount = await fetchNicknameCount();
-      currentPhoneNumCount = await fetchPhoneNumCount();
-      currentBirthdayCount = await fetchBirthdayCount();
-      currentGenderCount = await fetchGenderCount();
-      currentWorkCount = await fetchWorkCount();
-      currentHobbyCount = await fetchHobbyCount();
-      currentPostCodeCount = await fetchPostCodeCount();
-      currentAddressCount = await fetchAddressCount();
-      currentOtherPhoneNumCount = await fetchOtherPhoneNumCount();
-      currentOtherNameCount = await fetchOtherNameCount();
-      currentOtherRelationCount = await fetchOtherRelationCount();
-      currentBloodTypeCount = await fetchBloodTypeCount();
-      currentMotivationCount = await fetchMotivationCount();
-      currentSchoolNameCount = await fetchSchoolNameCount();
-      currentDepartmentNameCount = await fetchDepartmentNameCount();
-      currentDegreeCount = await fetchDegreeCount();
-      currentDegreeYearsCount = await fetchDegreeYearsCount();
+      const initialEmailCount = await fetchEmailCount();
+      setCurrentEmailCount(initialEmailCount);
+
+      const initialPasswordCount = await fetchPasswordCount();
+      setCurrentPasswordCount(initialPasswordCount);
+
+      const initialRetypePasswordCount = await fetchRetypePasswordCount();
+      setCurrentRetypePasswordCount(initialRetypePasswordCount);
+
+      const initialNicknameCount = await fetchNicknameCount();
+      setCurrentNicknameCount(initialNicknameCount);
+
+      const initialPhoneNumCount = await fetchPhoneNumCount();
+      setCurrentPhoneNumCount(initialPhoneNumCount);
+
+      const initialBirthdayCount = await fetchBirthdayCount();
+      setCurrentBirthdayCount(initialBirthdayCount);
+
+      const initialGenderCount = await fetchGenderCount();
+      setCurrentGenderCount(initialGenderCount);
+
+      const initialWorkCount = await fetchWorkCount();
+      setCurrentWorkCount(initialWorkCount);
+
+      const initialHobbyCount = await fetchHobbyCount();
+      setCurrentHobbyCount(initialHobbyCount);
+
+      const initialPostCodeCount = await fetchPostCodeCount();
+      setCurrentPostCodeCount(initialPostCodeCount);
+
+      const initialAddressCount = await fetchAddressCount();
+      setCurrentAddressCount(initialAddressCount);
+
+      const initialOtherPhoneNumCount = await fetchOtherPhoneNumCount();
+      setCurrentOtherPhoneNumCount(initialOtherPhoneNumCount);
+
+      const initialOtherNameCount = await fetchOtherNameCount();
+      setCurrentOtherNameCount(initialOtherNameCount);
+
+      const initialOtherRelationCount = await fetchOtherRelationCount();
+      setCurrentOtherRelationCount(initialOtherRelationCount);
+
+      const initialBloodTypeCount = await fetchBloodTypeCount();
+      setCurrentBloodTypeCount(initialBloodTypeCount);
+
+      const initialMotivationCount = await fetchMotivationCount();
+      setCurrentMotivationCount(initialMotivationCount);
+
+      const initialSchoolNameCount = await fetchSchoolNameCount();
+      setCurrentSchoolNameCount(initialSchoolNameCount);
+
+      const initialDepartmentNameCount = await fetchDepartmentNameCount();
+      setCurrentDepartmentNameCount(initialDepartmentNameCount);
+
+      const initialDegreeCount = await fetchDegreeCount();
+      setCurrentDegreeCount(initialDegreeCount);
+
+      const initialDegreeYearsCount = await fetchDegreeYearsCount();
+      setCurrentDegreeYearsCount(initialDegreeYearsCount);
     })();
-  });
+  }, []);
 
   return (
     <div className={classes.root}>

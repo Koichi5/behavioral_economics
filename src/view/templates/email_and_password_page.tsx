@@ -1,5 +1,5 @@
 import { updateDoc, doc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
@@ -56,6 +56,7 @@ const retypePasswordRegex =
   /^(?=.*[A-Z])(?=.*[.?/+=&%$#-])[a-zA-Z0-9.?/+=&%$#-]{8,}$/;
 
 function EmailAndPasswordPage() {
+  const ref: React.MutableRefObject<HTMLDialogElement | null> = useRef(null);
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -66,18 +67,25 @@ function EmailAndPasswordPage() {
   const [currentCount, setCurrentCount] = useState(0);
   const [currentEmailCount, setCurrentEmailCount] = useState(0);
   const [currentPasswordCount, setCurrentPasswordCount] = useState(0);
-  const [currentRetypePasswordCount, setCurrentRetypePasswordCount] = useState(0);
+  const [currentRetypePasswordCount, setCurrentRetypePasswordCount] =
+    useState(0);
 
   const {
     register,
     formState: { errors },
   } = useForm();
 
-  // const onSubmit = () => {
-  //   console.log("onSubmit fired");
-  //   _onPressed();
-  //   // navigate("/second_page");
-  // };
+  const showModal = useCallback(() => {
+    if (ref.current) {
+      ref.current.showModal();
+    }
+  }, []);
+
+  const closeModal = useCallback(() => {
+    if (ref.current) {
+      ref.current.close();
+    }
+  }, []);
 
   function handleClickShowPassword() {
     setShowPassword(!showPassword);
@@ -87,16 +95,8 @@ function EmailAndPasswordPage() {
     setShowConfirmPassword(!showConfirmPassword);
   }
 
-  // const backButtonListener = () => {
-  //   useEffect(() => {
-  //     window.onpopstate = () => {
-  //       onBrowserBack();
-  //     };
-  //   });
-  // };
-
   const updateEmailAndPasswordCount = async () => {
-    console.log("update email and password count")
+    console.log("update email and password count");
     const emailAndPasswordSubmissionDoc = doc(
       db,
       "emailAndPasswordSubmission",
@@ -105,11 +105,11 @@ function EmailAndPasswordPage() {
     await updateDoc(emailAndPasswordSubmissionDoc, {
       count: currentCount + 1,
     });
-    setCurrentCount(prev => prev +1);
+    setCurrentCount((prev) => prev + 1);
   };
 
   const updateEmailCount = async () => {
-    console.log("update email count")
+    console.log("update email count");
     const emailCollectionPath = doc(
       db,
       "emailAndPasswordSubmission",
@@ -121,12 +121,12 @@ function EmailAndPasswordPage() {
       await updateDoc(emailCollectionPath, {
         count: currentEmailCount + 1,
       });
-      setCurrentEmailCount(prev => prev + 1);
+      setCurrentEmailCount((prev) => prev + 1);
     }
   };
 
   const updatePasswordCount = async () => {
-    console.log("update password count")
+    console.log("update password count");
     const passwordCollectionPath = doc(
       db,
       "emailAndPasswordSubmission",
@@ -139,11 +139,11 @@ function EmailAndPasswordPage() {
         count: currentPasswordCount + 1,
       });
     }
-    setCurrentPasswordCount(prev => prev + 1);
+    setCurrentPasswordCount((prev) => prev + 1);
   };
 
   const updateRetypePasswordCount = async () => {
-    console.log("update retype password count")
+    console.log("update retype password count");
     const retypePasswordCollectionPath = doc(
       db,
       "emailAndPasswordSubmission",
@@ -156,7 +156,7 @@ function EmailAndPasswordPage() {
         count: currentRetypePasswordCount + 1,
       });
     }
-    setCurrentRetypePasswordCount(prev => prev + 1);
+    setCurrentRetypePasswordCount((prev) => prev + 1);
   };
 
   const fetchEmailAndPasswordSubmissionCount = async () => {
@@ -261,6 +261,7 @@ function EmailAndPasswordPage() {
   };
 
   const _onPressed = () => {
+    console.log("onpressed fired");
     updateEmailAndPasswordCount();
     updateEmailCount();
     updatePasswordCount();
@@ -269,7 +270,8 @@ function EmailAndPasswordPage() {
 
   useEffect(() => {
     (async () => {
-      const initEmailAndPasswordSubmissionCount = await fetchEmailAndPasswordSubmissionCount();
+      const initEmailAndPasswordSubmissionCount =
+        await fetchEmailAndPasswordSubmissionCount();
       setCurrentCount(initEmailAndPasswordSubmissionCount);
 
       const initEmailRegisterCount = await fetchEmailRegisterCount();
@@ -278,8 +280,9 @@ function EmailAndPasswordPage() {
       const initPasswordRegisterCount = await fetchPasswordRegisterCount();
       setCurrentPasswordCount(initPasswordRegisterCount);
 
-      const initRetypePasswordRegisterCount = await fetchRetypePasswordRegisterCount();
-      setCurrentRetypePasswordCount(initRetypePasswordRegisterCount); 
+      const initRetypePasswordRegisterCount =
+        await fetchRetypePasswordRegisterCount();
+      setCurrentRetypePasswordCount(initRetypePasswordRegisterCount);
     })();
     window.onpopstate = () => {
       _onBrowserBack();
@@ -288,6 +291,17 @@ function EmailAndPasswordPage() {
 
   return (
     <div className={classes.root}>
+      <dialog ref={ref} style={{ top: "30px" }}>
+        <p>メールアドレス、またはパスワードの形式が正しくありません</p>
+        <p>
+          パスワードは小文字、大文字、記号（%, $,
+          #など）、数字を含む８文字以上にしてください
+        </p>
+        <br />
+        <button type="button" onClick={closeModal}>
+          閉じる
+        </button>
+      </dialog>
       <CustomParticle />
       <div>
         {isWide ? <CustomStepper arg1={0} /> : <CustomMobileStepper arg1={1} />}
@@ -339,7 +353,7 @@ function EmailAndPasswordPage() {
                 pattern: {
                   value: passwordRegex,
                   message:
-                    "小文字、大文字、記号、数字を含む８文字以上にしてください",
+                    "小文字、大文字、記号（%, $, #など）、数字を含む８文字以上にしてください",
                 },
               })}
               error={Boolean(errors.password)}
@@ -381,7 +395,7 @@ function EmailAndPasswordPage() {
                 pattern: {
                   value: retypePasswordRegex,
                   message:
-                    "小文字、大文字、記号、数字を含む８文字以上にしてください",
+                    "小文字、大文字、記号（%, $, #など）、数字を含む８文字以上にしてください",
                 },
               })}
               error={Boolean(errors.retypePassword)}
@@ -425,12 +439,29 @@ function EmailAndPasswordPage() {
               やめる
             </Button>
           </Link>
-          <Link to="/second_page" style={{ paddingLeft: isWide ? "3%" : "0" }}>
+          <Link
+            to={
+              emailRegex.test(email) &&
+              passwordRegex.test(password) &&
+              retypePasswordRegex.test(retypePassword)
+                ? "/second_page"
+                : "#"
+            }
+            style={{ paddingLeft: isWide ? "3%" : "0" }}
+          >
             <Button
               disabled={email == "" || password == "" || retypePassword == ""}
               variant="contained"
               color="primary"
-              onClick={_onPressed}
+              onClick={
+                emailRegex.test(email) &&
+                passwordRegex.test(password) &&
+                retypePasswordRegex.test(retypePassword)
+                  ? _onPressed
+                  : () => {
+                      showModal();
+                    }
+              }
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",

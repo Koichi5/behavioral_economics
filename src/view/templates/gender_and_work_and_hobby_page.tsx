@@ -50,6 +50,10 @@ export const GenderAndWorkAndHobbyPage = () => {
   const [currentGenderCount, setCurrentGenderCount] = useState(0);
   const [currentWorkCount, setCurrentWorkCount] = useState(0);
   const [currentHobbyCount, setCurrentHobbyCount] = useState(0);
+  const [currentMaleCount, setCurrentMaleCount] = useState(0);
+  const [currentFemaleCount, setCurrentFemaleCount] = useState(0);
+  const [currentOtherCount, setCurrentOtherCount] = useState(0);
+  const [currentNotSelectedCount, setCurrentNotSelectedCount] = useState(0);
 
   const handleGenderChange = (event: SelectChangeEvent) => {
     setGender(event.target.value);
@@ -64,7 +68,7 @@ export const GenderAndWorkAndHobbyPage = () => {
     await updateDoc(genderAndWorkAndHobbySubmitDoc, {
       count: currentCount + 1,
     });
-    setCurrentCount(prev => prev + 1);
+    setCurrentCount((prev) => prev + 1);
   };
 
   const updateGenderCount = async () => {
@@ -79,7 +83,7 @@ export const GenderAndWorkAndHobbyPage = () => {
       await updateDoc(genderCollectionPath, {
         count: currentGenderCount + 1,
       });
-      setCurrentGenderCount(prev => prev + 1);
+      setCurrentGenderCount((prev) => prev + 1);
     }
   };
 
@@ -95,7 +99,7 @@ export const GenderAndWorkAndHobbyPage = () => {
       await updateDoc(workCollectionPath, {
         count: currentWorkCount + 1,
       });
-      setCurrentWorkCount(prev => prev + 1);
+      setCurrentWorkCount((prev) => prev + 1);
     }
   };
 
@@ -111,7 +115,47 @@ export const GenderAndWorkAndHobbyPage = () => {
       await updateDoc(hobbyCollectionPath, {
         count: currentHobbyCount + 1,
       });
-      setCurrentHobbyCount(prev => prev + 1);
+      setCurrentHobbyCount((prev) => prev + 1);
+    }
+  };
+
+  const updateTotalMaleCount = async () => {
+    const maleCollectionPath = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
+    if (gender == "10") {
+      await updateDoc(maleCollectionPath, {
+        male: currentMaleCount + 1,
+      });
+      setCurrentMaleCount((prev) => prev + 1);
+    }
+  };
+
+  const updateTotalFemaleCount = async () => {
+    const femaleCollectionPath = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
+    if (gender == "20") {
+      await updateDoc(femaleCollectionPath, {
+        female: currentFemaleCount + 1,
+      });
+      setCurrentFemaleCount((prev) => prev + 1);
+    }
+  };
+
+  const updateTotalOtherCount = async () => {
+    const otherCollectionPath = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
+    if (gender == "30") {
+      await updateDoc(otherCollectionPath, {
+        other: currentOtherCount + 1,
+      });
+      setCurrentOtherCount((prev) => prev + 1);
+    }
+  };
+
+  const updateTotalNotSelectedCount = async () => {
+    const notSelectedCollectionPath = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
+    if (gender == "40") {
+      await updateDoc(notSelectedCollectionPath, {
+        notSelected: currentNotSelectedCount + 1,
+      });
+      setCurrentNotSelectedCount((prev) => prev + 1);
     }
   };
 
@@ -205,11 +249,83 @@ export const GenderAndWorkAndHobbyPage = () => {
     return hobbyCount;
   };
 
+  const fetchTotalMaleCount = async () => {
+    var maleCount = 0;
+    const maleCountRef = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
+
+    try {
+      const snapshot = await getDoc(maleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.male) {
+        maleCount = Number(docData.male);
+      }
+      console.log(`male count: ${maleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return maleCount;
+  };
+
+  const fetchTotalFemaleCount = async () => {
+    var femaleCount = 0;
+    const femaleCountRef = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
+
+    try {
+      const snapshot = await getDoc(femaleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.female) {
+        femaleCount = Number(docData.female);
+      }
+      console.log(`female count: ${femaleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return femaleCount;
+  };
+
+  const fetchTotalOtherCount = async () => {
+    var otherCount = 0;
+    const otherCountRef = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
+
+    try {
+      const snapshot = await getDoc(otherCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.other) {
+        otherCount = Number(docData.other);
+      }
+      console.log(`other count: ${otherCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherCount;
+  };
+
+  const fetchTotalNotSelectedCount = async () => {
+    var notSelectedCount = 0;
+    const notSelectedCountRef = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
+
+    try {
+      const snapshot = await getDoc(notSelectedCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.notSelected) {
+        notSelectedCount = Number(docData.notSelected);
+      }
+      console.log(`notSelected count: ${notSelectedCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return notSelectedCount;
+  };
+
   const _onBrowserBack = () => {
     console.log("browser back fired !");
     updateGenderCount();
     updateWorkCount();
     updateHobbyCount();
+    updateTotalMaleCount();
+    updateTotalFemaleCount();
+    updateTotalOtherCount();
+    updateTotalNotSelectedCount();
   };
 
   const _onPressed = () => {
@@ -217,6 +333,10 @@ export const GenderAndWorkAndHobbyPage = () => {
     updateGenderCount();
     updateWorkCount();
     updateHobbyCount();
+    updateTotalMaleCount();
+    updateTotalFemaleCount();
+    updateTotalOtherCount();
+    updateTotalNotSelectedCount();
   };
 
   useEffect(() => {
@@ -232,6 +352,18 @@ export const GenderAndWorkAndHobbyPage = () => {
 
       const initialHobbyCount = await fetchHobbyCount();
       setCurrentHobbyCount(initialHobbyCount);
+
+      const initialMaleCount = await fetchTotalMaleCount();
+      setCurrentMaleCount(initialMaleCount);
+
+      const initialFemaleCount = await fetchTotalFemaleCount();
+      setCurrentFemaleCount(initialFemaleCount);
+
+      const initialOtherCount = await fetchTotalOtherCount();
+      setCurrentOtherCount(initialOtherCount);
+
+      const initialNotSelectedCount = await fetchTotalNotSelectedCount();
+      setCurrentNotSelectedCount(initialNotSelectedCount);
     })();
     window.onpopstate = () => {
       _onBrowserBack();
@@ -326,7 +458,7 @@ export const GenderAndWorkAndHobbyPage = () => {
               やめる
             </Button>
           </Link>
-          <Link to="/fourth_page" style={{ paddingLeft: isWide ? "3%" : "0" }}>
+          <Link to="/fourth_page" style={{ paddingLeft: isWide ? "3%" : "0" }} state={{state: gender}}>
             <Button
               disabled={gender == "" || work == "" || hobby == ""}
               variant="contained"
