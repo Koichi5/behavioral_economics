@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { NicknameAndPhoneAndBirthPage } from "./nickname_and_phone_and_birth_page";
 import {
   Button,
@@ -58,6 +58,7 @@ const retypePasswordRegex =
 function EmailAndPasswordPage() {
   const ref: React.MutableRefObject<HTMLDialogElement | null> = useRef(null);
   const classes = useStyles();
+  const { state } = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -65,10 +66,6 @@ function EmailAndPasswordPage() {
   const [retypePassword, setRetypePassword] = useState("");
   const isWide = useMedia("(min-width: 800px)");
   const [currentCount, setCurrentCount] = useState(0);
-  const [currentEmailCount, setCurrentEmailCount] = useState(0);
-  const [currentPasswordCount, setCurrentPasswordCount] = useState(0);
-  const [currentRetypePasswordCount, setCurrentRetypePasswordCount] =
-    useState(0);
 
   const {
     register,
@@ -95,7 +92,7 @@ function EmailAndPasswordPage() {
     setShowConfirmPassword(!showConfirmPassword);
   }
 
-  const updateEmailAndPasswordCount = async () => {
+  const updateEmailAndPasswordCount = async (value: number) => {
     console.log("update email and password count");
     const emailAndPasswordSubmissionDoc = doc(
       db,
@@ -103,12 +100,12 @@ function EmailAndPasswordPage() {
       "f1l7UtMKxLke8l40C3FZ"
     );
     await updateDoc(emailAndPasswordSubmissionDoc, {
-      count: currentCount + 1,
+      count: value + 1,
     });
     setCurrentCount((prev) => prev + 1);
   };
 
-  const updateEmailCount = async () => {
+  const updateEmailCount = async (value: number) => {
     console.log("update email count");
     const emailCollectionPath = doc(
       db,
@@ -119,13 +116,12 @@ function EmailAndPasswordPage() {
     );
     if (email != "") {
       await updateDoc(emailCollectionPath, {
-        count: currentEmailCount + 1,
+        count: value + 1,
       });
-      setCurrentEmailCount((prev) => prev + 1);
     }
   };
 
-  const updatePasswordCount = async () => {
+  const updatePasswordCount = async (value: number) => {
     console.log("update password count");
     const passwordCollectionPath = doc(
       db,
@@ -136,13 +132,12 @@ function EmailAndPasswordPage() {
     );
     if (password != "") {
       await updateDoc(passwordCollectionPath, {
-        count: currentPasswordCount + 1,
+        count: value + 1,
       });
     }
-    setCurrentPasswordCount((prev) => prev + 1);
   };
 
-  const updateRetypePasswordCount = async () => {
+  const updateRetypePasswordCount = async (value: number) => {
     console.log("update retype password count");
     const retypePasswordCollectionPath = doc(
       db,
@@ -153,10 +148,45 @@ function EmailAndPasswordPage() {
     );
     if (retypePassword != "") {
       await updateDoc(retypePasswordCollectionPath, {
-        count: currentRetypePasswordCount + 1,
+        count: value + 1,
       });
     }
-    setCurrentRetypePasswordCount((prev) => prev + 1);
+  };
+
+  const updateEmailAndPasswordInterruptedMaleCount = async (value: number) => {
+    const emailAndPasswordInterruptedMalePath = doc(db, "emailAndPasswordInterruptedGender", "Z7zuYTmN3t5wpW6t2doc");
+    if (state.state == "10") {
+      await updateDoc(emailAndPasswordInterruptedMalePath, {
+        male: value + 1,
+      });
+    }
+  };
+
+  const updateEmailAndPasswordInterruptedFemaleCount = async (value: number) => {
+    const emailAndPasswordInterruptedFemalePath = doc(db, "emailAndPasswordInterruptedGender", "Z7zuYTmN3t5wpW6t2doc");
+    if (state.state == "20") {
+      await updateDoc(emailAndPasswordInterruptedFemalePath, {
+        female: value + 1,
+      });
+    }
+  };
+
+  const updateEmailAndPasswordInterruptedOtherCount = async (value: number) => {
+    const emailAndPasswordInterruptedOtherPath = doc(db, "emailAndPasswordInterruptedGender", "Z7zuYTmN3t5wpW6t2doc");
+    if (state.state == "30") {
+      await updateDoc(emailAndPasswordInterruptedOtherPath, {
+        other: value + 1,
+      });
+    }
+  };
+
+  const updateEmailAndPasswordInterruptedNotSelectedCount = async (value: number) => {
+    const emailAndPasswordInterruptedNotSelectedPath = doc(db, "emailAndPasswordInterruptedGender", "Z7zuYTmN3t5wpW6t2doc");
+    if (state.state == "40") {
+      await updateDoc(emailAndPasswordInterruptedNotSelectedPath, {
+        notSelected: value + 1,
+      });
+    }
   };
 
   const fetchEmailAndPasswordSubmissionCount = async () => {
@@ -253,41 +283,227 @@ function EmailAndPasswordPage() {
     return retypePasswordRegisterCount;
   };
 
-  const _onBrowserBack = () => {
-    console.log("browser back fired !");
-    updateEmailCount();
-    updatePasswordCount();
-    updateRetypePasswordCount();
+  const fetchAndUpdateTotalGender = async () => {
+    const interruptedGenderRef = doc(
+      db,
+      "interruptedUserGender",
+      "KFwuzSDtYDtpszPF4amu"
+    );
+    if (state.state == "10") {
+      var interruptedMaleCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.male) {
+          interruptedMaleCount = Number(docData.male);
+        }
+        console.log(interruptedMaleCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        male: interruptedMaleCount + 1,
+      });
+    } else if (state.state == "20") {
+      var interruptedFemaleCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.female) {
+          interruptedFemaleCount = Number(docData.female);
+        }
+        console.log(interruptedFemaleCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        female: interruptedFemaleCount + 1,
+      });
+    } else if (state.state == "30") {
+      var interruptedOtherCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.other) {
+          interruptedOtherCount = Number(docData.other);
+        }
+        console.log(interruptedOtherCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        other: interruptedOtherCount + 1,
+      });
+    } else if (state.state == "40") {
+      var interruptedNotSelectedCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.notSelected) {
+          interruptedNotSelectedCount = Number(docData.notSelected);
+        }
+        console.log(interruptedNotSelectedCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        notSelected: interruptedNotSelectedCount + 1,
+      });
+    } else {
+      console.error("Firestoreの更新処理に失敗しました");
+    }
   };
 
-  const _onPressed = () => {
-    console.log("onpressed fired");
-    updateEmailAndPasswordCount();
-    updateEmailCount();
-    updatePasswordCount();
-    updateRetypePasswordCount();
+  const fetchEmailAndPasswordInterruptedMaleCount = async () => {
+    var maleCount = 0;
+    const maleCountRef = doc(db, "emailAndPasswordInterruptedGender", "Z7zuYTmN3t5wpW6t2doc");
+
+    try {
+      const snapshot = await getDoc(maleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.male) {
+        maleCount = Number(docData.male);
+      }
+      console.log(`male count: ${maleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return maleCount;
   };
+
+  const fetchEmailAndPasswordInterruptedFemaleCount = async () => {
+    var femaleCount = 0;
+    const femaleCountRef = doc(db, "emailAndPasswordInterruptedGender", "Z7zuYTmN3t5wpW6t2doc");
+
+    try {
+      const snapshot = await getDoc(femaleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.female) {
+        femaleCount = Number(docData.female);
+      }
+      console.log(`male count: ${femaleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return femaleCount;
+  };
+
+  const fetchEmailAndPasswordInterruptedOtherCount = async () => {
+    var otherCount = 0;
+    const otherCountRef = doc(db, "emailAndPasswordInterruptedGender", "Z7zuYTmN3t5wpW6t2doc");
+
+    try {
+      const snapshot = await getDoc(otherCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.other) {
+        otherCount = Number(docData.other);
+      }
+      console.log(`male count: ${otherCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherCount;
+  };
+
+  const fetchEmailAndPasswordInterruptedNotSelectedCount = async () => {
+    var notSelectedCount = 0;
+    const notSelectedCountRef = doc(db, "emailAndPasswordInterruptedGender", "Z7zuYTmN3t5wpW6t2doc");
+
+    try {
+      const snapshot = await getDoc(notSelectedCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.notSelected) {
+        notSelectedCount = Number(docData.notSelected);
+      }
+      console.log(`male count: ${notSelectedCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return notSelectedCount;
+  };
+
+  const _onBrowserBack = async () => {
+    console.log("browser back fired !");
+    await fetchEmailRegisterCount().then((value) => {
+      updateEmailCount(value);
+    });
+
+    await fetchPasswordRegisterCount().then((value) => {
+      updatePasswordCount(value);
+    });
+
+    await fetchRetypePasswordRegisterCount().then((value) => {
+      updateRetypePasswordCount(value);
+    });
+
+    if(state.state == "10") {
+      await fetchEmailAndPasswordInterruptedMaleCount().then((value) => {
+        updateEmailAndPasswordInterruptedMaleCount(value);
+      });
+    } else if (state.state == "20") {
+      await fetchEmailAndPasswordInterruptedFemaleCount().then((value) => {
+        updateEmailAndPasswordInterruptedFemaleCount(value);
+      });
+    } else if (state.state == "30") {
+      await fetchEmailAndPasswordInterruptedOtherCount().then((value) => {
+        updateEmailAndPasswordInterruptedOtherCount(value);
+      });
+    } else if (state.state == "40") {
+      await fetchEmailAndPasswordInterruptedNotSelectedCount().then((value) => {
+        updateEmailAndPasswordInterruptedNotSelectedCount(value);
+      });
+    } else {
+      console.log("エラーが発生しました");
+    }
+
+    fetchAndUpdateTotalGender();
+  };
+
+  const _onPressed = async () => {
+    console.log("onpressed fired");
+    await fetchEmailAndPasswordSubmissionCount().then((value) => {
+      updateEmailAndPasswordCount(value);
+    });
+
+    await fetchEmailRegisterCount().then((value) => {
+      updateEmailCount(value);
+    });
+
+    await fetchPasswordRegisterCount().then((value) => {
+      updatePasswordCount(value);
+    });
+
+    await fetchRetypePasswordRegisterCount().then((value) => {
+      updateRetypePasswordCount(value);
+    });
+  };
+
+  const blockBrowserBack = useCallback(() => {
+    window.history.go(1)
+}, [])
 
   useEffect(() => {
-    (async () => {
-      const initEmailAndPasswordSubmissionCount =
-        await fetchEmailAndPasswordSubmissionCount();
-      setCurrentCount(initEmailAndPasswordSubmissionCount);
-
-      const initEmailRegisterCount = await fetchEmailRegisterCount();
-      setCurrentEmailCount(initEmailRegisterCount);
-
-      const initPasswordRegisterCount = await fetchPasswordRegisterCount();
-      setCurrentPasswordCount(initPasswordRegisterCount);
-
-      const initRetypePasswordRegisterCount =
-        await fetchRetypePasswordRegisterCount();
-      setCurrentRetypePasswordCount(initRetypePasswordRegisterCount);
+    (() => {
+    window.history.pushState(null, '', window.location.href)
+    window.addEventListener('popstate', blockBrowserBack)
+    return () => {
+        window.removeEventListener('popstate', blockBrowserBack)
+    }
+    // const initEmailAndPasswordSubmissionCount =
+      //   await fetchEmailAndPasswordSubmissionCount();
+      // setCurrentCount(initEmailAndPasswordSubmissionCount);
+      // const initEmailRegisterCount = await fetchEmailRegisterCount();
+      // setCurrentEmailCount(initEmailRegisterCount);
+      // const initPasswordRegisterCount = await fetchPasswordRegisterCount();
+      // setCurrentPasswordCount(initPasswordRegisterCount);
+      // const initRetypePasswordRegisterCount =
+      //   await fetchRetypePasswordRegisterCount();
+      // setCurrentRetypePasswordCount(initRetypePasswordRegisterCount);
     })();
     window.onpopstate = () => {
       _onBrowserBack();
     };
-  }, []);
+  }, [blockBrowserBack]);
 
   return (
     <div className={classes.root}>
@@ -304,7 +520,7 @@ function EmailAndPasswordPage() {
       </dialog>
       <CustomParticle />
       <div>
-        {isWide ? <CustomStepper arg1={0} /> : <CustomMobileStepper arg1={1} />}
+        {isWide ? <CustomStepper arg1={1} /> : <CustomMobileStepper arg1={1} />}
       </div>
       <div
         className={classes.formWrapper}
@@ -345,7 +561,7 @@ function EmailAndPasswordPage() {
             paddingRight: isWide ? "20%" : "0",
           }}
         >
-          <p>パスワード</p>
+          <p>登録したいパスワード</p>
           <div style={{ marginBottom: "50px" }}>
             <OutlinedInput
               {...register("password", {
@@ -372,7 +588,7 @@ function EmailAndPasswordPage() {
                   </IconButton>
                 </InputAdornment>
               }
-              label="パスワード"
+              label="登録したいパスワード"
             />
             <FormHelperText error>
               {errors.password && errors.password.message}
@@ -387,7 +603,7 @@ function EmailAndPasswordPage() {
             paddingRight: isWide ? "20%" : "0",
           }}
         >
-          <p>パスワード（確認）</p>
+          <p>登録したいパスワード（確認）</p>
           <div style={{ marginBottom: "50px" }}>
             <OutlinedInput
               {...register("retypePassword", {
@@ -414,7 +630,7 @@ function EmailAndPasswordPage() {
                   </IconButton>
                 </InputAdornment>
               }
-              label="パスワード（確認）"
+              label="登録したいパスワード（確認）"
             />
             <FormHelperText error>
               {errors.retypePassword && errors.retypePassword.message}
@@ -423,10 +639,10 @@ function EmailAndPasswordPage() {
         </div>
         {errors.name && <span>エラーが発生しました</span>}
         <div>
-          <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+          <Link to="/final_page" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
-              variant="contained"
-              color="primary"
+              variant="text"
+              color="secondary"
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -444,10 +660,11 @@ function EmailAndPasswordPage() {
               emailRegex.test(email) &&
               passwordRegex.test(password) &&
               retypePasswordRegex.test(retypePassword)
-                ? "/second_page"
+                ? "/third_page"
                 : "#"
             }
             style={{ paddingLeft: isWide ? "3%" : "0" }}
+            state={{ state: state.state }}
           >
             <Button
               disabled={email == "" || password == "" || retypePassword == ""}
@@ -477,7 +694,7 @@ function EmailAndPasswordPage() {
         </div>
         <Routes>
           <Route
-            path="/second_page"
+            path="/third_page"
             element={<NicknameAndPhoneAndBirthPage />}
           ></Route>
         </Routes>

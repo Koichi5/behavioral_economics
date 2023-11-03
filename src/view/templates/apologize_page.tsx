@@ -2,6 +2,7 @@ import { Button, makeStyles } from "@material-ui/core";
 import CustomParticle from "../atoms/particle";
 import { Link, Route, Routes } from "react-router-dom";
 import { AskCommentsPage } from "./ask_ comments_page";
+import { useCallback, useEffect } from "react";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -12,6 +13,20 @@ const useStyles = makeStyles(() => ({
 
 export const ApologizePage = () => {
   const classes = useStyles();
+
+  const blockBrowserBack = useCallback(() => {
+    window.history.go(1);
+  }, []);
+
+  useEffect(() => {
+    (() => {
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", blockBrowserBack);
+      return () => {
+        window.removeEventListener("popstate", blockBrowserBack);
+      };      
+    })();
+  }, [blockBrowserBack]);
 
   return (
     <div className={classes.root}>
@@ -30,6 +45,8 @@ export const ApologizePage = () => {
       <p>最後まで入力して頂いたのにも関わらず、申し訳ありません。</p>
       <p>入力して頂いた情報の取り扱いに関しましては、こちらからは性別以外のデータを</p>
       <p>記録、確認できない仕組みとなっておりますので、ご安心ください。</p>
+      <p>次のページからは事後アンケートですので、よろしければご回答ください。</p>
+      <p>(事後アンケートの内容は保存されます)</p>
       <Link to="/ask_comments_page">
         <Button
           variant="contained"

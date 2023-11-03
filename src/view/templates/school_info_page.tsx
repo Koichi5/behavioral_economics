@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import { Link, Routes, Route, useLocation } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -51,11 +51,6 @@ export const SchoolInfoPage = () => {
   const [degreeEndYear, setDegreeEndYear] = useState("");
   const [degreeEndMonth, setDegreeEndMonth] = useState("");
   const isWide = useMedia("(min-width: 800px)");
-  const [currentCount, setCurrentCount] = useState(0);
-  const [currentSchoolNameCount, setCurrentSchoolNameCount] = useState(0);
-  const [currentDepartmentNameCount, setCurrentDepartmentNameCount] = useState(0);
-  const [currentDegreeCount, setCurrentDegreeCount] = useState(0);
-  const [currentDegreeYearsCount, setCurrentDegreeYearsCount] = useState(0);
 
   const handleDegreeChange = (event: SelectChangeEvent) => {
     setDegree(event.target.value);
@@ -77,19 +72,18 @@ export const SchoolInfoPage = () => {
     setDegreeEndMonth(event.target.value);
   };
 
-  const updateSchoolInfoCount = async () => {
+  const updateSchoolInfoCount = async (value: number) => {
     const schoolInfoSubmitDoc = doc(
       db,
       "schoolInfoSubmission",
       "P0GIu0A69M2u9dGD3oKX"
     );
     await updateDoc(schoolInfoSubmitDoc, {
-      count: currentCount + 1,
+      count: value + 1,
     });
-    setCurrentCount(prev => prev + 1);
   };
 
-  const updateSchoolNameCount = async () => {
+  const updateSchoolNameCount = async (value: number) => {
     const schoolNameCollectionPath = doc(
       db,
       "schoolInfoSubmission",
@@ -99,13 +93,12 @@ export const SchoolInfoPage = () => {
     );
     if (schoolName != "") {
       await updateDoc(schoolNameCollectionPath, {
-        count: currentSchoolNameCount + 1,
+        count: value + 1,
       });
-      setCurrentSchoolNameCount(prev => prev + 1);
     }
   };
 
-  const updateDepartmentNameCount = async () => {
+  const updateDepartmentNameCount = async (value: number) => {
     const departmentNameCollectionPath = doc(
       db,
       "schoolInfoSubmission",
@@ -115,13 +108,12 @@ export const SchoolInfoPage = () => {
     );
     if (departmentName != "") {
       await updateDoc(departmentNameCollectionPath, {
-        count: currentDepartmentNameCount + 1,
+        count: value + 1,
       });
-      setCurrentDepartmentNameCount(prev => prev + 1);
     }
   };
 
-  const updateDegreeCount = async () => {
+  const updateDegreeCount = async (value: number) => {
     const degreeCollectionPath = doc(
       db,
       "schoolInfoSubmission",
@@ -131,13 +123,12 @@ export const SchoolInfoPage = () => {
     );
     if (degree != "") {
       await updateDoc(degreeCollectionPath, {
-        count: currentDegreeCount + 1,
+        count: value + 1,
       });
-      setCurrentDegreeCount(prev => prev + 1);
     }
   };
 
-  const updateDegreeYearsCount = async () => {
+  const updateDegreeYearsCount = async (value: number) => {
     const degreeYearsCollectionPath = doc(
       db,
       "schoolInfoSubmission",
@@ -152,9 +143,44 @@ export const SchoolInfoPage = () => {
       degreeEndMonth != ""
     ) {
       await updateDoc(degreeYearsCollectionPath, {
-        count: currentDegreeYearsCount + 1,
+        count: value + 1,
       });
-      setCurrentDegreeYearsCount(prev => prev + 1);
+    }
+  };
+
+  const updateSchoolInfoInterruptedMaleCount = async (value: number) => {
+    const schoolInfoInterruptedMalePath = doc(db, "schoolInfoInterruptedGender", "bfyLZDbUw5gk6KokTevU");
+    if (state.state == "10") {
+      await updateDoc(schoolInfoInterruptedMalePath, {
+        male: value + 1,
+      });
+    }
+  };
+
+  const updateSchoolInfoInterruptedFemaleCount = async (value: number) => {
+    const schoolInfoInterruptedFemalePath = doc(db, "schoolInfoInterruptedGender", "bfyLZDbUw5gk6KokTevU");
+    if (state.state == "20") {
+      await updateDoc(schoolInfoInterruptedFemalePath, {
+        female: value + 1,
+      });
+    }
+  };
+
+  const updateSchoolInfoInterruptedOtherCount = async (value: number) => {
+    const schoolInfoInterruptedOtherPath = doc(db, "schoolInfoInterruptedGender", "bfyLZDbUw5gk6KokTevU");
+    if (state.state == "30") {
+      await updateDoc(schoolInfoInterruptedOtherPath, {
+        other: value + 1,
+      });
+    }
+  };
+
+  const updateSchoolInfoInterruptedNotSelectedCount = async (value: number) => {
+    const schoolInfoInterruptedNotSelectedPath = doc(db, "schoolInfoInterruptedGender", "bfyLZDbUw5gk6KokTevU");
+    if (state.state == "40") {
+      await updateDoc(schoolInfoInterruptedNotSelectedPath, {
+        notSelected: value + 1,
+      });
     }
   };
 
@@ -271,6 +297,74 @@ export const SchoolInfoPage = () => {
     return degreeYearsCount;
   };
 
+  const fetchSchoolInfoInterruptedMaleCount = async () => {
+    var maleCount = 0;
+    const maleCountRef = doc(db, "schoolInfoInterruptedGender", "bfyLZDbUw5gk6KokTevU");
+
+    try {
+      const snapshot = await getDoc(maleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.male) {
+        maleCount = Number(docData.male);
+      }
+      console.log(`male count: ${maleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return maleCount;
+  };
+
+  const fetchSchoolInfoInterruptedFemaleCount = async () => {
+    var femaleCount = 0;
+    const femaleCountRef = doc(db, "schoolInfoInterruptedGender", "bfyLZDbUw5gk6KokTevU");
+
+    try {
+      const snapshot = await getDoc(femaleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.female) {
+        femaleCount = Number(docData.female);
+      }
+      console.log(`male count: ${femaleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return femaleCount;
+  };
+
+  const fetchSchoolInfoInterruptedOtherCount = async () => {
+    var otherCount = 0;
+    const otherCountRef = doc(db, "schoolInfoInterruptedGender", "bfyLZDbUw5gk6KokTevU");
+
+    try {
+      const snapshot = await getDoc(otherCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.other) {
+        otherCount = Number(docData.other);
+      }
+      console.log(`male count: ${otherCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherCount;
+  };
+
+  const fetchSchoolInfoInterruptedNotSelectedCount = async () => {
+    var notSelectedCount = 0;
+    const notSelectedCountRef = doc(db, "schoolInfoInterruptedGender", "bfyLZDbUw5gk6KokTevU");
+
+    try {
+      const snapshot = await getDoc(notSelectedCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.notSelected) {
+        notSelectedCount = Number(docData.notSelected);
+      }
+      console.log(`male count: ${notSelectedCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return notSelectedCount;
+  };
+
   const fetchAndUpdateTotalGender = async () => {
     const interruptedGenderRef = doc(
       db,
@@ -342,48 +436,92 @@ export const SchoolInfoPage = () => {
     }
   };
 
-  const _onBrowserBack = () => {
+  const _onBrowserBack = async () => {
     console.log("browser back fired !");
-    updateSchoolNameCount();
-    updateDepartmentNameCount();
-    updateDegreeCount();
-    updateDegreeYearsCount();
+    await fetchSchoolNameCount().then((value) => {
+      updateSchoolNameCount(value);
+    });
+    await fetchDepartmentNameCount().then((value) => {
+      updateDepartmentNameCount(value);
+    });
+    await fetchDegreeCount().then((value) => {
+      updateDegreeCount(value);
+    });
+    await fetchDegreeYearsCount().then((value) => {
+      updateDegreeYearsCount(value);
+    });
+
+    if(state.state == "10") {
+      await fetchSchoolInfoInterruptedMaleCount().then((value) => {
+        updateSchoolInfoInterruptedMaleCount(value);
+      });
+    } else if (state.state == "20") {
+      await fetchSchoolInfoInterruptedFemaleCount().then((value) => {
+        updateSchoolInfoInterruptedFemaleCount(value);
+      });
+    } else if (state.state == "30") {
+      await fetchSchoolInfoInterruptedOtherCount().then((value) => {
+        updateSchoolInfoInterruptedOtherCount(value);
+      });
+    } else if (state.state == "40") {
+      await fetchSchoolInfoInterruptedNotSelectedCount().then((value) => {
+        updateSchoolInfoInterruptedNotSelectedCount(value);
+      });
+    } else {
+      console.log("エラーが発生しました");
+    }
+
     fetchAndUpdateTotalGender();
   };
 
-  const _onPressed = () => {
-    updateSchoolInfoCount();
-    updateSchoolNameCount();
-    updateDepartmentNameCount();
-    updateDegreeCount();
-    updateDegreeYearsCount();
+  const _onPressed = async () => {
+    await fetchSchoolInfoSubmissionCount().then((value) => {
+      updateSchoolInfoCount(value);
+    });
+    await fetchSchoolNameCount().then((value) => {
+      updateSchoolNameCount(value);
+    });
+    await fetchDepartmentNameCount().then((value) => {
+      updateDepartmentNameCount(value);
+    });
+    await fetchDegreeCount().then((value) => {
+      updateDegreeCount(value);
+    });
+    await fetchDegreeYearsCount().then((value) => {
+      updateDegreeYearsCount(value);
+    });
   };
 
-  useEffect(() => {
-    (async () => {
-      const initialCount = await fetchSchoolInfoSubmissionCount();
-      setCurrentCount(initialCount);
-
-      const initialSchoolNameCount = await fetchSchoolNameCount();
-      setCurrentSchoolNameCount(initialSchoolNameCount);
-
-      const initialDepartmentNameCount = await fetchDepartmentNameCount();
-      setCurrentDepartmentNameCount(initialDepartmentNameCount);
-
-      const initialDegreeCount = await fetchDegreeCount();
-      setCurrentDegreeCount(initialDegreeCount);
-
-      const initialDegreeYearsCount = await fetchDegreeYearsCount();
-      setCurrentDegreeYearsCount(initialDegreeYearsCount);
-    })();
-    window.onpopstate = () => {
-      _onBrowserBack();
-    };
+  const blockBrowserBack = useCallback(() => {
+    window.history.go(1);
   }, []);
+
+  useEffect(() => {
+    (() => {
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", blockBrowserBack);
+      return () => {
+        window.removeEventListener("popstate", blockBrowserBack);
+      };      // const initialCount = await fetchSchoolInfoSubmissionCount();
+      // setCurrentCount(initialCount);
+
+      // const initialSchoolNameCount = await fetchSchoolNameCount();
+      // setCurrentSchoolNameCount(initialSchoolNameCount);
+
+      // const initialDepartmentNameCount = await fetchDepartmentNameCount();
+      // setCurrentDepartmentNameCount(initialDepartmentNameCount);
+
+      // const initialDegreeCount = await fetchDegreeCount();
+      // setCurrentDegreeCount(initialDegreeCount);
+
+      // const initialDegreeYearsCount = await fetchDegreeYearsCount();
+      // setCurrentDegreeYearsCount(initialDegreeYearsCount);
+    })();
+  }, [blockBrowserBack]);
   return (
     <div className={classes.root}>
       <CustomParticle />
-      {isWide ? <CustomStepper arg1={6} /> : <CustomMobileStepper arg1={7} />}
+      {isWide ? <CustomStepper arg1={6} /> : <CustomMobileStepper arg1={6} />}
       <div
         className={classes.formWrapper}
         style={{ alignItems: isWide ? "inherit" : "center" }}
@@ -587,10 +725,10 @@ export const SchoolInfoPage = () => {
           </div>
         </div>
         <div>
-          <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+          <Link to="/final_page" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
-              variant="contained"
-              color="primary"
+              variant="text"
+              color="secondary"
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -606,6 +744,7 @@ export const SchoolInfoPage = () => {
           <Link
             to="/explanation_page"
             style={{ paddingLeft: isWide ? "3%" : "0" }}
+            state={{ state: state.state }}
           >
             <Button
               disabled={

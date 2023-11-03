@@ -44,10 +44,6 @@ export const PostAndAddressPage = () => {
   const [address, setAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
   const isWide = useMedia("(min-width: 800px)");
-  const [currentCount, setCurrentCount] = useState(0);
-  const [currentPostCount, setCurrentPostCount] = useState(0);
-  const [currentAddressCount, setCurrentAddressCount] = useState(0);
-  const [currentDetailAddressCount, setCurrentDetailAddressCount] = useState(0);
 
   const {
     register,
@@ -66,19 +62,18 @@ export const PostAndAddressPage = () => {
     }
   }, []);
 
-  const updatePostAndAddressCount = async () => {
+  const updatePostAndAddressCount = async (value: number) => {
     const postAndAddressSubmitDoc = doc(
       db,
       "postAndAddressSubmission",
       "inOV9RPe59p1ZG6TO831"
     );
     await updateDoc(postAndAddressSubmitDoc, {
-      count: currentCount + 1,
+      count: value + 1,
     });
-    setCurrentCount((prev) => prev + 1);
   };
 
-  const updatePostCount = async () => {
+  const updatePostCount = async (value: number) => {
     const postCollectionPath = doc(
       db,
       "postAndAddressSubmission",
@@ -88,13 +83,12 @@ export const PostAndAddressPage = () => {
     );
     if (postNumber != "") {
       await updateDoc(postCollectionPath, {
-        count: currentPostCount + 1,
+        count: value + 1,
       });
-      setCurrentPostCount((prev) => prev + 1);
     }
   };
 
-  const updateAddressCount = async () => {
+  const updateAddressCount = async (value: number) => {
     const addressCollectionPath = doc(
       db,
       "postAndAddressSubmission",
@@ -104,13 +98,12 @@ export const PostAndAddressPage = () => {
     );
     if (address != "") {
       await updateDoc(addressCollectionPath, {
-        count: currentAddressCount + 1,
+        count: value + 1,
       });
-      setCurrentAddressCount((prev) => prev + 1);
     }
   };
 
-  const updateDetailAddressCount = async () => {
+  const updateDetailAddressCount = async (value: number) => {
     const detailAddressCollectionPath = doc(
       db,
       "postAndAddressSubmission",
@@ -120,9 +113,44 @@ export const PostAndAddressPage = () => {
     );
     if (detailAddress != "") {
       await updateDoc(detailAddressCollectionPath, {
-        count: currentDetailAddressCount + 1,
+        count: value + 1,
       });
-      setCurrentDetailAddressCount((prev) => prev + 1);
+    }
+  };
+
+  const updatePostAndAddressInterruptedMaleCount = async (value: number) => {
+    const postAndAddressInterruptedMalePath = doc(db, "postAndAddressInterruptedGender", "1gCq33UwHPjpmqYwwLLX");
+    if (state.state == "10") {
+      await updateDoc(postAndAddressInterruptedMalePath, {
+        male: value + 1,
+      });
+    }
+  };
+
+  const updatePostAndAddressInterruptedFemaleCount = async (value: number) => {
+    const postAndAddressInterruptedFemalePath = doc(db, "postAndAddressInterruptedGender", "1gCq33UwHPjpmqYwwLLX");
+    if (state.state == "20") {
+      await updateDoc(postAndAddressInterruptedFemalePath, {
+        female: value + 1,
+      });
+    }
+  };
+
+  const updatePostAndAddressInterruptedOtherCount = async (value: number) => {
+    const postAndAddressInterruptedOtherPath = doc(db, "postAndAddressInterruptedGender", "1gCq33UwHPjpmqYwwLLX");
+    if (state.state == "30") {
+      await updateDoc(postAndAddressInterruptedOtherPath, {
+        other: value + 1,
+      });
+    }
+  };
+
+  const updatePostAndAddressInterruptedNotSelectedCount = async (value: number) => {
+    const postAndAddressInterruptedNotSelectedPath = doc(db, "postAndAddressInterruptedGender", "1gCq33UwHPjpmqYwwLLX");
+    if (state.state == "40") {
+      await updateDoc(postAndAddressInterruptedNotSelectedPath, {
+        notSelected: value + 1,
+      });
     }
   };
 
@@ -216,6 +244,74 @@ export const PostAndAddressPage = () => {
     return detailAddressCount;
   };
 
+  const fetchPostAndAddressInterruptedMaleCount = async () => {
+    var maleCount = 0;
+    const maleCountRef = doc(db, "postAndAddressInterruptedGender", "1gCq33UwHPjpmqYwwLLX");
+
+    try {
+      const snapshot = await getDoc(maleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.male) {
+        maleCount = Number(docData.male);
+      }
+      console.log(`male count: ${maleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return maleCount;
+  };
+
+  const fetchPostAndAddressInterruptedFemaleCount = async () => {
+    var femaleCount = 0;
+    const femaleCountRef = doc(db, "postAndAddressInterruptedGender", "1gCq33UwHPjpmqYwwLLX");
+
+    try {
+      const snapshot = await getDoc(femaleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.female) {
+        femaleCount = Number(docData.female);
+      }
+      console.log(`male count: ${femaleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return femaleCount;
+  };
+
+  const fetchPostAndAddressInterruptedOtherCount = async () => {
+    var otherCount = 0;
+    const otherCountRef = doc(db, "postAndAddressInterruptedGender", "1gCq33UwHPjpmqYwwLLX");
+
+    try {
+      const snapshot = await getDoc(otherCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.other) {
+        otherCount = Number(docData.other);
+      }
+      console.log(`male count: ${otherCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherCount;
+  };
+
+  const fetchPostAndAddressInterruptedNotSelectedCount = async () => {
+    var notSelectedCount = 0;
+    const notSelectedCountRef = doc(db, "postAndAddressInterruptedGender", "1gCq33UwHPjpmqYwwLLX");
+
+    try {
+      const snapshot = await getDoc(notSelectedCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.notSelected) {
+        notSelectedCount = Number(docData.notSelected);
+      }
+      console.log(`male count: ${notSelectedCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return notSelectedCount;
+  };
+
   const fetchAndUpdateTotalGender = async () => {
     const interruptedGenderRef = doc(
       db,
@@ -287,41 +383,82 @@ export const PostAndAddressPage = () => {
     }
   };
 
-  const _onBrowserBack = () => {
+  const _onBrowserBack = async () => {
     console.log("browser back fired !");
-    updatePostCount();
-    updateAddressCount();
-    updateDetailAddressCount();
+    await fetchPostCount().then((value) => {
+      updatePostCount(value);
+    })
+    await fetchAddressCount().then((value) => {
+      updateAddressCount(value);
+    })
+    await fetchDetailAddressCount().then((value) => {
+      updateDetailAddressCount(value);
+    })
+
+    if(state.state == "10") {
+      await fetchPostAndAddressInterruptedMaleCount().then((value) => {
+        updatePostAndAddressInterruptedMaleCount(value);
+      });
+    } else if (state.state == "20") {
+      await fetchPostAndAddressInterruptedFemaleCount().then((value) => {
+        updatePostAndAddressInterruptedFemaleCount(value);
+      });
+    } else if (state.state == "30") {
+      await fetchPostAndAddressInterruptedOtherCount().then((value) => {
+        updatePostAndAddressInterruptedOtherCount(value);
+      });
+    } else if (state.state == "40") {
+      await fetchPostAndAddressInterruptedNotSelectedCount().then((value) => {
+        updatePostAndAddressInterruptedNotSelectedCount(value);
+      });
+    } else {
+      console.log("エラーが発生しました");
+    }
+
     fetchAndUpdateTotalGender();
   };
 
-  const _onPressed = () => {
-    updatePostAndAddressCount();
-    updatePostCount();
-    updateAddressCount();
-    updateDetailAddressCount();
+  const _onPressed = async () => {
+    await fetchPostAndAddressSubmissionCount().then((value) => {
+      updatePostAndAddressCount(value);
+    })
+    await fetchPostCount().then((value) => {
+      updatePostCount(value);
+    })
+    await fetchAddressCount().then((value) => {
+      updateAddressCount(value);
+    })
+    await fetchDetailAddressCount().then((value) => {
+      updateDetailAddressCount(value);
+    })
   };
 
+  const blockBrowserBack = useCallback(() => {
+    window.history.go(1);
+  }, []);
+
   useEffect(() => {
-    (async () => {
-      const initialCount = await fetchPostAndAddressSubmissionCount();
-      setCurrentCount(initialCount);
+    (() => {
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", blockBrowserBack);
+      return () => {
+        window.removeEventListener("popstate", blockBrowserBack);
+      };
+      // const initialCount = await fetchPostAndAddressSubmissionCount();
+      // setCurrentCount(initialCount);
 
-      const initialPostCount = await fetchPostCount();
-      setCurrentPostCount(initialPostCount);
+      // const initialPostCount = await fetchPostCount();
+      // setCurrentPostCount(initialPostCount);
 
-      const initialAddressCount = await fetchAddressCount();
-      setCurrentAddressCount(initialAddressCount);
+      // const initialAddressCount = await fetchAddressCount();
+      // setCurrentAddressCount(initialAddressCount);
 
-      const initialDetailAddressCount = await fetchDetailAddressCount();
-      setCurrentDetailAddressCount(initialDetailAddressCount);
+      // const initialDetailAddressCount = await fetchDetailAddressCount();
+      // setCurrentDetailAddressCount(initialDetailAddressCount);
 
       console.log(`gender state: ${state.state}`);
     })();
-    window.onpopstate = () => {
-      _onBrowserBack();
-    };
-  }, []);
+  }, [blockBrowserBack]);
   return (
     <div className={classes.root}>
       <dialog ref={ref} style={{ top: "30px" }}>
@@ -333,7 +470,7 @@ export const PostAndAddressPage = () => {
         </button>
       </dialog>
       <CustomParticle />
-      {isWide ? <CustomStepper arg1={3} /> : <CustomMobileStepper arg1={4} />}
+      {isWide ? <CustomStepper arg1={3} /> : <CustomMobileStepper arg1={3} />}
       <div
         className={classes.formWrapper}
         style={{ alignItems: isWide ? "inherit" : "center" }}
@@ -402,10 +539,10 @@ export const PostAndAddressPage = () => {
           />
         </div>
         <div>
-          <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+          <Link to="/final_page" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
-              variant="contained"
-              color="primary"
+              variant="text"
+              color="secondary"
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",

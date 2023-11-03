@@ -44,10 +44,6 @@ export const OtherPhoneAndNamePage = () => {
   const [otherName, setOtherName] = useState("");
   const [otherRelation, setOtherRelation] = useState("");
   const isWide = useMedia("(min-width: 800px)");
-  const [currentCount, setCurrentCount] = useState(0);
-  const [currentOtherPhoneCount, setCurrentOtherPhoneCount] = useState(0);
-  const [currentOtherNameCount, setCurrentOtherNameCount] = useState(0);
-  const [currentOtherRelationCount, setCurrentOtherRelationCount] = useState(0);
 
   const {
     register,
@@ -66,19 +62,18 @@ export const OtherPhoneAndNamePage = () => {
     }
   }, []);
 
-  const updateOtherPhoneAndNameAndRelation = async () => {
+  const updateOtherPhoneAndNameAndRelation = async (value: number) => {
     const otherPhoneAndNameSubmitDoc = doc(
       db,
       "otherPhoneAndNameSubmission",
       "wSTeNxF4tp4LK6QOnC7k"
     );
     await updateDoc(otherPhoneAndNameSubmitDoc, {
-      count: currentCount + 1,
+      count: value + 1,
     });
-    setCurrentCount((prev) => prev + 1);
   };
 
-  const updateOtherPhoneCount = async () => {
+  const updateOtherPhoneCount = async (value: number) => {
     const otherPhoneCollectionPath = doc(
       db,
       "otherPhoneAndNameSubmission",
@@ -88,13 +83,12 @@ export const OtherPhoneAndNamePage = () => {
     );
     if (otherPhone != "") {
       await updateDoc(otherPhoneCollectionPath, {
-        count: currentOtherPhoneCount + 1,
+        count: value + 1,
       });
-      setCurrentOtherPhoneCount((prev) => prev + 1);
     }
   };
 
-  const updateOtherNameCount = async () => {
+  const updateOtherNameCount = async (value: number) => {
     const otherNameCollectionPath = doc(
       db,
       "otherPhoneAndNameSubmission",
@@ -104,13 +98,12 @@ export const OtherPhoneAndNamePage = () => {
     );
     if (otherName != "") {
       await updateDoc(otherNameCollectionPath, {
-        count: currentOtherNameCount + 1,
+        count: value + 1,
       });
-      setCurrentOtherNameCount((prev) => prev + 1);
     }
   };
 
-  const updateOtherRelationCount = async () => {
+  const updateOtherRelationCount = async (value: number) => {
     const otherRelationCollectionPath = doc(
       db,
       "otherPhoneAndNameSubmission",
@@ -120,9 +113,44 @@ export const OtherPhoneAndNamePage = () => {
     );
     if (otherRelation != "") {
       await updateDoc(otherRelationCollectionPath, {
-        count: currentOtherRelationCount + 1,
+        count: value + 1,
       });
-      setCurrentOtherRelationCount((prev) => prev + 1);
+    }
+  };
+
+  const updateOtherPhoneAndNameAndRelationInterruptedMaleCount = async (value: number) => {
+    const otherPhoneAndNameAndRelationInterruptedMalePath = doc(db, "otherPhoneAndNameAndRelationInterruptedGender", "fMPXWg9QmZJoWiOBU4h3");
+    if (state.state == "10") {
+      await updateDoc(otherPhoneAndNameAndRelationInterruptedMalePath, {
+        male: value + 1,
+      });
+    }
+  };
+
+  const updateOtherPhoneAndNameAndRelationInterruptedFemaleCount = async (value: number) => {
+    const otherPhoneAndNameAndRelationInterruptedFemalePath = doc(db, "otherPhoneAndNameAndRelationInterruptedGender", "fMPXWg9QmZJoWiOBU4h3");
+    if (state.state == "20") {
+      await updateDoc(otherPhoneAndNameAndRelationInterruptedFemalePath, {
+        female: value + 1,
+      });
+    }
+  };
+
+  const updateOtherPhoneAndNameAndRelationInterruptedOtherCount = async (value: number) => {
+    const otherPhoneAndNameAndRelationInterruptedOtherPath = doc(db, "otherPhoneAndNameAndRelationInterruptedGender", "fMPXWg9QmZJoWiOBU4h3");
+    if (state.state == "30") {
+      await updateDoc(otherPhoneAndNameAndRelationInterruptedOtherPath, {
+        other: value + 1,
+      });
+    }
+  };
+
+  const updateOtherPhoneAndNameAndRelationInterruptedNotSelectedCount = async (value: number) => {
+    const otherPhoneAndNameAndRelationInterruptedNotSelectedPath = doc(db, "otherPhoneAndNameAndRelationInterruptedGender", "fMPXWg9QmZJoWiOBU4h3");
+    if (state.state == "40") {
+      await updateDoc(otherPhoneAndNameAndRelationInterruptedNotSelectedPath, {
+        notSelected: value + 1,
+      });
     }
   };
 
@@ -216,6 +244,74 @@ export const OtherPhoneAndNamePage = () => {
     return otherRelationCount;
   };
 
+  const fetchOtherPhoneAndNameAndRelationInterruptedMaleCount = async () => {
+    var maleCount = 0;
+    const maleCountRef = doc(db, "otherPhoneAndNameAndRelationInterruptedGender", "fMPXWg9QmZJoWiOBU4h3");
+
+    try {
+      const snapshot = await getDoc(maleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.male) {
+        maleCount = Number(docData.male);
+      }
+      console.log(`male count: ${maleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return maleCount;
+  };
+
+  const fetchOtherPhoneAndNameAndRelationInterruptedFemaleCount = async () => {
+    var femaleCount = 0;
+    const femaleCountRef = doc(db, "otherPhoneAndNameAndRelationInterruptedGender", "fMPXWg9QmZJoWiOBU4h3");
+
+    try {
+      const snapshot = await getDoc(femaleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.female) {
+        femaleCount = Number(docData.female);
+      }
+      console.log(`male count: ${femaleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return femaleCount;
+  };
+
+  const fetchOtherPhoneAndNameAndRelationInterruptedOtherCount = async () => {
+    var otherCount = 0;
+    const otherCountRef = doc(db, "otherPhoneAndNameAndRelationInterruptedGender", "fMPXWg9QmZJoWiOBU4h3");
+
+    try {
+      const snapshot = await getDoc(otherCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.other) {
+        otherCount = Number(docData.other);
+      }
+      console.log(`male count: ${otherCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherCount;
+  };
+
+  const fetchOtherPhoneAndNameAndRelationInterruptedNotSelectedCount = async () => {
+    var notSelectedCount = 0;
+    const notSelectedCountRef = doc(db, "otherPhoneAndNameAndRelationInterruptedGender", "fMPXWg9QmZJoWiOBU4h3");
+
+    try {
+      const snapshot = await getDoc(notSelectedCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.notSelected) {
+        notSelectedCount = Number(docData.notSelected);
+      }
+      console.log(`male count: ${notSelectedCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return notSelectedCount;
+  };
+
   const fetchAndUpdateTotalGender = async () => {
     const interruptedGenderRef = doc(
       db,
@@ -287,41 +383,80 @@ export const OtherPhoneAndNamePage = () => {
     }
   };
 
-  const _onBrowserBack = () => {
+  const _onBrowserBack = async () => {
     console.log("browser back fired !");
-    updateOtherPhoneCount();
-    updateOtherNameCount();
-    updateOtherRelationCount();
+    await fetchOtherPhoneCount().then((value) => {
+      updateOtherPhoneCount(value);
+    });
+    await fetchOtherNameCount().then((value) => {
+      updateOtherNameCount(value);
+    });
+    await fetchOtherRelationCount().then((value) => {
+      updateOtherRelationCount(value);
+    });
+
+    if(state.state == "10") {
+      await fetchOtherPhoneAndNameAndRelationInterruptedMaleCount().then((value) => {
+        updateOtherPhoneAndNameAndRelationInterruptedMaleCount(value);
+      });
+    } else if (state.state == "20") {
+      await fetchOtherPhoneAndNameAndRelationInterruptedFemaleCount().then((value) => {
+        updateOtherPhoneAndNameAndRelationInterruptedFemaleCount(value);
+      });
+    } else if (state.state == "30") {
+      await fetchOtherPhoneAndNameAndRelationInterruptedOtherCount().then((value) => {
+        updateOtherPhoneAndNameAndRelationInterruptedOtherCount(value);
+      });
+    } else if (state.state == "40") {
+      await fetchOtherPhoneAndNameAndRelationInterruptedNotSelectedCount().then((value) => {
+        updateOtherPhoneAndNameAndRelationInterruptedNotSelectedCount(value);
+      });
+    } else {
+      console.log("エラーが発生しました");
+    }
+
     fetchAndUpdateTotalGender();
   };
 
-  const _onPressed = () => {
-    updateOtherPhoneAndNameAndRelation();
-    updateOtherPhoneCount();
-    updateOtherNameCount();
-    updateOtherRelationCount();
+  const _onPressed = async () => {
+    await fetchotherPhoneAndNameSubmissionCount().then((value) => {
+      updateOtherPhoneAndNameAndRelation(value);
+    });
+    await fetchOtherPhoneCount().then((value) => {
+      updateOtherPhoneCount(value);
+    });
+    await fetchOtherNameCount().then((value) => {
+      updateOtherNameCount(value);
+    });
+    await fetchOtherRelationCount().then((value) => {
+      updateOtherRelationCount(value);
+    });
   };
 
-  useEffect(() => {
-    (async () => {
-      const initialCount = await fetchotherPhoneAndNameSubmissionCount();
-      setCurrentCount(initialCount);
-
-      const initialOtherPhoneCount = await fetchOtherPhoneCount();
-      setCurrentOtherPhoneCount(initialOtherPhoneCount);
-
-      const initialOtherNameCount = await fetchOtherNameCount();
-      setCurrentOtherNameCount(initialOtherNameCount);
-
-      const initialOtherRelationCount = await fetchOtherRelationCount();
-      setCurrentOtherRelationCount(initialOtherRelationCount);
-
-      console.log(`gender state: ${state.state}`);
-    })();
-    window.onpopstate = () => {
-      _onBrowserBack();
-    };
+  const blockBrowserBack = useCallback(() => {
+    window.history.go(1);
   }, []);
+
+  useEffect(() => {
+    (() => {
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", blockBrowserBack);
+      return () => {
+        window.removeEventListener("popstate", blockBrowserBack);
+      };      // const initialCount = await fetchotherPhoneAndNameSubmissionCount();
+      // setCurrentCount(initialCount);
+
+      // const initialOtherPhoneCount = await fetchOtherPhoneCount();
+      // setCurrentOtherPhoneCount(initialOtherPhoneCount);
+
+      // const initialOtherNameCount = await fetchOtherNameCount();
+      // setCurrentOtherNameCount(initialOtherNameCount);
+
+      // const initialOtherRelationCount = await fetchOtherRelationCount();
+      // setCurrentOtherRelationCount(initialOtherRelationCount);
+
+    })();
+  }, [blockBrowserBack]);
   return (
     <div className={classes.root}>
       <dialog ref={ref} style={{ top: "30px" }}>
@@ -333,7 +468,7 @@ export const OtherPhoneAndNamePage = () => {
         </button>
       </dialog>
       <CustomParticle />
-      {isWide ? <CustomStepper arg1={4} /> : <CustomMobileStepper arg1={5} />}
+      {isWide ? <CustomStepper arg1={4} /> : <CustomMobileStepper arg1={4} />}
       <div
         className={classes.formWrapper}
         style={{ alignItems: isWide ? "inherit" : "center" }}
@@ -402,10 +537,10 @@ export const OtherPhoneAndNamePage = () => {
           />
         </div>
         <div>
-          <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+          <Link to="/final_page" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
-              variant="contained"
-              color="primary"
+              variant="text"
+              color="secondary"
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",

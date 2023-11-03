@@ -1,7 +1,7 @@
 import Checkbox from "@mui/material/Checkbox";
 import { Button, TextField, makeStyles } from "@material-ui/core";
 import CustomParticle from "../atoms/particle";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMedia } from "react-use";
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -65,26 +65,33 @@ export const AskCommentsPage = () => {
   const [isDegreeConfirmd, setIsDegreeConfirmed] = useState(true);
   const [isDegreeYearsConfirmd, setIsDegreeYearsConfirmed] = useState(true);
 
-  const [currentEmailCount, setCurrentEmailCount] = useState(0);
-  const [currentPasswordCount, setCurrentPasswordCount] = useState(0);
-  const [currentRetypePasswordCount, setCurrentRetypePasswordCount] = useState(0);
-  const [currentNicknameCount, setCurrentNicknameCount] = useState(0);
-  const [currentPhoneNumCount, setCurrentPhoneNumCount] = useState(0);
-  const [currentBirthdayCount, setCurrentBirthdayCount] = useState(0);
-  const [currentGenderCount, setCurrentGenderCount] = useState(0);
-  const [currentWorkCount, setCurrentWorkCount] = useState(0);
-  const [currentHobbyCount, setCurrentHobbyCount] = useState(0);
-  const [currentPostCodeCount, setCurrentPostCodeCount] = useState(0);
-  const [currentAddressCount, setCurrentAddressCount] = useState(0);
-  const [currentOtherPhoneNumCount, setCurrentOtherPhoneNumCount] = useState(0);
-  const [currentOtherNameCount, setCurrentOtherNameCount] = useState(0);
-  const [currentOtherRelationCount, setCurrentOtherRelationCount] = useState(0);
-  const [currentBloodTypeCount, setCurrentBloodTypeCount] = useState(0);
-  const [currentMotivationCount, setCurrentMotivationCount] = useState(0);
-  const [currentSchoolNameCount, setCurrentSchoolNameCount] = useState(0);
-  const [currentDepartmentNameCount, setCurrentDepartmentNameCount] = useState(0);
-  const [currentDegreeCount, setCurrentDegreeCount] = useState(0);
-  const [currentDegreeYearsCount, setCurrentDegreeYearsCount] = useState(0);
+  const [isLiedEmailConfirmd, setIsLiedEmailConfirmed] = useState(true);
+  const [isLiedPasswordConfirmd, setIsLiedPasswordConfirmed] = useState(true);
+  const [isLiedRetypePasswordConfirmd, setIsLiedRetypePasswordConfirmed] =
+    useState(true);
+  const [isLiedNicknameConfirmd, setIsLiedNicknameConfirmed] = useState(true);
+  const [isLiedPhoneNumConfirmd, setIsLiedPhoneNumConfirmed] = useState(true);
+  const [isLiedBirthdayConfirmd, setIsLiedBirthdayConfirmed] = useState(true);
+  const [isLiedGenderConfirmd, setIsLiedGenderConfirmed] = useState(true);
+  const [isLiedWorkConfirmd, setIsLiedWorkConfirmed] = useState(true);
+  const [isLiedHobbyConfirmd, setIsLiedHobbyConfirmed] = useState(true);
+  const [isLiedPostCodeConfirmd, setIsLiedPostCodeConfirmed] = useState(true);
+  const [isLiedAddressConfirmd, setIsLiedAddressConfirmed] = useState(true);
+  const [isLiedOtherPhoneNumConfirmd, setIsLiedOtherPhoneNumConfirmed] =
+    useState(true);
+  const [isLiedOtherNameConfirmd, setIsLiedOtherNameConfirmed] = useState(true);
+  const [isLiedOtherRelationConfirmd, setIsLiedOtherRelationConfirmed] =
+    useState(true);
+  const [isLiedBloodTypeConfirmd, setIsLiedBloodTypeConfirmed] = useState(true);
+  const [isLiedMotivationConfirmd, setIsLiedMotivationConfirmed] =
+    useState(true);
+  const [isLiedSchoolNameConfirmd, setIsLiedSchoolNameConfirmed] =
+    useState(true);
+  const [isLiedDepartmentNameConfirmd, setIsLiedDepartmentNameConfirmed] =
+    useState(true);
+  const [isLiedDegreeConfirmd, setIsLiedDegreeConfirmed] = useState(true);
+  const [isLiedDegreeYearsConfirmd, setIsLiedDegreeYearsConfirmed] =
+    useState(true);
 
   const handleIsEmailConfirmedChange = () => {
     setIsEmailConfirmed(!isEmailConfirmd);
@@ -186,6 +193,86 @@ export const AskCommentsPage = () => {
     console.log(isDegreeYearsConfirmd);
   };
 
+  const handleIsLiedEmailConfirmedChange = () => {
+    setIsLiedEmailConfirmed(!isLiedEmailConfirmd);
+  };
+
+  const handleIsLiedPasswordConfirmedChange = () => {
+    setIsLiedPasswordConfirmed(!isLiedPasswordConfirmd);
+  };
+
+  const handleIsLiedRetypePasswordConfirmedChange = () => {
+    setIsLiedRetypePasswordConfirmed(!isLiedRetypePasswordConfirmd);
+  };
+
+  const handleIsLiedNicknameConfirmedChange = () => {
+    setIsLiedNicknameConfirmed(!isLiedNicknameConfirmd);
+  };
+
+  const handleIsLiedPhoneNumConfirmedChange = () => {
+    setIsLiedPhoneNumConfirmed(!isLiedPhoneNumConfirmd);
+  };
+
+  const handleIsLiedBirthdayConfirmedChange = () => {
+    setIsLiedBirthdayConfirmed(!isLiedBirthdayConfirmd);
+  };
+
+  const handleIsLiedGenderConfirmedChange = () => {
+    setIsLiedGenderConfirmed(!isLiedGenderConfirmd);
+  };
+
+  const handleIsLiedWorkConfirmedChange = () => {
+    setIsLiedWorkConfirmed(!isLiedWorkConfirmd);
+  };
+
+  const handleIsLiedHobbyConfirmedChange = () => {
+    setIsLiedHobbyConfirmed(!isLiedHobbyConfirmd);
+  };
+
+  const handleIsLiedPostCodeConfirmedChange = () => {
+    setIsLiedPostCodeConfirmed(!isLiedPostCodeConfirmd);
+  };
+
+  const handleIsLiedAddressConfirmedChange = () => {
+    setIsLiedAddressConfirmed(!isLiedAddressConfirmd);
+  };
+
+  const handleIsLiedOtherPhoneNumConfirmedChange = () => {
+    setIsLiedOtherPhoneNumConfirmed(!isLiedOtherPhoneNumConfirmd);
+  };
+
+  const handleIsLiedOtherNameConfirmedChange = () => {
+    setIsLiedOtherNameConfirmed(!isLiedOtherNameConfirmd);
+  };
+
+  const handleIsLiedOtherRelationConfirmedChange = () => {
+    setIsLiedOtherRelationConfirmed(!isLiedOtherRelationConfirmd);
+  };
+
+  const handleIsLiedBloodTypeConfirmedChange = () => {
+    setIsLiedBloodTypeConfirmed(!isLiedBloodTypeConfirmd);
+  };
+
+  const handleIsLiedMotivationConfirmedChange = () => {
+    setIsLiedMotivationConfirmed(!isLiedMotivationConfirmd);
+  };
+
+  const handleIsLiedSchoolNameConfirmedChange = () => {
+    setIsLiedSchoolNameConfirmed(!isLiedSchoolNameConfirmd);
+  };
+
+  const handleIsLiedDepartmentNameConfirmedChange = () => {
+    setIsLiedDepartmentNameConfirmed(!isLiedDepartmentNameConfirmd);
+  };
+
+  const handleIsLiedDegreeConfirmedChange = () => {
+    setIsLiedDegreeConfirmed(!isLiedDegreeConfirmd);
+  };
+
+  const handleIsLiedDegreeYearsConfirmedChange = () => {
+    setIsLiedDegreeYearsConfirmed(!isLiedDegreeYearsConfirmd);
+  };
+
   const isWide = useMedia("(min-width: 800px)");
 
   const fetchEmailCount = async () => {
@@ -211,8 +298,8 @@ export const AskCommentsPage = () => {
     return emailCount;
   };
 
-  const updateEmailCount = () => {
-    console.log('updateEmailCount');
+  const updateEmailCount = (value: number) => {
+    console.log("updateEmailCount");
     const emailCountPath = doc(
       db,
       "finalAssessment",
@@ -221,7 +308,7 @@ export const AskCommentsPage = () => {
       "U8H2X1bwtVB2ilP10EgY"
     );
     updateDoc(emailCountPath, {
-      count: currentEmailCount + 1,
+      count: value + 1,
     });
   };
 
@@ -248,7 +335,7 @@ export const AskCommentsPage = () => {
     return passwordCount;
   };
 
-  const updatePasswordCount = () => {
+  const updatePasswordCount = (value: number) => {
     console.log("updatePasswordCount");
     const passwordCountPath = doc(
       db,
@@ -258,7 +345,7 @@ export const AskCommentsPage = () => {
       "khbYQLwsrJ5qMxjxLAjx"
     );
     updateDoc(passwordCountPath, {
-      count: currentPasswordCount + 1,
+      count: value + 1,
     });
   };
 
@@ -285,8 +372,8 @@ export const AskCommentsPage = () => {
     return retypePasswordCount;
   };
 
-  const updateRetypePasswordCount = () => {
-    console.log('updateRetypePasswordCount');
+  const updateRetypePasswordCount = (value: number) => {
+    console.log("updateRetypePasswordCount");
     const retypePasswordCountPath = doc(
       db,
       "finalAssessment",
@@ -295,7 +382,7 @@ export const AskCommentsPage = () => {
       "bJztMoQcshMaNqMZ758E"
     );
     updateDoc(retypePasswordCountPath, {
-      count: currentRetypePasswordCount + 1,
+      count: value + 1,
     });
   };
 
@@ -321,8 +408,8 @@ export const AskCommentsPage = () => {
     return nicknameCount;
   };
 
-  const updateNicknameCount = () => {
-    console.log('updateNicknameCount')
+  const updateNicknameCount = (value: number) => {
+    console.log("updateNicknameCount");
     const nicknameCountPath = doc(
       db,
       "finalAssessment",
@@ -331,7 +418,7 @@ export const AskCommentsPage = () => {
       "POyYYIZmmEmBXWBJMd7P"
     );
     updateDoc(nicknameCountPath, {
-      count: currentNicknameCount + 1,
+      count: value + 1,
     });
   };
 
@@ -357,8 +444,8 @@ export const AskCommentsPage = () => {
     return phoneNumCount;
   };
 
-  const updatePhoneNumCount = () => {
-    console.log('updatePhoneNumCount');
+  const updatePhoneNumCount = (value: number) => {
+    console.log("updatePhoneNumCount");
     const phoneNumCountPath = doc(
       db,
       "finalAssessment",
@@ -367,7 +454,7 @@ export const AskCommentsPage = () => {
       "fyQLSoKGqHkBDYBVaZaQ"
     );
     updateDoc(phoneNumCountPath, {
-      count: currentPhoneNumCount + 1,
+      count: value + 1,
     });
   };
 
@@ -393,8 +480,8 @@ export const AskCommentsPage = () => {
     return birthdayCount;
   };
 
-  const updateBirthdayCount = () => {
-    console.log('updateBirthdayCount');
+  const updateBirthdayCount = (value: number) => {
+    console.log("updateBirthdayCount");
     const birthdayCountPath = doc(
       db,
       "finalAssessment",
@@ -403,7 +490,7 @@ export const AskCommentsPage = () => {
       "eBKXQXQk8uaEsFoOGMb4"
     );
     updateDoc(birthdayCountPath, {
-      count: currentBirthdayCount + 1,
+      count: value + 1,
     });
   };
 
@@ -429,8 +516,8 @@ export const AskCommentsPage = () => {
     return genderCount;
   };
 
-  const updateGenderCount = () => {
-    console.log('updateGenderCount');
+  const updateGenderCount = (value: number) => {
+    console.log("updateGenderCount");
     const genderCountPath = doc(
       db,
       "finalAssessment",
@@ -439,7 +526,7 @@ export const AskCommentsPage = () => {
       "G8ZoE0HqoUqiy0cwSKpL"
     );
     updateDoc(genderCountPath, {
-      count: currentGenderCount + 1,
+      count: value + 1,
     });
   };
 
@@ -465,8 +552,8 @@ export const AskCommentsPage = () => {
     return workCount;
   };
 
-  const updateWorkCount = () => {
-    console.log('updateWorkCount');
+  const updateWorkCount = (value: number) => {
+    console.log("updateWorkCount");
     const workCountPath = doc(
       db,
       "finalAssessment",
@@ -475,7 +562,7 @@ export const AskCommentsPage = () => {
       "C3TK0Cn4KJ25DMSZWTNA"
     );
     updateDoc(workCountPath, {
-      count: currentWorkCount + 1,
+      count: value + 1,
     });
   };
 
@@ -501,8 +588,8 @@ export const AskCommentsPage = () => {
     return hobbyCount;
   };
 
-  const updateHobbyCount = () => {
-    console.log('updateHobbyCount');
+  const updateHobbyCount = (value: number) => {
+    console.log("updateHobbyCount");
     const hobbyCountPath = doc(
       db,
       "finalAssessment",
@@ -511,7 +598,7 @@ export const AskCommentsPage = () => {
       "IxY6rM2BHRzN05duZL3F"
     );
     updateDoc(hobbyCountPath, {
-      count: currentHobbyCount + 1,
+      count: value + 1,
     });
   };
 
@@ -537,8 +624,8 @@ export const AskCommentsPage = () => {
     return postCodeCount;
   };
 
-  const updatePostCodeCount = () => {
-    console.log('updatePostCodeCount');
+  const updatePostCodeCount = (value: number) => {
+    console.log("updatePostCodeCount");
     const postCodeCountPath = doc(
       db,
       "finalAssessment",
@@ -547,7 +634,7 @@ export const AskCommentsPage = () => {
       "sRv2GOVH1eXioxXRrmnQ"
     );
     updateDoc(postCodeCountPath, {
-      count: currentPostCodeCount + 1,
+      count: value + 1,
     });
   };
 
@@ -573,8 +660,8 @@ export const AskCommentsPage = () => {
     return addressCount;
   };
 
-  const updateAddressCount = () => {
-    console.log('updateAddressCount');
+  const updateAddressCount = (value: number) => {
+    console.log("updateAddressCount");
     const addressCountPath = doc(
       db,
       "finalAssessment",
@@ -583,7 +670,7 @@ export const AskCommentsPage = () => {
       "9hc8XpF4sW6HgeqtQQ3M"
     );
     updateDoc(addressCountPath, {
-      count: currentAddressCount + 1,
+      count: value + 1,
     });
   };
 
@@ -609,8 +696,8 @@ export const AskCommentsPage = () => {
     return otherPhoneNumCount;
   };
 
-  const updateOtherPhoneNumCount = () => {
-    console.log('updateOtherPhoneNumCount');
+  const updateOtherPhoneNumCount = (value: number) => {
+    console.log("updateOtherPhoneNumCount");
     const otherPhoneNumCountPath = doc(
       db,
       "finalAssessment",
@@ -619,7 +706,7 @@ export const AskCommentsPage = () => {
       "gXMLhO8H9oPVzGpXMp5Z"
     );
     updateDoc(otherPhoneNumCountPath, {
-      count: currentOtherPhoneNumCount + 1,
+      count: value + 1,
     });
   };
 
@@ -645,8 +732,8 @@ export const AskCommentsPage = () => {
     return otherNameCount;
   };
 
-  const updateOtherNameCount = () => {
-    console.log('updateOtherNameCount');
+  const updateOtherNameCount = (value: number) => {
+    console.log("updateOtherNameCount");
     const otherNameCountPath = doc(
       db,
       "finalAssessment",
@@ -655,7 +742,7 @@ export const AskCommentsPage = () => {
       "y7vfEF76Df6eWtD0DzK8"
     );
     updateDoc(otherNameCountPath, {
-      count: currentOtherNameCount + 1,
+      count: value + 1,
     });
   };
 
@@ -681,8 +768,8 @@ export const AskCommentsPage = () => {
     return otherRelationCount;
   };
 
-  const updateOtherRelationCount = () => {
-    console.log('updateOtherRelationCount');
+  const updateOtherRelationCount = (value: number) => {
+    console.log("updateOtherRelationCount");
     const otherRelationCountPath = doc(
       db,
       "finalAssessment",
@@ -691,7 +778,7 @@ export const AskCommentsPage = () => {
       "OcfnzMK866fYqGLzui85"
     );
     updateDoc(otherRelationCountPath, {
-      count: currentOtherRelationCount + 1,
+      count: value + 1,
     });
   };
 
@@ -717,8 +804,8 @@ export const AskCommentsPage = () => {
     return bloodTypeCount;
   };
 
-  const updateBloodTypeCount = () => {
-    console.log('updateBloodTypeCount');
+  const updateBloodTypeCount = (value: number) => {
+    console.log("updateBloodTypeCount");
     const bloodTypeCountPath = doc(
       db,
       "finalAssessment",
@@ -727,7 +814,7 @@ export const AskCommentsPage = () => {
       "yDRKwrimJWMglOnnIiJO"
     );
     updateDoc(bloodTypeCountPath, {
-      count: currentBloodTypeCount + 1,
+      count: value + 1,
     });
   };
 
@@ -753,8 +840,8 @@ export const AskCommentsPage = () => {
     return motivationCount;
   };
 
-  const updateMotivationCount = () => {
-    console.log('updateMotivationCount');
+  const updateMotivationCount = (value: number) => {
+    console.log("updateMotivationCount");
     const motivationCountPath = doc(
       db,
       "finalAssessment",
@@ -763,7 +850,7 @@ export const AskCommentsPage = () => {
       "j9fet8D8DNFIOTLseG2Q"
     );
     updateDoc(motivationCountPath, {
-      count: currentMotivationCount + 1,
+      count: value + 1,
     });
   };
 
@@ -789,8 +876,8 @@ export const AskCommentsPage = () => {
     return schoolNameCount;
   };
 
-  const updateSchoolNameCount = () => {
-    console.log('updateSchoolNameCount')
+  const updateSchoolNameCount = (value: number) => {
+    console.log("updateSchoolNameCount");
     const schoolNameCountPath = doc(
       db,
       "finalAssessment",
@@ -799,7 +886,7 @@ export const AskCommentsPage = () => {
       "YeWoWyx5qHwWjJHO7gAf"
     );
     updateDoc(schoolNameCountPath, {
-      count: currentSchoolNameCount + 1,
+      count: value + 1,
     });
   };
 
@@ -825,8 +912,8 @@ export const AskCommentsPage = () => {
     return departmentNameCount;
   };
 
-  const updateDepartmentNameCount = () => {
-    console.log('updateDepartmentNameCount');
+  const updateDepartmentNameCount = (value: number) => {
+    console.log("updateDepartmentNameCount");
     const departmentNameCountPath = doc(
       db,
       "finalAssessment",
@@ -835,7 +922,7 @@ export const AskCommentsPage = () => {
       "JzseeyI2IAjyPv9xzNt0"
     );
     updateDoc(departmentNameCountPath, {
-      count: currentDepartmentNameCount + 1,
+      count: value + 1,
     });
   };
 
@@ -861,8 +948,8 @@ export const AskCommentsPage = () => {
     return degreeCount;
   };
 
-  const updateDegreeCount = () => {
-    console.log('updateDegreeCount');
+  const updateDegreeCount = (value: number) => {
+    console.log("updateDegreeCount");
     const degreeCountPath = doc(
       db,
       "finalAssessment",
@@ -871,7 +958,7 @@ export const AskCommentsPage = () => {
       "DlyHJQhjuiqNJ7AYS2ox"
     );
     updateDoc(degreeCountPath, {
-      count: currentDegreeCount + 1,
+      count: value + 1,
     });
   };
 
@@ -897,8 +984,8 @@ export const AskCommentsPage = () => {
     return degreeYearsCount;
   };
 
-  const updateDegreeYearsCount = () => {
-    console.log('updateDegreeYearsCount');
+  const updateDegreeYearsCount = (value: number) => {
+    console.log("updateDegreeYearsCount");
     const degreeYearsCountPath = doc(
       db,
       "finalAssessment",
@@ -907,139 +994,851 @@ export const AskCommentsPage = () => {
       "a9j3tmlgvGtqFM50e6X7"
     );
     updateDoc(degreeYearsCountPath, {
-      count: currentDegreeYearsCount + 1,
+      count: value + 1,
     });
   };
 
-  const addComment = (props: { inputComment: String }) => {
+  const fetchLiedEmailCount = async () => {
+    var emailCount = 0;
+    const emailCountPath = doc(db, "finalAssessment", "NsUKNWxMtkuyT6e1phXO");
+
+    try {
+      const snapshot = await getDoc(emailCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.emailLiedCount) {
+        emailCount = Number(docData.emailLiedCount);
+      }
+      console.log(emailCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return emailCount;
+  };
+
+  const updateLiedEmailCount = (value: number) => {
+    console.log("updateEmailCount");
+    const emailCountPath = doc(db, "finalAssessment", "NsUKNWxMtkuyT6e1phXO");
+
+    updateDoc(emailCountPath, {
+      emailLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedPasswordCount = async () => {
+    var passwordCount = 0;
+    const passwordCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO"
+    );
+
+    try {
+      const snapshot = await getDoc(passwordCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.passwordLiedCount) {
+        passwordCount = Number(docData.passwordLiedCount);
+      }
+      console.log(passwordCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return passwordCount;
+  };
+
+  const updateLiedPasswordCount = (value: number) => {
+    console.log("updatePasswordCount");
+    const passwordCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO"
+    );
+    updateDoc(passwordCountPath, {
+      passwordLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedRetypePasswordCount = async () => {
+    var retypePasswordCount = 0;
+    const retypePasswordCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO"
+    );
+
+    try {
+      const snapshot = await getDoc(retypePasswordCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.retypePasswordLiedCount) {
+        retypePasswordCount = Number(docData.retypePasswordLiedCount);
+      }
+      console.log(retypePasswordCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return retypePasswordCount;
+  };
+
+  const updateLiedRetypePasswordCount = (value: number) => {
+    console.log("updateRetypePasswordCount");
+    const retypePasswordCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO"
+    );
+    updateDoc(retypePasswordCountPath, {
+      retypePasswordLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedNicknameCount = async () => {
+    var nicknameCount = 0;
+    const nicknameCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO"
+    );
+    try {
+      const snapshot = await getDoc(nicknameCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.nicknameLiedCount) {
+        nicknameCount = Number(docData.nicknameLiedCount);
+      }
+      console.log(nicknameCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return nicknameCount;
+  };
+
+  const updateLiedNicknameCount = (value: number) => {
+    console.log("updateNicknameCount");
+    const nicknameCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO"
+    );
+    updateDoc(nicknameCountPath, {
+      nicknameLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedPhoneNumCount = async () => {
+    var phoneNumCount = 0;
+    const phoneNumCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO"
+    );
+    try {
+      const snapshot = await getDoc(phoneNumCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.phoneNumLiedCount) {
+        phoneNumCount = Number(docData.phoneNumLiedCount);
+      }
+      console.log(phoneNumCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return phoneNumCount;
+  };
+
+  const updateLiedPhoneNumCount = (value: number) => {
+    console.log("updatePhoneNumCount");
+    const phoneNumCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO"
+    );
+    updateDoc(phoneNumCountPath, {
+      phoneNumLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedBirthdayCount = async () => {
+    var birthdayCount = 0;
+    const birthdayCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO"
+    );
+    try {
+      const snapshot = await getDoc(birthdayCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.birthdayLiedCount) {
+        birthdayCount = Number(docData.birthdayLiedCount);
+      }
+      console.log(birthdayCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return birthdayCount;
+  };
+
+  const updateLiedBirthdayCount = (value: number) => {
+    console.log("updateBirthdayCount");
+    const birthdayCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO"
+    );
+    updateDoc(birthdayCountPath, {
+      birthdayLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedGenderCount = async () => {
+    var genderCount = 0;
+    const genderCountPath = doc(db, "finalAssessment", "NsUKNWxMtkuyT6e1phXO");
+    try {
+      const snapshot = await getDoc(genderCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.genderLiedCount) {
+        genderCount = Number(docData.genderLiedCount);
+      }
+      console.log(genderCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return genderCount;
+  };
+
+  const updateLiedGenderCount = (value: number) => {
+    console.log("updateGenderCount");
+    const genderCountPath = doc(db, "finalAssessment", "NsUKNWxMtkuyT6e1phXO");
+    updateDoc(genderCountPath, {
+      genderLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedWorkCount = async () => {
+    var workCount = 0;
+    const workCountPath = doc(db, "finalAssessment", "NsUKNWxMtkuyT6e1phXO");
+    try {
+      const snapshot = await getDoc(workCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.workLiedCount) {
+        workCount = Number(docData.workLiedCount);
+      }
+      console.log(workCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return workCount;
+  };
+
+  const updateLiedWorkCount = (value: number) => {
+    console.log("updateWorkCount");
+    const workCountPath = doc(db, "finalAssessment", "NsUKNWxMtkuyT6e1phXO");
+    updateDoc(workCountPath, {
+      workLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedHobbyCount = async () => {
+    var hobbyCount = 0;
+    const hobbyCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    try {
+      const snapshot = await getDoc(hobbyCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.hobbyLiedCount) {
+        hobbyCount = Number(docData.hobbyLiedCount);
+      }
+      console.log(hobbyCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return hobbyCount;
+  };
+
+  const updateLiedHobbyCount = (value: number) => {
+    console.log("updateHobbyCount");
+    const hobbyCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    updateDoc(hobbyCountPath, {
+      hobbyLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedPostCodeCount = async () => {
+    var postCodeCount = 0;
+    const postCodeCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    try {
+      const snapshot = await getDoc(postCodeCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.postCodeLiedCount) {
+        postCodeCount = Number(docData.postCodeLiedCount);
+      }
+      console.log(postCodeCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return postCodeCount;
+  };
+
+  const updateLiedPostCodeCount = (value: number) => {
+    console.log("updatePostCodeCount");
+    const postCodeCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    updateDoc(postCodeCountPath, {
+      postCodeLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedAddressCount = async () => {
+    var addressCount = 0;
+    const addressCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    try {
+      const snapshot = await getDoc(addressCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.addressLiedCount) {
+        addressCount = Number(docData.addressLiedCount);
+      }
+      console.log(addressCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return addressCount;
+  };
+
+  const updateLiedAddressCount = (value: number) => {
+    console.log("updateAddressCount");
+    const addressCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    updateDoc(addressCountPath, {
+      addressLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedOtherPhoneNumCount = async () => {
+    var otherPhoneNumCount = 0;
+    const otherPhoneNumCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    try {
+      const snapshot = await getDoc(otherPhoneNumCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.otherPhoneNumLiedCount) {
+        otherPhoneNumCount = Number(docData.otherPhoneNumLiedCount);
+      }
+      console.log(otherPhoneNumCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherPhoneNumCount;
+  };
+
+  const updateLiedOtherPhoneNumCount = (value: number) => {
+    console.log("updateOtherPhoneNumCount");
+    const otherPhoneNumCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    updateDoc(otherPhoneNumCountPath, {
+      otherPhoneNumLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedOtherNameCount = async () => {
+    var otherNameCount = 0;
+    const otherNameCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    try {
+      const snapshot = await getDoc(otherNameCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.otherNameLiedCount) {
+        otherNameCount = Number(docData.otherNameLiedCount);
+      }
+      console.log(otherNameCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherNameCount;
+  };
+
+  const updateLiedOtherNameCount = (value: number) => {
+    console.log("updateOtherNameCount");
+    const otherNameCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    updateDoc(otherNameCountPath, {
+      otherNameLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedOtherRelationCount = async () => {
+    var otherRelationCount = 0;
+    const otherRelationCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    try {
+      const snapshot = await getDoc(otherRelationCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.otherRelationLiedCount) {
+        otherRelationCount = Number(docData.otherRelationLiedCount);
+      }
+      console.log(otherRelationCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherRelationCount;
+  };
+
+  const updateLiedOtherRelationCount = (value: number) => {
+    console.log("updateOtherRelationCount");
+    const otherRelationCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    updateDoc(otherRelationCountPath, {
+      otherRelationLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedBloodTypeCount = async () => {
+    var bloodTypeCount = 0;
+    const bloodTypeCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    try {
+      const snapshot = await getDoc(bloodTypeCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.bloodTypeLiedCount) {
+        bloodTypeCount = Number(docData.bloodTypeLiedCount);
+      }
+      console.log(bloodTypeCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return bloodTypeCount;
+  };
+
+  const updateLiedBloodTypeCount = (value: number) => {
+    console.log("updateBloodTypeCount");
+    const bloodTypeCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    updateDoc(bloodTypeCountPath, {
+      bloodTypeLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedMotivationCount = async () => {
+    var motivationCount = 0;
+    const motivationCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    try {
+      const snapshot = await getDoc(motivationCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.motivationLiedCount) {
+        motivationCount = Number(docData.motivationLiedCount);
+      }
+      console.log(motivationCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return motivationCount;
+  };
+
+  const updateLiedMotivationCount = (value: number) => {
+    console.log("updateMotivationCount");
+    const motivationCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    updateDoc(motivationCountPath, {
+      motivationLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedSchoolNameCount = async () => {
+    var schoolNameCount = 0;
+    const schoolNameCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    try {
+      const snapshot = await getDoc(schoolNameCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.schoolNameLiedCount) {
+        schoolNameCount = Number(docData.schoolNameLiedCount);
+      }
+      console.log(schoolNameCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return schoolNameCount;
+  };
+
+  const updateLiedSchoolNameCount = (value: number) => {
+    console.log("updateSchoolNameCount");
+    const schoolNameCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    updateDoc(schoolNameCountPath, {
+      schoolNameLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedDepartmentNameCount = async () => {
+    var departmentNameCount = 0;
+    const departmentNameCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    try {
+      const snapshot = await getDoc(departmentNameCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.departmentNameLiedCount) {
+        departmentNameCount = Number(docData.departmentNameLiedCount);
+      }
+      console.log(departmentNameCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return departmentNameCount;
+  };
+
+  const updateLiedDepartmentNameCount = (value: number) => {
+    console.log("updateDepartmentNameCount");
+    const departmentNameCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    updateDoc(departmentNameCountPath, {
+      departmentNameLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedDegreeCount = async () => {
+    var degreeCount = 0;
+    const degreeCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    try {
+      const snapshot = await getDoc(degreeCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.degreeLiedCount) {
+        degreeCount = Number(docData.degreeLiedCount);
+      }
+      console.log(degreeCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return degreeCount;
+  };
+
+  const updateLiedDegreeCount = (value: number) => {
+    console.log("updateDegreeCount");
+    const degreeCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    updateDoc(degreeCountPath, {
+      degreeLiedCount: value + 1,
+    });
+  };
+
+  const fetchLiedDegreeYearsCount = async () => {
+    var degreeYearsCount = 0;
+    const degreeYearsCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    try {
+      const snapshot = await getDoc(degreeYearsCountPath);
+      const docData = snapshot.data();
+      if (docData && docData.degreeYearsLiedCount) {
+        degreeYearsCount = Number(docData.degreeYearsLiedCount);
+      }
+      console.log(degreeYearsCount);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return degreeYearsCount;
+  };
+
+  const updateLiedDegreeYearsCount = (value: number) => {
+    console.log("updateDegreeYearsCount");
+    const degreeYearsCountPath = doc(
+      db,
+      "finalAssessment",
+      "NsUKNWxMtkuyT6e1phXO",
+    );
+    updateDoc(degreeYearsCountPath, {
+      degreeYearsLiedCount: value + 1,
+    });
+  };
+
+  const addComment = async (props: { inputComment: String }) => {
     addDoc(collection(db, "comments"), {
       comment: props.inputComment,
     });
     if (!isEmailConfirmd) {
-      updateEmailCount();
+      await fetchEmailCount().then((value) => {
+        updateEmailCount(value);
+      });
     }
     if (!isPasswordConfirmd) {
-      updatePasswordCount();
+      await fetchPasswordCount().then((value) => {
+        updatePasswordCount(value);
+      });
     }
     if (!isRetypePasswordConfirmd) {
-      updateRetypePasswordCount();
+      await fetchRetypePasswordCount().then((value) => {
+        updateRetypePasswordCount(value);
+      });
     }
     if (!isNicknameConfirmd) {
-      updateNicknameCount();
+      await fetchNicknameCount().then((value) => {
+        updateNicknameCount(value);
+      });
     }
     if (!isPhoneNumConfirmd) {
-      updatePhoneNumCount();
+      await fetchPhoneNumCount().then((value) => {
+        updatePhoneNumCount(value);
+      });
     }
     if (!isBirthdayConfirmd) {
-      updateBirthdayCount();
+      await fetchBirthdayCount().then((value) => {
+        updateBirthdayCount(value);
+      });
     }
     if (!isGenderConfirmd) {
-      updateGenderCount();
+      await fetchGenderCount().then((value) => {
+        updateGenderCount(value);
+      });
     }
     if (!isWorkConfirmd) {
-      updateWorkCount();
+      await fetchWorkCount().then((value) => {
+        updateWorkCount(value);
+      });
     }
     if (!isHobbyConfirmd) {
-      updateHobbyCount();
+      await fetchHobbyCount().then((value) => {
+        updateHobbyCount(value);
+      });
     }
     if (!isPostCodeConfirmd) {
-      updatePostCodeCount();
+      await fetchPostCodeCount().then((value) => {
+        updatePostCodeCount(value);
+      });
     }
     if (!isAddressConfirmd) {
-      updateAddressCount();
+      await fetchAddressCount().then((value) => {
+        updateAddressCount(value);
+      });
     }
     if (!isOtherPhoneNumConfirmd) {
-      updateOtherPhoneNumCount();
+      await fetchOtherPhoneNumCount().then((value) => {
+        updateOtherPhoneNumCount(value);
+      });
     }
     if (!isOtherNameConfirmd) {
-      updateOtherNameCount();
+      await fetchOtherNameCount().then((value) => {
+        updateOtherNameCount(value);
+      });
     }
     if (!isOtherRelationConfirmd) {
-      updateOtherRelationCount();
+      await fetchOtherRelationCount().then((value) => {
+        updateOtherRelationCount(value);
+      });
     }
     if (!isBloodTypeConfirmd) {
-      updateBloodTypeCount();
+      await fetchBloodTypeCount().then((value) => {
+        updateBloodTypeCount(value);
+      });
     }
     if (!isMotivationConfirmd) {
-      updateMotivationCount();
+      await fetchMotivationCount().then((value) => {
+        updateMotivationCount(value);
+      });
     }
     if (!isSchoolNameConfirmd) {
-      updateSchoolNameCount();
+      await fetchSchoolNameCount().then((value) => {
+        updateSchoolNameCount(value);
+      });
     }
     if (!isDepartmentNameConfirmd) {
-      updateDepartmentNameCount();
+      await fetchDepartmentNameCount().then((value) => {
+        updateDepartmentNameCount(value);
+      });
     }
     if (!isDegreeConfirmd) {
-      updateDegreeCount();
+      await fetchDegreeCount().then((value) => {
+        updateDegreeCount(value);
+      });
     }
     if (!isDegreeYearsConfirmd) {
-      updateDegreeYearsCount();
+      await fetchDegreeYearsCount().then((value) => {
+        updateDegreeYearsCount(value);
+      });
+    }
+
+
+    if (!isLiedEmailConfirmd) {
+      await fetchLiedEmailCount().then((value) => {
+        updateLiedEmailCount(value);
+      });
+    }
+    if (!isLiedPasswordConfirmd) {
+      await fetchLiedPasswordCount().then((value) => {
+        updateLiedPasswordCount(value);
+      });
+    }
+    if (!isLiedRetypePasswordConfirmd) {
+      await fetchLiedRetypePasswordCount().then((value) => {
+        updateLiedRetypePasswordCount(value);
+      });
+    }
+    if (!isLiedNicknameConfirmd) {
+      await fetchLiedNicknameCount().then((value) => {
+        updateLiedNicknameCount(value);
+      });
+    }
+    if (!isLiedPhoneNumConfirmd) {
+      await fetchLiedPhoneNumCount().then((value) => {
+        updateLiedPhoneNumCount(value);
+      });
+    }
+    if (!isLiedBirthdayConfirmd) {
+      await fetchLiedBirthdayCount().then((value) => {
+        updateLiedBirthdayCount(value);
+      });
+    }
+    if (!isLiedGenderConfirmd) {
+      await fetchLiedGenderCount().then((value) => {
+        updateLiedGenderCount(value);
+      });
+    }
+    if (!isLiedWorkConfirmd) {
+      await fetchLiedWorkCount().then((value) => {
+        updateLiedWorkCount(value);
+      });
+    }
+    if (!isLiedHobbyConfirmd) {
+      await fetchLiedHobbyCount().then((value) => {
+        updateLiedHobbyCount(value);
+      });
+    }
+    if (!isLiedPostCodeConfirmd) {
+      await fetchLiedPostCodeCount().then((value) => {
+        updateLiedPostCodeCount(value);
+      });
+    }
+    if (!isLiedAddressConfirmd) {
+      await fetchLiedAddressCount().then((value) => {
+        updateLiedAddressCount(value);
+      });
+    }
+    if (!isLiedOtherPhoneNumConfirmd) {
+      await fetchLiedOtherPhoneNumCount().then((value) => {
+        updateLiedOtherPhoneNumCount(value);
+      });
+    }
+    if (!isLiedOtherNameConfirmd) {
+      await fetchLiedOtherNameCount().then((value) => {
+        updateLiedOtherNameCount(value);
+      });
+    }
+    if (!isLiedOtherRelationConfirmd) {
+      await fetchLiedOtherRelationCount().then((value) => {
+        updateLiedOtherRelationCount(value);
+      });
+    }
+    if (!isLiedBloodTypeConfirmd) {
+      await fetchLiedBloodTypeCount().then((value) => {
+        updateLiedBloodTypeCount(value);
+      });
+    }
+    if (!isLiedMotivationConfirmd) {
+      await fetchLiedMotivationCount().then((value) => {
+        updateLiedMotivationCount(value);
+      });
+    }
+    if (!isLiedSchoolNameConfirmd) {
+      await fetchLiedSchoolNameCount().then((value) => {
+        updateLiedSchoolNameCount(value);
+      });
+    }
+    if (!isLiedDepartmentNameConfirmd) {
+      await fetchLiedDepartmentNameCount().then((value) => {
+        updateLiedDepartmentNameCount(value);
+      });
+    }
+    if (!isLiedDegreeConfirmd) {
+      await fetchLiedDegreeCount().then((value) => {
+        updateLiedDegreeCount(value);
+      });
+    }
+    if (!isLiedDegreeYearsConfirmd) {
+      await fetchLiedDegreeYearsCount().then((value) => {
+        updateLiedDegreeYearsCount(value);
+      });
     }
   };
 
-  useEffect(() => {(
-    async () => {
-      const initialEmailCount = await fetchEmailCount();
-      setCurrentEmailCount(initialEmailCount);
-
-      const initialPasswordCount = await fetchPasswordCount();
-      setCurrentPasswordCount(initialPasswordCount);
-
-      const initialRetypePasswordCount = await fetchRetypePasswordCount();
-      setCurrentRetypePasswordCount(initialRetypePasswordCount);
-
-      const initialNicknameCount = await fetchNicknameCount();
-      setCurrentNicknameCount(initialNicknameCount);
-
-      const initialPhoneNumCount = await fetchPhoneNumCount();
-      setCurrentPhoneNumCount(initialPhoneNumCount);
-
-      const initialBirthdayCount = await fetchBirthdayCount();
-      setCurrentBirthdayCount(initialBirthdayCount);
-
-      const initialGenderCount = await fetchGenderCount();
-      setCurrentGenderCount(initialGenderCount);
-
-      const initialWorkCount = await fetchWorkCount();
-      setCurrentWorkCount(initialWorkCount);
-
-      const initialHobbyCount = await fetchHobbyCount();
-      setCurrentHobbyCount(initialHobbyCount);
-
-      const initialPostCodeCount = await fetchPostCodeCount();
-      setCurrentPostCodeCount(initialPostCodeCount);
-
-      const initialAddressCount = await fetchAddressCount();
-      setCurrentAddressCount(initialAddressCount);
-
-      const initialOtherPhoneNumCount = await fetchOtherPhoneNumCount();
-      setCurrentOtherPhoneNumCount(initialOtherPhoneNumCount);
-
-      const initialOtherNameCount = await fetchOtherNameCount();
-      setCurrentOtherNameCount(initialOtherNameCount);
-
-      const initialOtherRelationCount = await fetchOtherRelationCount();
-      setCurrentOtherRelationCount(initialOtherRelationCount);
-
-      const initialBloodTypeCount = await fetchBloodTypeCount();
-      setCurrentBloodTypeCount(initialBloodTypeCount);
-
-      const initialMotivationCount = await fetchMotivationCount();
-      setCurrentMotivationCount(initialMotivationCount);
-
-      const initialSchoolNameCount = await fetchSchoolNameCount();
-      setCurrentSchoolNameCount(initialSchoolNameCount);
-
-      const initialDepartmentNameCount = await fetchDepartmentNameCount();
-      setCurrentDepartmentNameCount(initialDepartmentNameCount);
-
-      const initialDegreeCount = await fetchDegreeCount();
-      setCurrentDegreeCount(initialDegreeCount);
-
-      const initialDegreeYearsCount = await fetchDegreeYearsCount();
-      setCurrentDegreeYearsCount(initialDegreeYearsCount);
-    })();
+  const blockBrowserBack = useCallback(() => {
+    window.history.go(1);
   }, []);
+
+  useEffect(() => {
+    (() => {
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", blockBrowserBack);
+      return () => {
+        window.removeEventListener("popstate", blockBrowserBack);
+      };
+    })();
+  }, [blockBrowserBack]);
 
   return (
     <div className={classes.root}>
@@ -1129,6 +1928,96 @@ export const AskCommentsPage = () => {
           </div>
           <div className={classes.checkbox}>
             <Checkbox onChange={handleIsDegreeYearsConfirmedChange} />
+            <p>在籍期間</p>
+          </div>
+        </div>
+      </div>
+
+      <p>今までの入力で嘘の内容を入力した項目にチェックをしてください</p>
+      <div
+        style={{ display: "flex", flexDirection: isWide ? "row" : "column" }}
+      >
+        <div style={{ paddingRight: isWide ? "250px" : "0" }}>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedEmailConfirmedChange} />
+            <p>メールアドレス</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedRetypePasswordConfirmedChange} />
+            <p>パスワード（確認）</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedPhoneNumConfirmedChange} />
+            <p>電話番号</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedGenderConfirmedChange} />
+            <p>性別</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedHobbyConfirmedChange} />
+            <p>趣味</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedAddressConfirmedChange} />
+            <p>住所</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedOtherNameConfirmedChange} />
+            <p>緊急連絡先の方の氏名</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedBloodTypeConfirmedChange} />
+            <p>血液型</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedSchoolNameConfirmedChange} />
+            <p>学校名</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedDegreeConfirmedChange} />
+            <p>学位</p>
+          </div>
+        </div>
+        <div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedPasswordConfirmedChange} />
+            <p>パスワード</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedNicknameConfirmedChange} />
+            <p>ニックネーム</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedBirthdayConfirmedChange} />
+            <p>誕生日</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedWorkConfirmedChange} />
+            <p>職業</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedPostCodeConfirmedChange} />
+            <p>郵便番号</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedOtherPhoneNumConfirmedChange} />
+            <p>緊急連絡先</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedOtherRelationConfirmedChange} />
+            <p>続柄</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedMotivationConfirmedChange} />
+            <p>動機</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedDepartmentNameConfirmedChange} />
+            <p>学部・学科</p>
+          </div>
+          <div className={classes.checkbox}>
+            <Checkbox onChange={handleIsLiedDegreeYearsConfirmedChange} />
             <p>在籍期間</p>
           </div>
         </div>

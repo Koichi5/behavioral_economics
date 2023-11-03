@@ -1,7 +1,7 @@
 import { Button, FormControl, MenuItem, makeStyles } from "@material-ui/core";
 import { Link, Routes, Route, useLocation } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -40,9 +40,6 @@ export const BloodTypeAndMotivationPage = () => {
   const [bloodType, setBloodType] = useState("");
   const [motivation, setMotivation] = useState("");
   const isWide = useMedia("(min-width: 800px)");
-  const [currentCount, setCurrentCount] = useState(0);
-  const [currentBloodCount, setCurrentBloodCount] = useState(0);
-  const [currentMotivationCount, setCurrentMotivationCount] = useState(0);
 
   const handleBloodTypeChange = (event: SelectChangeEvent) => {
     setBloodType(event.target.value);
@@ -52,19 +49,18 @@ export const BloodTypeAndMotivationPage = () => {
     setMotivation(event.target.value);
   };
 
-  const updateBloodTypeAndMotivationCount = async () => {
+  const updateBloodTypeAndMotivationCount = async (value: number) => {
     const bloodTypeAndMotivationSubmitDoc = doc(
       db,
       "bloodTypeAndMotivationSubmission",
       "YkUZ38YRtTgjXKbPshm6"
     );
     await updateDoc(bloodTypeAndMotivationSubmitDoc, {
-      count: currentCount + 1,
+      count: value + 1,
     });
-    setCurrentCount(prev => prev + 1);
   };
 
-  const updateBloodCount = async () => {
+  const updateBloodCount = async (value: number) => {
     const bloodCollectionPath = doc(
       db,
       "bloodTypeAndMotivationSubmission",
@@ -74,13 +70,12 @@ export const BloodTypeAndMotivationPage = () => {
     );
     if (bloodType != "") {
       await updateDoc(bloodCollectionPath, {
-        count: currentBloodCount + 1,
+        count: value + 1,
       });
-      setCurrentBloodCount(prev => prev + 1);
     }
   };
 
-  const updateMotivationCount = async () => {
+  const updateMotivationCount = async (value: number) => {
     const motivationCollectionPath = doc(
       db,
       "bloodTypeAndMotivationSubmission",
@@ -90,9 +85,44 @@ export const BloodTypeAndMotivationPage = () => {
     );
     if (motivation != "") {
       await updateDoc(motivationCollectionPath, {
-        count: currentMotivationCount + 1,
+        count: value + 1,
       });
-      setCurrentMotivationCount(prev => prev + 1);
+    }
+  };
+
+  const updateBloodTypeAndMotivationInterruptedMaleCount = async (value: number) => {
+    const bloodTypeAndMotivationInterruptedMalePath = doc(db, "bloodTypeAndMotivationInterruptedGender", "aJUKJFVN3WPZpm9bMNo1");
+    if (state.state == "10") {
+      await updateDoc(bloodTypeAndMotivationInterruptedMalePath, {
+        male: value + 1,
+      });
+    }
+  };
+
+  const updateBloodTypeAndMotivationInterruptedFemaleCount = async (value: number) => {
+    const bloodTypeAndMotivationInterruptedFemalePath = doc(db, "bloodTypeAndMotivationInterruptedGender", "aJUKJFVN3WPZpm9bMNo1");
+    if (state.state == "20") {
+      await updateDoc(bloodTypeAndMotivationInterruptedFemalePath, {
+        female: value + 1,
+      });
+    }
+  };
+
+  const updateBloodTypeAndMotivationInterruptedOtherCount = async (value: number) => {
+    const bloodTypeAndMotivationInterruptedOtherPath = doc(db, "bloodTypeAndMotivationInterruptedGender", "aJUKJFVN3WPZpm9bMNo1");
+    if (state.state == "30") {
+      await updateDoc(bloodTypeAndMotivationInterruptedOtherPath, {
+        other: value + 1,
+      });
+    }
+  };
+
+  const updateBloodTypeAndMotivationInterruptedNotSelectedCount = async (value: number) => {
+    const bloodTypeAndMotivationInterruptedNotSelectedPath = doc(db, "bloodTypeAndMotivationInterruptedGender", "aJUKJFVN3WPZpm9bMNo1");
+    if (state.state == "40") {
+      await updateDoc(bloodTypeAndMotivationInterruptedNotSelectedPath, {
+        notSelected: value + 1,
+      });
     }
   };
 
@@ -160,6 +190,74 @@ export const BloodTypeAndMotivationPage = () => {
       console.error("Firestoreの更新処理に失敗しました", error);
     }
     return motivationCount;
+  };
+
+  const fetchBloodTypeAndMotivationInterruptedMaleCount = async () => {
+    var maleCount = 0;
+    const maleCountRef = doc(db, "bloodTypeAndMotivationInterruptedGender", "aJUKJFVN3WPZpm9bMNo1");
+
+    try {
+      const snapshot = await getDoc(maleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.male) {
+        maleCount = Number(docData.male);
+      }
+      console.log(`male count: ${maleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return maleCount;
+  };
+
+  const fetchBloodTypeAndMotivationInterruptedFemaleCount = async () => {
+    var femaleCount = 0;
+    const femaleCountRef = doc(db, "bloodTypeAndMotivationInterruptedGender", "aJUKJFVN3WPZpm9bMNo1");
+
+    try {
+      const snapshot = await getDoc(femaleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.female) {
+        femaleCount = Number(docData.female);
+      }
+      console.log(`male count: ${femaleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return femaleCount;
+  };
+
+  const fetchBloodTypeAndMotivationInterruptedOtherCount = async () => {
+    var otherCount = 0;
+    const otherCountRef = doc(db, "bloodTypeAndMotivationInterruptedGender", "aJUKJFVN3WPZpm9bMNo1");
+
+    try {
+      const snapshot = await getDoc(otherCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.other) {
+        otherCount = Number(docData.other);
+      }
+      console.log(`male count: ${otherCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherCount;
+  };
+
+  const fetchBloodTypeAndMotivationInterruptedNotSelectedCount = async () => {
+    var notSelectedCount = 0;
+    const notSelectedCountRef = doc(db, "bloodTypeAndMotivationInterruptedGender", "aJUKJFVN3WPZpm9bMNo1");
+
+    try {
+      const snapshot = await getDoc(notSelectedCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.notSelected) {
+        notSelectedCount = Number(docData.notSelected);
+      }
+      console.log(`male count: ${notSelectedCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return notSelectedCount;
   };
 
   const fetchAndUpdateTotalGender = async () => {
@@ -233,38 +331,72 @@ export const BloodTypeAndMotivationPage = () => {
     }
   };
 
-  const _onBrowserBack = () => {
+  const _onBrowserBack = async () => {
     console.log("browser back fired !");
-    updateBloodCount();
-    updateMotivationCount();
+    await fetchBloodCount().then((value) => {
+      updateBloodCount(value);
+    });
+    await fetchMotivationCount().then((value) => {
+      updateMotivationCount(value);
+    });
+
+    if(state.state == "10") {
+      await fetchBloodTypeAndMotivationInterruptedMaleCount().then((value) => {
+        updateBloodTypeAndMotivationInterruptedMaleCount(value);
+      });
+    } else if (state.state == "20") {
+      await fetchBloodTypeAndMotivationInterruptedFemaleCount().then((value) => {
+        updateBloodTypeAndMotivationInterruptedFemaleCount(value);
+      });
+    } else if (state.state == "30") {
+      await fetchBloodTypeAndMotivationInterruptedOtherCount().then((value) => {
+        updateBloodTypeAndMotivationInterruptedOtherCount(value);
+      });
+    } else if (state.state == "40") {
+      await fetchBloodTypeAndMotivationInterruptedNotSelectedCount().then((value) => {
+        updateBloodTypeAndMotivationInterruptedNotSelectedCount(value);
+      });
+    } else {
+      console.log("エラーが発生しました");
+    }
+
     fetchAndUpdateTotalGender();
   };
 
-  const _onPressed = () => {
-    updateBloodTypeAndMotivationCount();
-    updateBloodCount();
-    updateMotivationCount();
+  const _onPressed = async () => {
+    await fetchBloodTypeAndMotivationSubmissionCount().then((value) => {
+      updateBloodTypeAndMotivationCount(value);
+    });
+    await fetchBloodCount().then((value) => {
+      updateBloodCount(value);
+    });
+    await fetchMotivationCount().then((value) => {
+      updateMotivationCount(value);
+    });
   };
 
-  useEffect(() => {
-    (async () => {
-      const initialCount = await fetchBloodTypeAndMotivationSubmissionCount();
-      setCurrentCount(initialCount);
-
-      const initialBloodCount = await fetchBloodCount();
-      setCurrentBloodCount(initialBloodCount);
-
-      const initialMotivationCount = await fetchMotivationCount();
-      setCurrentMotivationCount(initialMotivationCount);
-    })();
-    window.onpopstate = () => {
-      _onBrowserBack();
-    };
+  const blockBrowserBack = useCallback(() => {
+    window.history.go(1);
   }, []);
+
+  useEffect(() => {
+    (() => {
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", blockBrowserBack);
+      return () => {
+        window.removeEventListener("popstate", blockBrowserBack);
+      };      // const initialCount = await fetchBloodTypeAndMotivationSubmissionCount();
+      // setCurrentCount(initialCount);
+      // const initialBloodCount = await fetchBloodCount();
+      // setCurrentBloodCount(initialBloodCount);
+      // const initialMotivationCount = await fetchMotivationCount();
+      // setCurrentMotivationCount(initialMotivationCount);
+    })();
+  }, [blockBrowserBack]);
   return (
     <div className={classes.root}>
       <CustomParticle />
-      {isWide ? <CustomStepper arg1={5} /> : <CustomMobileStepper arg1={6} />}
+      {isWide ? <CustomStepper arg1={5} /> : <CustomMobileStepper arg1={5} />}
       <div
         className={classes.formWrapper}
         style={{ alignItems: isWide ? "inherit" : "center" }}
@@ -327,10 +459,10 @@ export const BloodTypeAndMotivationPage = () => {
           </div>
         </div>
         <div>
-        <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }} state={{state: state.state}}>
+          <Link to="/final_page" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
-              variant="contained"
-              color="primary"
+              variant="text"
+              color="secondary"
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -343,23 +475,27 @@ export const BloodTypeAndMotivationPage = () => {
               やめる
             </Button>
           </Link>
-        <Link to="/seventh_page" style={{ paddingLeft: isWide ? "3%" : "0" }}>
-          <Button
-            disabled={bloodType == "" || motivation == ""}
-            variant="contained"
-            color="primary"
-            onClick={_onPressed}
-            style={{
-              maxWidth: "400px",
-              maxHeight: "45px",
-              minWidth: "300px",
-              minHeight: "45px",
-              marginTop: "3%",
-            }}
+          <Link
+            to="/seventh_page"
+            style={{ paddingLeft: isWide ? "3%" : "0" }}
+            state={{ state: state.state }}
           >
-            次　　へ
-          </Button>
-        </Link>
+            <Button
+              disabled={bloodType == "" || motivation == ""}
+              variant="contained"
+              color="primary"
+              onClick={_onPressed}
+              style={{
+                maxWidth: "400px",
+                maxHeight: "45px",
+                minWidth: "300px",
+                minHeight: "45px",
+                marginTop: "3%",
+              }}
+            >
+              次　　へ
+            </Button>
+          </Link>
         </div>
         <Routes>
           <Route path="/seventh_page" element={<SchoolInfoPage />}></Route>

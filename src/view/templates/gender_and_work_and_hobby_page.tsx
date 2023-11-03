@@ -7,14 +7,14 @@ import {
 } from "@material-ui/core";
 import { Link, Routes, Route } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { PostAndAddressPage } from "./post_and_address_page";
 import { useMedia } from "react-use";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
+import EmailAndPasswordPage from "./email_and_password_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -46,32 +46,23 @@ export const GenderAndWorkAndHobbyPage = () => {
   const [work, setWork] = useState("");
   const [hobby, setHobby] = useState("");
   const isWide = useMedia("(min-width: 800px)");
-  const [currentCount, setCurrentCount] = useState(0);
-  const [currentGenderCount, setCurrentGenderCount] = useState(0);
-  const [currentWorkCount, setCurrentWorkCount] = useState(0);
-  const [currentHobbyCount, setCurrentHobbyCount] = useState(0);
-  const [currentMaleCount, setCurrentMaleCount] = useState(0);
-  const [currentFemaleCount, setCurrentFemaleCount] = useState(0);
-  const [currentOtherCount, setCurrentOtherCount] = useState(0);
-  const [currentNotSelectedCount, setCurrentNotSelectedCount] = useState(0);
 
   const handleGenderChange = (event: SelectChangeEvent) => {
     setGender(event.target.value);
   };
 
-  const updateGenderAndWorkAndHobbyCount = async () => {
+  const updateGenderAndWorkAndHobbyCount = async (value: number) => {
     const genderAndWorkAndHobbySubmitDoc = doc(
       db,
       "genderAndWorkAndHobbySubmission",
       "ur6R8Avm4P55AUAtFTX2"
     );
     await updateDoc(genderAndWorkAndHobbySubmitDoc, {
-      count: currentCount + 1,
+      count: value + 1,
     });
-    setCurrentCount((prev) => prev + 1);
   };
 
-  const updateGenderCount = async () => {
+  const updateGenderCount = async (value: number) => {
     const genderCollectionPath = doc(
       db,
       "genderAndWorkAndHobbySubmission",
@@ -81,13 +72,12 @@ export const GenderAndWorkAndHobbyPage = () => {
     );
     if (gender != "") {
       await updateDoc(genderCollectionPath, {
-        count: currentGenderCount + 1,
+        count: value + 1,
       });
-      setCurrentGenderCount((prev) => prev + 1);
     }
   };
 
-  const updateWorkCount = async () => {
+  const updateWorkCount = async (value: number) => {
     const workCollectionPath = doc(
       db,
       "genderAndWorkAndHobbySubmission",
@@ -97,13 +87,12 @@ export const GenderAndWorkAndHobbyPage = () => {
     );
     if (work != "") {
       await updateDoc(workCollectionPath, {
-        count: currentWorkCount + 1,
+        count: value + 1,
       });
-      setCurrentWorkCount((prev) => prev + 1);
     }
   };
 
-  const updateHobbyCount = async () => {
+  const updateHobbyCount = async (value: number) => {
     const hobbyCollectionPath = doc(
       db,
       "genderAndWorkAndHobbySubmission",
@@ -113,51 +102,86 @@ export const GenderAndWorkAndHobbyPage = () => {
     );
     if (hobby != "") {
       await updateDoc(hobbyCollectionPath, {
-        count: currentHobbyCount + 1,
+        count: value + 1,
       });
-      setCurrentHobbyCount((prev) => prev + 1);
     }
   };
 
-  const updateTotalMaleCount = async () => {
+  const updateTotalMaleCount = async (value: number) => {
     const maleCollectionPath = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
     if (gender == "10") {
       await updateDoc(maleCollectionPath, {
-        male: currentMaleCount + 1,
+        male: value + 1,
       });
-      setCurrentMaleCount((prev) => prev + 1);
     }
   };
 
-  const updateTotalFemaleCount = async () => {
+  const updateGenderAndWorkAndHobbyInterruptedMaleCount = async (value: number) => {
+    const emailInterruptedMalePath = doc(db, "genderAndWorkAndHobbyInterruptedGender", "9EEfjZt3wvgfXt8wnAdb");
+    if (gender == "10") {
+      await updateDoc(emailInterruptedMalePath, {
+        male: value + 1,
+      });
+    }
+  };
+
+  const updateTotalFemaleCount = async (value: number) => {
     const femaleCollectionPath = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
     if (gender == "20") {
       await updateDoc(femaleCollectionPath, {
-        female: currentFemaleCount + 1,
+        female: value + 1,
       });
-      setCurrentFemaleCount((prev) => prev + 1);
     }
   };
 
-  const updateTotalOtherCount = async () => {
+  const updateGenderAndWorkAndHobbyInterruptedFemaleCount = async (value: number) => {
+    const emailInterruptedFemalePath = doc(db, "genderAndWorkAndHobbyInterruptedGender", "9EEfjZt3wvgfXt8wnAdb");
+    if (gender == "20") {
+      await updateDoc(emailInterruptedFemalePath, {
+        female: value + 1,
+      });
+    }
+  }
+
+  const updateTotalOtherCount = async (value: number) => {
     const otherCollectionPath = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
     if (gender == "30") {
       await updateDoc(otherCollectionPath, {
-        other: currentOtherCount + 1,
+        other: value + 1,
       });
-      setCurrentOtherCount((prev) => prev + 1);
     }
   };
 
-  const updateTotalNotSelectedCount = async () => {
-    const notSelectedCollectionPath = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
-    if (gender == "40") {
-      await updateDoc(notSelectedCollectionPath, {
-        notSelected: currentNotSelectedCount + 1,
+  const updateGenderAndWorkAndHobbyInterruptedOtherCount = async (value: number) => {
+    const emailInterruptedOtherPath = doc(db, "genderAndWorkAndHobbyInterruptedGender", "9EEfjZt3wvgfXt8wnAdb");
+    if (gender == "30") {
+      await updateDoc(emailInterruptedOtherPath, {
+        other: value + 1,
       });
-      setCurrentNotSelectedCount((prev) => prev + 1);
     }
   };
+
+  const updateTotalNotSelectedCount = async (value: number) => {
+    const notSelectedCollectionPath = doc(
+      db,
+      "totalGender",
+      "VggaCpkEXJGNhvIu95KA"
+    );
+    if (gender == "40") {
+      await updateDoc(notSelectedCollectionPath, {
+        notSelected: value + 1,
+      });
+    }
+  };
+
+  const updateGenderAndWorkAndHobbyInterruptedNotSelectedCount = async (value: number) => {
+    const emailInterruptedNotSelectedPath = doc(db, "genderAndWorkAndHobbyInterruptedGender", "9EEfjZt3wvgfXt8wnAdb");
+    if (gender == "40") {
+      await updateDoc(emailInterruptedNotSelectedPath, {
+        notSelected: value + 1,
+      });
+    }
+  }
 
   const fetchgenderAndWorkAndHobbySubmissionCount = async () => {
     var genderAndWorkAndHobbySubmissionCount = 0;
@@ -266,6 +290,23 @@ export const GenderAndWorkAndHobbyPage = () => {
     return maleCount;
   };
 
+  const fetchGenderAndWorkAndHobbyInterruptedMaleCount = async () => {
+    var maleCount = 0;
+    const maleCountRef = doc(db, "genderAndWorkAndHobbyInterruptedGender", "9EEfjZt3wvgfXt8wnAdb");
+
+    try {
+      const snapshot = await getDoc(maleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.male) {
+        maleCount = Number(docData.male);
+      }
+      console.log(`male count: ${maleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return maleCount;
+  };
+
   const fetchTotalFemaleCount = async () => {
     var femaleCount = 0;
     const femaleCountRef = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
@@ -277,6 +318,23 @@ export const GenderAndWorkAndHobbyPage = () => {
         femaleCount = Number(docData.female);
       }
       console.log(`female count: ${femaleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return femaleCount;
+  };
+
+  const fetchGenderAndWorkAndHobbyInterruptedFemaleCount = async () => {
+    var femaleCount = 0;
+    const femaleCountRef = doc(db, "genderAndWorkAndHobbyInterruptedGender", "9EEfjZt3wvgfXt8wnAdb");
+
+    try {
+      const snapshot = await getDoc(femaleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.female) {
+        femaleCount = Number(docData.female);
+      }
+      console.log(`male count: ${femaleCount}`);
     } catch (error) {
       console.error("Firestoreの更新処理に失敗しました", error);
     }
@@ -300,6 +358,23 @@ export const GenderAndWorkAndHobbyPage = () => {
     return otherCount;
   };
 
+  const fetchGenderAndWorkAndHobbyInterruptedOtherCount = async () => {
+    var otherCount = 0;
+    const otherCountRef = doc(db, "genderAndWorkAndHobbyInterruptedGender", "9EEfjZt3wvgfXt8wnAdb");
+
+    try {
+      const snapshot = await getDoc(otherCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.other) {
+        otherCount = Number(docData.other);
+      }
+      console.log(`male count: ${otherCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherCount;
+  };
+
   const fetchTotalNotSelectedCount = async () => {
     var notSelectedCount = 0;
     const notSelectedCountRef = doc(db, "totalGender", "VggaCpkEXJGNhvIu95KA");
@@ -317,63 +392,201 @@ export const GenderAndWorkAndHobbyPage = () => {
     return notSelectedCount;
   };
 
-  const _onBrowserBack = () => {
-    console.log("browser back fired !");
-    updateGenderCount();
-    updateWorkCount();
-    updateHobbyCount();
-    updateTotalMaleCount();
-    updateTotalFemaleCount();
-    updateTotalOtherCount();
-    updateTotalNotSelectedCount();
+  const fetchGenderAndWorkAndHobbyInterruptedNotSelectedCount = async () => {
+    var notSelectedCount = 0;
+    const notSelectedCountRef = doc(db, "genderAndWorkAndHobbyInterruptedGender", "9EEfjZt3wvgfXt8wnAdb");
+
+    try {
+      const snapshot = await getDoc(notSelectedCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.notSelected) {
+        notSelectedCount = Number(docData.notSelected);
+      }
+      console.log(`male count: ${notSelectedCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return notSelectedCount;
   };
 
-  const _onPressed = () => {
-    updateGenderAndWorkAndHobbyCount();
-    updateGenderCount();
-    updateWorkCount();
-    updateHobbyCount();
-    updateTotalMaleCount();
-    updateTotalFemaleCount();
-    updateTotalOtherCount();
-    updateTotalNotSelectedCount();
+  const fetchAndUpdateTotalGender = async () => {
+    const interruptedGenderRef = doc(
+      db,
+      "interruptedUserGender",
+      "KFwuzSDtYDtpszPF4amu"
+    );
+    if (gender == "10") {
+      var interruptedMaleCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.male) {
+          interruptedMaleCount = Number(docData.male);
+        }
+        console.log(interruptedMaleCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        male: interruptedMaleCount + 1,
+      });
+    } else if (gender == "20") {
+      var interruptedFemaleCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.female) {
+          interruptedFemaleCount = Number(docData.female);
+        }
+        console.log(interruptedFemaleCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        female: interruptedFemaleCount + 1,
+      });
+    } else if (gender == "30") {
+      var interruptedOtherCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.other) {
+          interruptedOtherCount = Number(docData.other);
+        }
+        console.log(interruptedOtherCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        other: interruptedOtherCount + 1,
+      });
+    } else if (gender == "40") {
+      var interruptedNotSelectedCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.notSelected) {
+          interruptedNotSelectedCount = Number(docData.notSelected);
+        }
+        console.log(interruptedNotSelectedCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        notSelected: interruptedNotSelectedCount + 1,
+      });
+    } else {
+      console.error("Firestoreの更新処理に失敗しました");
+    }
   };
+
+  const _onBrowserBack = async () => {
+    console.log("browser back fired !");
+    await fetchGenderCount().then((value) => {
+      updateGenderCount(value);
+    });
+    await fetchWorkCount().then((value) => {
+      updateWorkCount(value);
+    });
+    await fetchHobbyCount().then((value) => {
+      updateHobbyCount(value);
+    });
+
+    if (gender == "10") {
+      await fetchTotalMaleCount().then((value) => {
+        updateTotalMaleCount(value);
+      });
+      await fetchGenderAndWorkAndHobbyInterruptedMaleCount().then((value) => {
+        updateGenderAndWorkAndHobbyInterruptedMaleCount(value);
+      });
+    } else if (gender == "20") {
+      await fetchTotalFemaleCount().then((value) => {
+        updateTotalFemaleCount(value);
+      });
+      await fetchGenderAndWorkAndHobbyInterruptedFemaleCount().then((value) => {
+        updateGenderAndWorkAndHobbyInterruptedFemaleCount(value);
+      });
+    } else if (gender == "30") {
+      await fetchTotalOtherCount().then((value) => {
+        updateTotalOtherCount(value);
+      });
+      await fetchGenderAndWorkAndHobbyInterruptedOtherCount().then((value) => {
+        updateGenderAndWorkAndHobbyInterruptedOtherCount(value);
+      });
+    } else if (gender == "40") {
+      await fetchTotalNotSelectedCount().then((value) => {
+        updateTotalNotSelectedCount(value);
+      });
+      fetchGenderAndWorkAndHobbyInterruptedNotSelectedCount().then((value) => {
+        updateGenderAndWorkAndHobbyInterruptedNotSelectedCount(value);
+      });
+    } else {
+      console.log("エラーが発生しました");
+    }
+    fetchAndUpdateTotalGender();
+  };
+
+  const _onPressed = async () => {
+    await fetchgenderAndWorkAndHobbySubmissionCount().then((value) => {
+      updateGenderAndWorkAndHobbyCount(value);
+    });
+    await fetchGenderCount().then((value) => {
+      updateGenderCount(value);
+    });
+    await fetchWorkCount().then((value) => {
+      updateWorkCount(value);
+    });
+    await fetchHobbyCount().then((value) => {
+      updateHobbyCount(value);
+    });
+    await fetchTotalMaleCount().then((value) => {
+      updateTotalMaleCount(value);
+    });
+    await fetchTotalFemaleCount().then((value) => {
+      updateTotalFemaleCount(value);
+    });
+    await fetchTotalOtherCount().then((value) => {
+      updateTotalOtherCount(value);
+    });
+    await fetchTotalNotSelectedCount().then((value) => {
+      updateTotalNotSelectedCount(value);
+    });
+  };
+
+  const blockBrowserBack = useCallback(() => {
+    window.history.go(1);
+  }, []);
 
   useEffect(() => {
-    (async () => {
-      const initialCount = await fetchgenderAndWorkAndHobbySubmissionCount();
-      setCurrentCount(initialCount);
-
-      const initialGenderCount = await fetchGenderCount();
-      setCurrentGenderCount(initialGenderCount);
-
-      const initialWorkCount = await fetchWorkCount();
-      setCurrentWorkCount(initialWorkCount);
-
-      const initialHobbyCount = await fetchHobbyCount();
-      setCurrentHobbyCount(initialHobbyCount);
-
-      const initialMaleCount = await fetchTotalMaleCount();
-      setCurrentMaleCount(initialMaleCount);
-
-      const initialFemaleCount = await fetchTotalFemaleCount();
-      setCurrentFemaleCount(initialFemaleCount);
-
-      const initialOtherCount = await fetchTotalOtherCount();
-      setCurrentOtherCount(initialOtherCount);
-
-      const initialNotSelectedCount = await fetchTotalNotSelectedCount();
-      setCurrentNotSelectedCount(initialNotSelectedCount);
+    (() => {
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", blockBrowserBack);
+      return () => {
+        window.removeEventListener("popstate", blockBrowserBack);
+      };
+      // const initialCount = await fetchgenderAndWorkAndHobbySubmissionCount();
+      // setCurrentCount(initialCount);
+      // const initialGenderCount = await fetchGenderCount();
+      // setCurrentGenderCount(initialGenderCount);
+      // const initialWorkCount = await fetchWorkCount();
+      // setCurrentWorkCount(initialWorkCount);
+      // const initialHobbyCount = await fetchHobbyCount();
+      // setCurrentHobbyCount(initialHobbyCount);
+      // const initialMaleCount = await fetchTotalMaleCount();
+      // setCurrentMaleCount(initialMaleCount);
+      // const initialFemaleCount = await fetchTotalFemaleCount();
+      // setCurrentFemaleCount(initialFemaleCount);
+      // const initialOtherCount = await fetchTotalOtherCount();
+      // setCurrentOtherCount(initialOtherCount);
+      // const initialNotSelectedCount = await fetchTotalNotSelectedCount();
+      // setCurrentNotSelectedCount(initialNotSelectedCount);
     })();
-    window.onpopstate = () => {
-      _onBrowserBack();
-    };
-  }, []);
+  }, [blockBrowserBack]);
   return (
     <div className={classes.root}>
       <CustomParticle />
       <div>
-        {isWide ? <CustomStepper arg1={2} /> : <CustomMobileStepper arg1={3} />}
+        {isWide ? <CustomStepper arg1={0} /> : <CustomMobileStepper arg1={0} />}
       </div>
       <div
         className={classes.formWrapper}
@@ -442,10 +655,10 @@ export const GenderAndWorkAndHobbyPage = () => {
           />
         </div>
         <div>
-          <Link to="/" style={{ paddingRight: isWide ? "3%" : "0" }}>
+          <Link to="/final_page" style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
-              variant="contained"
-              color="primary"
+              variant="text"
+              color="secondary"
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -458,7 +671,11 @@ export const GenderAndWorkAndHobbyPage = () => {
               やめる
             </Button>
           </Link>
-          <Link to="/fourth_page" style={{ paddingLeft: isWide ? "3%" : "0" }} state={{state: gender}}>
+          <Link
+            to="/second_page"
+            style={{ paddingLeft: isWide ? "3%" : "0" }}
+            state={{ state: gender }}
+          >
             <Button
               disabled={gender == "" || work == "" || hobby == ""}
               variant="contained"
@@ -477,7 +694,7 @@ export const GenderAndWorkAndHobbyPage = () => {
           </Link>
         </div>
         <Routes>
-          <Route path="/fourth_page" element={<PostAndAddressPage />}></Route>
+          <Route path="/second_page" element={<EmailAndPasswordPage />}></Route>
         </Routes>
       </div>
     </div>

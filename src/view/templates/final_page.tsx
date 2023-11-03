@@ -1,5 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 import CustomParticle from "../atoms/particle";
+import { useCallback, useEffect } from "react";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -13,6 +14,20 @@ const useStyles = makeStyles(() => ({
 
 export const FinalPage = () => {
   const classes = useStyles();
+
+  const blockBrowserBack = useCallback(() => {
+    window.history.go(1);
+  }, []);
+
+  useEffect(() => {
+    (() => {
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", blockBrowserBack);
+      return () => {
+        window.removeEventListener("popstate", blockBrowserBack);
+      };
+    })();
+  }, [blockBrowserBack]);
 
   return (
     <div className={classes.root}>

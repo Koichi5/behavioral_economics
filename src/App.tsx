@@ -14,14 +14,12 @@ import { FinalPage } from "./view/templates/final_page";
 import { BloodTypeAndMotivationPage } from "./view/templates/blood_type_and_motivation_page";
 import { OtherPhoneAndNamePage } from "./view/templates/other_phone_and_name_page";
 import { ExplanationPage } from "./view/templates/explanation_page";
-import { FirstIntroductionPage } from "./view/templates/first_introduction_page";
-import { SecondIntroductionPage } from "./view/templates/second_introduction_page";
-import { ThirdIntroductionPage } from "./view/templates/third_introduction_page";
-import { FourthIntroductionPage } from "./view/templates/fourth_introduction_page";
 import { GenderAndWorkAndHobbyPage } from "./view/templates/gender_and_work_and_hobby_page";
 import { AskCommentsPage } from "./view/templates/ask_ comments_page";
 import { ApologizePage } from "./view/templates/apologize_page";
 import { InitialExplanationPage } from "./view/templates/initial_explanation_page";
+import { SceneAssumptionPage } from "./view/templates/scene_assumption_page";
+import { ExplainAboutSavingDataPage } from "./view/templates/explain_about_saving_data_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -73,28 +71,14 @@ function App() {
       <div className={classes.root}>
         <Routes>
           <Route path="/" element={<InitialExplanationPage />} />
-          <Route
-            path="/first_introduction_page"
-            element={<FirstIntroductionPage />}
-          />
-          <Route
-            path="/second_introduction_page"
-            element={<SecondIntroductionPage />}
-          />
-          <Route
-            path="/third_introduction_page"
-            element={<ThirdIntroductionPage />}
-          />
-          <Route
-            path="/fourth_introduction_page"
-            element={<FourthIntroductionPage />}
-          />
-          <Route path="/initial_page" element={<EmailAndPasswordPage />} />
+          <Route path="/scene_assumption_page" element={<SceneAssumptionPage />} />
+          <Route path="explain_about_saving_data_page" element={<ExplainAboutSavingDataPage />} />
+          <Route path="/initial_page" element={<GenderAndWorkAndHobbyPage />} />
           <Route
             path="/second_page"
-            element={<NicknameAndPhoneAndBirthPage />}
+            element={<EmailAndPasswordPage />}
           />
-          <Route path="/third_page" element={<GenderAndWorkAndHobbyPage />} />
+          <Route path="/third_page" element={<NicknameAndPhoneAndBirthPage />} />
           <Route path="/fourth_page" element={<PostAndAddressPage />} />
           <Route path="/fifth_page" element={<OtherPhoneAndNamePage />} />
           <Route path="/sixth_page" element={<BloodTypeAndMotivationPage />} />

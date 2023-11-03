@@ -1,14 +1,14 @@
 import { Button, TextField, makeStyles } from "@material-ui/core";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useLocation } from "react-router-dom";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { db } from "../../firebase";
 import { CustomStepper } from "../atoms/stepper";
 import CustomParticle from "../atoms/particle";
-import { GenderAndWorkAndHobbyPage } from "./gender_and_work_and_hobby_page";
 import { useMedia } from "react-use";
 import { CustomMobileStepper } from "../atoms/mobile_stepper";
 import { useForm } from "react-hook-form";
+import { PostAndAddressPage } from "./post_and_address_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -41,14 +41,11 @@ const birthdayRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
 export const NicknameAndPhoneAndBirthPage = () => {
   const ref: React.MutableRefObject<HTMLDialogElement | null> = useRef(null);
   const classes = useStyles();
+  const { state } = useLocation();
   const [nickName, setNickName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [birthDay, setBirthDay] = useState("");
   const isWide = useMedia("(min-width: 800px)");
-  const [currentCount, setCurrentCount] = useState(0);
-  const [currentNickNameCount, setCurrentNickNameCount] = useState(0);
-  const [currentPhoneCount, setCurrentPhoneCount] = useState(0);
-  const [currentBirthCount, setCurrentBirthCount] = useState(0);
 
   const {
     register,
@@ -67,19 +64,18 @@ export const NicknameAndPhoneAndBirthPage = () => {
     }
   }, []);
 
-  const updateNickNameAndPhoneAndBirthCount = async () => {
+  const updateNickNameAndPhoneAndBirthCount = async (value: number) => {
     const nicknameAndPhoneAndBirthSubmitDoc = doc(
       db,
       "nicknameAndPhoneAndBirthSubmission",
       "VBWeQgZmJSEwJZ4STudk"
     );
     await updateDoc(nicknameAndPhoneAndBirthSubmitDoc, {
-      count: currentCount + 1,
+      count: value + 1,
     });
-    setCurrentCount((prev) => prev + 1);
   };
 
-  const updateNickNameCount = async () => {
+  const updateNickNameCount = async (value: number) => {
     const nickNameCollectionPath = doc(
       db,
       "nicknameAndPhoneAndBirthSubmission",
@@ -89,13 +85,12 @@ export const NicknameAndPhoneAndBirthPage = () => {
     );
     if (nickName != "") {
       await updateDoc(nickNameCollectionPath, {
-        count: currentNickNameCount + 1,
+        count: value + 1,
       });
-      setCurrentNickNameCount((prev) => prev + 1);
     }
   };
 
-  const updatePhoneCount = async () => {
+  const updatePhoneCount = async (value: number) => {
     const phoneCollectionPath = doc(
       db,
       "nicknameAndPhoneAndBirthSubmission",
@@ -105,13 +100,12 @@ export const NicknameAndPhoneAndBirthPage = () => {
     );
     if (phoneNumber != "") {
       await updateDoc(phoneCollectionPath, {
-        count: currentPhoneCount + 1,
+        count: value + 1,
       });
-      setCurrentPhoneCount((prev) => prev + 1);
     }
   };
 
-  const updateBirthCount = async () => {
+  const updateBirthCount = async (value: number) => {
     const birthCollectionPath = doc(
       db,
       "nicknameAndPhoneAndBirthSubmission",
@@ -121,9 +115,44 @@ export const NicknameAndPhoneAndBirthPage = () => {
     );
     if (birthDay != "") {
       await updateDoc(birthCollectionPath, {
-        count: currentBirthCount + 1,
+        count: value + 1,
       });
-      setCurrentBirthCount((prev) => prev + 1);
+    }
+  };
+
+  const updateNicknameAndPhoneAndBirthInterruptedMaleCount = async (value: number) => {
+    const nicknameAndPhoneAndBirthInterruptedMalePath = doc(db, "nicknameAndPhoneAndBirthInterruptedGender", "5Qy3CfF72RLlyCICl2tu");
+    if (state.state == "10") {
+      await updateDoc(nicknameAndPhoneAndBirthInterruptedMalePath, {
+        male: value + 1,
+      });
+    }
+  };
+
+  const updateNicknameAndPhoneAndBirthInterruptedFemaleCount = async (value: number) => {
+    const nicknameAndPhoneAndBirthInterruptedFemalePath = doc(db, "nicknameAndPhoneAndBirthInterruptedGender", "5Qy3CfF72RLlyCICl2tu");
+    if (state.state == "20") {
+      await updateDoc(nicknameAndPhoneAndBirthInterruptedFemalePath, {
+        female: value + 1,
+      });
+    }
+  };
+
+  const updateNicknameAndPhoneAndBirthInterruptedOtherCount = async (value: number) => {
+    const nicknameAndPhoneAndBirthInterruptedOtherPath = doc(db, "nicknameAndPhoneAndBirthInterruptedGender", "5Qy3CfF72RLlyCICl2tu");
+    if (state.state == "30") {
+      await updateDoc(nicknameAndPhoneAndBirthInterruptedOtherPath, {
+        other: value + 1,
+      });
+    }
+  };
+
+  const updateNicknameAndPhoneAndBirthInterruptedNotSelectedCount = async (value: number) => {
+    const nicknameAndPhoneAndBirthInterruptedNotSelectedPath = doc(db, "nicknameAndPhoneAndBirthInterruptedGender", "5Qy3CfF72RLlyCICl2tu");
+    if (state.state == "40") {
+      await updateDoc(nicknameAndPhoneAndBirthInterruptedNotSelectedPath, {
+        notSelected: value + 1,
+      });
     }
   };
 
@@ -214,38 +243,224 @@ export const NicknameAndPhoneAndBirthPage = () => {
     return birthCount;
   };
 
-  const _onBrowserBack = () => {
-    console.log("browser back fired !");
-    updateNickNameCount();
-    updatePhoneCount();
-    updateBirthCount();
+  const fetchNicknameAndPhoneAndBirthInterruptedMaleCount = async () => {
+    var maleCount = 0;
+    const maleCountRef = doc(db, "nicknameAndPhoneAndBirthInterruptedGender", "5Qy3CfF72RLlyCICl2tu");
+
+    try {
+      const snapshot = await getDoc(maleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.male) {
+        maleCount = Number(docData.male);
+      }
+      console.log(`male count: ${maleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return maleCount;
   };
 
-  const _onPressed = () => {
-    updateNickNameAndPhoneAndBirthCount();
-    updateNickNameCount();
-    updatePhoneCount();
-    updateBirthCount();
+  const fetchNicknameAndPhoneAndBirthInterruptedFemaleCount = async () => {
+    var femaleCount = 0;
+    const femaleCountRef = doc(db, "nicknameAndPhoneAndBirthInterruptedGender", "5Qy3CfF72RLlyCICl2tu");
+
+    try {
+      const snapshot = await getDoc(femaleCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.female) {
+        femaleCount = Number(docData.female);
+      }
+      console.log(`male count: ${femaleCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return femaleCount;
   };
+
+  const fetchNicknameAndPhoneAndBirthInterruptedOtherCount = async () => {
+    var otherCount = 0;
+    const otherCountRef = doc(db, "nicknameAndPhoneAndBirthInterruptedGender", "5Qy3CfF72RLlyCICl2tu");
+
+    try {
+      const snapshot = await getDoc(otherCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.other) {
+        otherCount = Number(docData.other);
+      }
+      console.log(`male count: ${otherCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return otherCount;
+  };
+
+  const fetchNicknameAndPhoneAndBirthInterruptedNotSelectedCount = async () => {
+    var notSelectedCount = 0;
+    const notSelectedCountRef = doc(db, "nicknameAndPhoneAndBirthInterruptedGender", "5Qy3CfF72RLlyCICl2tu");
+
+    try {
+      const snapshot = await getDoc(notSelectedCountRef);
+      const docData = snapshot.data();
+      if (docData && docData.notSelected) {
+        notSelectedCount = Number(docData.notSelected);
+      }
+      console.log(`male count: ${notSelectedCount}`);
+    } catch (error) {
+      console.error("Firestoreの更新処理に失敗しました", error);
+    }
+    return notSelectedCount;
+  };
+
+
+  const fetchAndUpdateTotalGender = async () => {
+    const interruptedGenderRef = doc(
+      db,
+      "interruptedUserGender",
+      "KFwuzSDtYDtpszPF4amu"
+    );
+    if (state.state == "10") {
+      var interruptedMaleCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.male) {
+          interruptedMaleCount = Number(docData.male);
+        }
+        console.log(interruptedMaleCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        male: interruptedMaleCount + 1,
+      });
+    } else if (state.state == "20") {
+      var interruptedFemaleCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.female) {
+          interruptedFemaleCount = Number(docData.female);
+        }
+        console.log(interruptedFemaleCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        female: interruptedFemaleCount + 1,
+      });
+    } else if (state.state == "30") {
+      var interruptedOtherCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.other) {
+          interruptedOtherCount = Number(docData.other);
+        }
+        console.log(interruptedOtherCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        other: interruptedOtherCount + 1,
+      });
+    } else if (state.state == "40") {
+      var interruptedNotSelectedCount = 0;
+      try {
+        const snapshot = await getDoc(interruptedGenderRef);
+        const docData = snapshot.data();
+        if (docData && docData.notSelected) {
+          interruptedNotSelectedCount = Number(docData.notSelected);
+        }
+        console.log(interruptedNotSelectedCount);
+      } catch (error) {
+        console.error("Firestoreの更新処理に失敗しました", error);
+      }
+      await updateDoc(interruptedGenderRef, {
+        notSelected: interruptedNotSelectedCount + 1,
+      });
+    } else {
+      console.error("Firestoreの更新処理に失敗しました");
+    }
+  };
+
+  const _onBrowserBack = async () => {
+    console.log("browser back fired !");
+    await fetchNicknameCount().then((value) => {
+      updateNickNameCount(value);
+    });
+
+    await fetchPhoneCount().then((value) => {
+      updatePhoneCount(value);
+    });
+
+    await fetchBirthCount().then((value) => {
+      updateBirthCount(value);
+    });
+
+    if(state.state == "10") {
+      await fetchNicknameAndPhoneAndBirthInterruptedMaleCount().then((value) => {
+        updateNicknameAndPhoneAndBirthInterruptedMaleCount(value);
+      });
+    } else if (state.state == "20") {
+      await fetchNicknameAndPhoneAndBirthInterruptedFemaleCount().then((value) => {
+        updateNicknameAndPhoneAndBirthInterruptedFemaleCount(value);
+      });
+    } else if (state.state == "30") {
+      await fetchNicknameAndPhoneAndBirthInterruptedOtherCount().then((value) => {
+        updateNicknameAndPhoneAndBirthInterruptedOtherCount(value);
+      });
+    } else if (state.state == "40") {
+      await fetchNicknameAndPhoneAndBirthInterruptedNotSelectedCount().then((value) => {
+        updateNicknameAndPhoneAndBirthInterruptedNotSelectedCount(value);
+      });
+    } else {
+      console.log("エラーが発生しました");
+    }
+
+    fetchAndUpdateTotalGender();
+  };
+
+  const _onPressed = async () => {
+    await fetchNicknameAndPhoneAndBirthSubmissionCount().then((value) => {
+      updateNickNameAndPhoneAndBirthCount(value);
+    });
+
+    await fetchNicknameCount().then((value) => {
+      updateNickNameCount(value);
+    });
+
+    await fetchPhoneCount().then((value) => {
+      updatePhoneCount(value);
+    });
+
+    await fetchBirthCount().then((value) => {
+      updateBirthCount(value);
+    });
+  };
+
+  const blockBrowserBack = useCallback(() => {
+    window.history.go(1);
+  }, []);
 
   useEffect(() => {
-    (async () => {
-      const initialCount = await fetchNicknameAndPhoneAndBirthSubmissionCount();
-      setCurrentCount(initialCount);
+    (() => {
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", blockBrowserBack);
+      return () => {
+        window.removeEventListener("popstate", blockBrowserBack);
+      };      // const initialCount = await fetchNicknameAndPhoneAndBirthSubmissionCount();
+      // setCurrentCount(initialCount);
 
-      const initialNickNameCount = await fetchNicknameCount();
-      setCurrentNickNameCount(initialNickNameCount);
+      // const initialNickNameCount = await fetchNicknameCount();
+      // setCurrentNickNameCount(initialNickNameCount);
 
-      const initialPhoneCount = await fetchPhoneCount();
-      setCurrentPhoneCount(initialPhoneCount);
+      // const initialPhoneCount = await fetchPhoneCount();
+      // setCurrentPhoneCount(initialPhoneCount);
 
-      const initialBirthCount = await fetchBirthCount();
-      setCurrentBirthCount(initialBirthCount);
+      // const initialBirthCount = await fetchBirthCount();
+      // setCurrentBirthCount(initialBirthCount);
     })();
-    window.onpopstate = () => {
-      _onBrowserBack();
-    };
-  }, []);
+  }, [blockBrowserBack]);
 
   return (
     <div className={classes.root}>
@@ -258,7 +473,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
         </button>
       </dialog>
       <CustomParticle />
-      {isWide ? <CustomStepper arg1={1} /> : <CustomMobileStepper arg1={2} />}
+      {isWide ? <CustomStepper arg1={2} /> : <CustomMobileStepper arg1={2} />}
       <div
         className={classes.formWrapper}
         style={{ alignItems: isWide ? "inherit" : "center" }}
@@ -345,10 +560,10 @@ export const NicknameAndPhoneAndBirthPage = () => {
           />
         </div>
         <div>
-          <Link to={"/"} style={{ paddingRight: isWide ? "3%" : "0" }}>
+          <Link to={"/final_page"} style={{ paddingRight: isWide ? "3%" : "0" }}>
             <Button
-              variant="contained"
-              color="primary"
+              variant="text"
+              color="secondary"
               style={{
                 maxWidth: "400px",
                 maxHeight: "45px",
@@ -366,9 +581,10 @@ export const NicknameAndPhoneAndBirthPage = () => {
               nicknameRegex.test(nickName) &&
               phoneNumRegex.test(phoneNumber) &&
               birthdayRegex.test(birthDay)
-                ? "/third_page"
+                ? "/fourth_page"
                 : "#"
             }
+            state={{ state: state.state }}
           >
             <Button
               disabled={nickName == "" || phoneNumber == "" || birthDay == ""}
@@ -396,10 +612,7 @@ export const NicknameAndPhoneAndBirthPage = () => {
           </Link>
         </div>
         <Routes>
-          <Route
-            path="/third_page"
-            element={<GenderAndWorkAndHobbyPage />}
-          ></Route>
+          <Route path="/fourth_page" element={<PostAndAddressPage />}></Route>
         </Routes>
       </div>
     </div>

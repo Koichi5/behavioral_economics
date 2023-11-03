@@ -1,8 +1,8 @@
 import { Button, makeStyles } from "@material-ui/core";
 import CustomParticle from "../atoms/particle";
 import { Link, Route, Routes } from "react-router-dom";
-import { FirstIntroductionPage } from "./first_introduction_page";
 import { useMedia } from "react-use";
+import { SceneAssumptionPage } from "./scene_assumption_page";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -31,16 +31,17 @@ export const InitialExplanationPage = () => {
       <p>
         外部に漏れたり、ほかの目的に使用されたりすることは一切ありません。論文やゼミナール大会などの成果公開の場でも、匿名性が保持された形で公表されます。
       </p>
-      <p>
-        また、本アンケートの回答や提供していただくデータは、本講義（行動経済学１）の成績とは無関係であり、参加を強制するものではありません。
+      <p>x
+        また、本アンケートの回答や提供していただくデータは、本講義（行動経済学２）の成績とは無関係であり、参加を強制するものではありません。
       </p>
       <p>
-        アンケートは、５分程度で終わる簡単なものですので、上記の趣旨をご理解いただいたうえで素直にありのままをお答えください。
+        上記の趣旨をご理解いただいたうえで素直にありのままをお答えください。
       </p>
       <br></br>
       <p>以上の説明を理解した上で、アンケート及びデータの提供に同意していただけますか？</p>
-      <p>（たとえ同意しても、次のページでアンケート内容を確認したあと、回答したくないと思った場合は「戻る」ボタンを押すことで同意を取り消すことができます。）</p>
-      <Link to="/first_introduction_page">
+      <p>
+        同意した後でも、回答したくないと思った場合は「やめる」ボタンを押すことで記録を中断することができます。
+      </p>      <Link to="/scene_assumption_page">
         <Button
           variant="contained"
           color="primary"
@@ -52,13 +53,13 @@ export const InitialExplanationPage = () => {
             marginTop: "3%",
           }}
         >
-          次へ
+          同意する
         </Button>
       </Link>
       <Routes>
         <Route
-          path="/first_introduction_page"
-          element={<FirstIntroductionPage />}
+          path="/scene_assumption_page"
+          element={<SceneAssumptionPage />}
         ></Route>
       </Routes>
     </div>
